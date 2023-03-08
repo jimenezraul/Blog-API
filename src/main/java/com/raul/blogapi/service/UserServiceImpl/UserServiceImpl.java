@@ -1,8 +1,10 @@
 package com.raul.blogapi.service.UserServiceImpl;
 
+import com.raul.blogapi.dto.RoleDto;
 import com.raul.blogapi.dto.UserDto;
 import com.raul.blogapi.error.NullFieldException;
 import com.raul.blogapi.error.UserNotFoundException;
+import com.raul.blogapi.model.Role;
 import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.service.UserService;

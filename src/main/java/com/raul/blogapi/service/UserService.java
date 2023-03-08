@@ -1,5 +1,6 @@
 package com.raul.blogapi.service;
 
+import com.raul.blogapi.dto.RoleDto;
 import com.raul.blogapi.dto.UserDto;
 
 import java.util.List;
