@@ -1,6 +1,8 @@
 package com.raul.blogapi.dto;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.raul.blogapi.controller.Views;
+import com.raul.blogapi.model.User;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
