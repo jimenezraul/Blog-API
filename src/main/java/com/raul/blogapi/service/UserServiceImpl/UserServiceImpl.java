@@ -1,5 +1,10 @@
 package com.raul.blogapi.service.UserServiceImpl;
 
+import com.raul.blogapi.dto.UserDto;
+import com.raul.blogapi.error.NullFieldException;
+import com.raul.blogapi.error.UserNotFoundException;
+import com.raul.blogapi.model.User;
+import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserServiceImpl {
-    @Service
-    public class UserServiceImpl implements UserService {
+
+@Service
+public class UserServiceImpl implements UserService {
         @Autowired
         private UserRepository userRepository;
 
@@ -81,6 +87,5 @@ public class UserServiceImpl {
             return new UserDto(user);
         }
 
-    }
-
 }
+
