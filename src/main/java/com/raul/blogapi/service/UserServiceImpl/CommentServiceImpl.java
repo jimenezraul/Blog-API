@@ -1,6 +1,6 @@
 package com.raul.blogapi.service.UserServiceImpl;
 
-import com.raul.blogapi.dto.CommentDto;
+import com.raul.blogapi.dto.CommentDTO;
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Comment;
 import com.raul.blogapi.model.Post;
@@ -24,13 +24,13 @@ public class CommentServiceImpl implements CommentService {
 
 
     @Override
-    public List<CommentDto> getAllComments() {
+    public List<CommentDTO> getAllComments() {
         List<Comment> comments = commentRepository.findAll();
         return comments.stream().map(comment -> toDto(comment)).collect(Collectors.toList());
     }
 
     @Override
-    public CommentDto createComment(CommentDto commentDto) {
+    public CommentDTO createComment(CommentDTO commentDto) {
         Comment comment = convertToEntity(commentDto);
         comment.setPost(new Post(commentDto.getPostId()));
         comment.setUser(new User(commentDto.getUserId()));
@@ -39,24 +39,24 @@ public class CommentServiceImpl implements CommentService {
     }
 
 
-    private Comment convertToEntity(CommentDto comment) {
+    private Comment convertToEntity(CommentDTO comment) {
         Comment commentModel = new Comment();
         BeanUtils.copyProperties(comment, commentModel);
         return commentModel;
     }
 
     @Override
-    public CommentDto getCommentById(Long id) {
+    public CommentDTO getCommentById(Long id) {
         return null;
     }
 
     @Override
-    public List<CommentDto> getCommentByPostId(Long id) {
+    public List<CommentDTO> getCommentByPostId(Long id) {
         return null;
     }
 
     @Override
-    public CommentDto updateComment(Long id, CommentDto comment) {
+    public CommentDTO updateComment(Long id, CommentDTO comment) {
         return null;
     }
 
@@ -70,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.deleteById(id);
     }
 
-    private CommentDto toDto(Comment comment) {
-        return new CommentDto(comment);
+    private CommentDTO toDto(Comment comment) {
+        return new CommentDTO(comment);
     }
 }

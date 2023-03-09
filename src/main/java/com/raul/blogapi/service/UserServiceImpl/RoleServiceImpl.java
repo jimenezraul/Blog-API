@@ -2,7 +2,7 @@ package com.raul.blogapi.service.UserServiceImpl;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.raul.blogapi.controller.Views;
-import com.raul.blogapi.dto.RoleDto;
+import com.raul.blogapi.dto.RoleDTO;
 import com.raul.blogapi.model.Role;
 import com.raul.blogapi.repository.RoleRepository;
 import com.raul.blogapi.repository.UserRepository;
@@ -22,27 +22,27 @@ public class RoleServiceImpl implements RoleService {
 
 
     @Override
-    public List<RoleDto> getAllRoles() {
+    public List<RoleDTO> getAllRoles() {
         List<Role> roles = roleRepository.findAll();
-        return roles.stream().map(RoleDto::new).collect(Collectors.toList());
+        return roles.stream().map(RoleDTO::new).collect(Collectors.toList());
     }
 
     @Override
-    public RoleDto createRole(RoleDto role) {
+    public RoleDTO createRole(RoleDTO role) {
         Role roleModel = convertToEntity(role);
-        return new RoleDto(roleRepository.save(roleModel));
+        return new RoleDTO(roleRepository.save(roleModel));
     }
 
     @Override
-    public RoleDto getRoleById(Long id) {
-        return roleRepository.findById(id).map(RoleDto::new).orElseThrow(() -> new RuntimeException("Role not found"));
+    public RoleDTO getRoleById(Long id) {
+        return roleRepository.findById(id).map(RoleDTO::new).orElseThrow(() -> new RuntimeException("Role not found"));
     }
 
     @Override
-    public RoleDto updateRole(Long id, RoleDto role) {
+    public RoleDTO updateRole(Long id, RoleDTO role) {
         return  roleRepository.findById(id).map(roleModel -> {
             roleModel.setName(role.getName());
-            return new RoleDto(roleRepository.save(roleModel));
+            return new RoleDTO(roleRepository.save(roleModel));
         }).orElseThrow(() -> new RuntimeException("Role not found"));
     }
 
@@ -58,7 +58,7 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.deleteById(id);
     }
 
-    private Role convertToEntity(RoleDto role) {
+    private Role convertToEntity(RoleDTO role) {
         Role roleModel = new Role();
         roleModel.setName(role.getName());
         return roleModel;

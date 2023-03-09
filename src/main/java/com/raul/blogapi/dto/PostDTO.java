@@ -15,7 +15,7 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostDto {
+public class PostDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @Size(min = 10, message = "Description should have at least 10 characters")
@@ -30,14 +30,14 @@ public class PostDto {
     @JsonView(Views.Public.class)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     // get users with the same id too
-    private Collection<CommentDto> comments;
+    private Collection<CommentDTO> comments;
 
-    public PostDto(Post post) {
+    public PostDTO(Post post) {
         this.id = post.getId();
         this.description = post.getDescription();
         this.userId = post.getUser().getId();
         this.userName = post.getUser().getName();
-        this.comments = post.getComments().stream().map(CommentDto::new).toList();
+        this.comments = post.getComments().stream().map(CommentDTO::new).toList();
     }
 
 

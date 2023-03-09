@@ -1,16 +1,16 @@
 package com.raul.blogapi.service;
 
-import com.raul.blogapi.dto.CommentDto;
+import com.raul.blogapi.dto.CommentDTO;
 
 import java.util.List;
 
 public interface CommentService {
-    List<CommentDto> getAllComments();
-    CommentDto createComment(CommentDto comment);
-    CommentDto getCommentById(Long id);
-    List<CommentDto> getCommentByPostId(Long id);
+    List<CommentDTO> getAllComments();
+    CommentDTO createComment(CommentDTO comment);
+    CommentDTO getCommentById(Long id);
+    List<CommentDTO> getCommentByPostId(Long id);
 
-    CommentDto updateComment(Long id, CommentDto comment);
+    CommentDTO updateComment(Long id, CommentDTO comment);
     void deleteComment(Long id);
 }
 

@@ -16,29 +16,36 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @Size(min = 2, message = "Name should have at least 2 characters")
     @NonNull
     @JsonView(Views.Public.class)
     private String name;
+    private String username;
     @NonNull
     @JsonView(Views.Private.class)
     private LocalDate birthDate;
+    private String password;
     @JsonView(Views.Public.class)
-    Collection<PostDto> posts = new ArrayList<>();
+    Collection<PostDTO> posts = new ArrayList<>();
     @JsonView(Views.Public.class)
     Long numberOfPosts = 0L;
     @JsonView(Views.Private.class)
-    private Collection<RoleDto> roles = new ArrayList<>();
+    private Collection<RoleDTO> roles = new ArrayList<>();
 
-    public UserDto(User savedUser) {
+    public UserDTO(User savedUser) {
         this.id = savedUser.getId();
         this.name = savedUser.getName();
         this.birthDate = savedUser.getBirthDate();
-        this.posts = savedUser.getPosts().stream().map(PostDto::new).toList();
-        this.roles = savedUser.getRoles().stream().map(RoleDto::new).toList();
+        this.posts = savedUser.getPosts().stream().map(PostDTO::new).toList();
+        this.roles = savedUser.getRoles().stream().map(RoleDTO::new).toList();
         this.numberOfPosts = savedUser.getPosts().stream().count();
+    }
+
+    public UserDTO(String name, String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 }

@@ -1,6 +1,6 @@
 package com.raul.blogapi.service.UserServiceImpl;
 
-import com.raul.blogapi.dto.PostDto;
+import com.raul.blogapi.dto.PostDTO;
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Post;
 import com.raul.blogapi.model.User;
@@ -19,36 +19,36 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
 
     @Override
-    public List<PostDto> getAllPost() {
+    public List<PostDTO> getAllPost() {
         List<Post> posts = postRepository.findAll();
-        return posts.stream().map(PostDto::new).collect(Collectors.toList());
+        return posts.stream().map(PostDTO::new).collect(Collectors.toList());
     }
 
     @Override
-    public PostDto createPost(PostDto post) {
+    public PostDTO createPost(PostDTO post) {
         Post postModel = convertToEntity(post);
         postModel.setUser(new User(post.getUserId()));
-        return new PostDto(postRepository.save(postModel));
+        return new PostDTO(postRepository.save(postModel));
     }
 
     @Override
-    public PostDto getPostById(Long id) {
+    public PostDTO getPostById(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Post not found"));
-        return new PostDto(post);
+        return new PostDTO(post);
     }
 
     @Override
-    public List<PostDto> getPostByUserId(Long id) {
+    public List<PostDTO> getPostByUserId(Long id) {
         List<Post> posts = postRepository.findByUserId(id);
-        return posts.stream().map(PostDto::new).collect(Collectors.toList());
+        return posts.stream().map(PostDTO::new).collect(Collectors.toList());
     }
 
 
     @Override
-    public PostDto updatePost(Long id, PostDto post) {
+    public PostDTO updatePost(Long id, PostDTO post) {
         Post postToUpdate = postRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Post not found"));
         postToUpdate.setDescription(post.getDescription());
-        return new PostDto(postRepository.save(postToUpdate));
+        return new PostDTO(postRepository.save(postToUpdate));
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PostServiceImpl implements PostService {
         postRepository.deleteById(id);
     }
 
-    private Post convertToEntity(PostDto postDto) {
+    private Post convertToEntity(PostDTO postDto) {
         Post post = new Post();
         BeanUtils.copyProperties(postDto, post);
         return post;

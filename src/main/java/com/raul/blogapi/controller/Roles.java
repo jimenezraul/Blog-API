@@ -1,8 +1,8 @@
 package com.raul.blogapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.raul.blogapi.dto.RoleDto;
-import com.raul.blogapi.dto.UserDto;
+import com.raul.blogapi.dto.RoleDTO;
+import com.raul.blogapi.dto.UserDTO;
 import com.raul.blogapi.service.RoleService;
 import com.raul.blogapi.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,40 +22,45 @@ public class Roles {
     private UserService userService;
 
     @GetMapping("/roles")
-    public List<RoleDto> getAllRoles() {
+    public List<RoleDTO> getAllRoles() {
         return roleService.getAllRoles();
     }
 
     @PostMapping("/roles")
-    public Long createRole(@RequestBody RoleDto role) {
+    public Long createRole(@RequestBody RoleDTO role) {
         return roleService.createRole(role).getId();
     }
 
     @GetMapping("/roles/{id}")
     @JsonView(Views.Private.class)
-    public ResponseEntity<RoleDto> getRoleById(@PathVariable Long id) {
-        ResponseEntity<RoleDto> role = ResponseEntity.of(Optional.ofNullable(roleService.getRoleById(id)));
+    public ResponseEntity<RoleDTO> getRoleById(@PathVariable Long id) {
+        ResponseEntity<RoleDTO> role = ResponseEntity.of(Optional.ofNullable(roleService.getRoleById(id)));
         System.out.println(role);
         return role;
     }
 
     @PutMapping("/roles/user/{id}")
-    public void addRoleToUser(@PathVariable Long id, @RequestBody RoleDto role) {
+    public void addRoleToUser(@PathVariable Long id, @RequestBody RoleDTO role) {
         userService.addRoleToUser(id, role);
     }
 
+    @DeleteMapping("/roles/user/{id}/role/{roleId}")
+    public void deleteRoleFromUser(@PathVariable("id") Long id, @PathVariable("roleId") Long roleId) {
+        userService.removeRoleFromUser(id, roleId);
+    }
+
     @PutMapping("/roles/{id}")
-    public RoleDto updateRole(@PathVariable Long id, @RequestBody RoleDto role) {
+    public RoleDTO updateRole(@PathVariable Long id, @RequestBody RoleDTO role) {
         return roleService.updateRole(id, role);
     }
 
     @DeleteMapping("/roles/user/{id}")
-    public void deleteRoleFromUser(@PathVariable Long id, @RequestBody RoleDto role) {
+    public void deleteRoleFromUser(@PathVariable Long id, @RequestBody RoleDTO role) {
         System.out.println(role);
-        Optional<UserDto> users = Optional.ofNullable(userService.getUserById(id));
+        Optional<UserDTO> users = Optional.ofNullable(userService.getUserById(id));
         if (users.isPresent()) {
-            UserDto user = users.get();
-            Collection<RoleDto> roles = user.getRoles();
+            UserDTO user = users.get();
+            Collection<RoleDTO> roles = user.getRoles();
             roles.removeIf(r -> r.getId().equals(role.getId()));
             user.setRoles(roles);
             userService.updateUser(id, user);

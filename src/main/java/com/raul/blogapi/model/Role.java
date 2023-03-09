@@ -2,7 +2,7 @@ package com.raul.blogapi.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.raul.blogapi.controller.Views;
-import com.raul.blogapi.dto.RoleDto;
+import com.raul.blogapi.dto.RoleDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,7 +31,7 @@ public class Role {
     @JsonView(Views.Private.class)
     private Collection<User> users = new ArrayList<>();
 
-    public Role(RoleDto role) {
+    public Role(RoleDTO role) {
         this.id = role.getId();
         this.name = role.getName();
     }
