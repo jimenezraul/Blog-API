@@ -13,7 +13,7 @@ import org.springframework.beans.BeanUtils;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentDto {
+public class CommentDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @Size(min = 2, message = "Description should have at least 2 characters")
@@ -29,7 +29,7 @@ public class CommentDto {
     @JsonView(Views.Public.class)
     private String user;
 
-    public CommentDto(Comment comment) {
+    public CommentDTO(Comment comment) {
         BeanUtils.copyProperties(comment, this);
         this.postId = comment.getPost().getId();
         this.userId = comment.getUser().getId();

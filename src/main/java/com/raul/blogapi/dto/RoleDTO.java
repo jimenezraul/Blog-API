@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleDto {
+public class RoleDTO {
     @JsonView(Views.Private.class)
     private Long id;
     @JsonView(Views.Private.class)
     private String name;
-    public RoleDto(Role role) {
+    public RoleDTO(Role role) {
         this.id = role.getId();
         this.name = role.getName();
     }

@@ -1,7 +1,7 @@
 package com.raul.blogapi.service.UserServiceImpl;
 
-import com.raul.blogapi.dto.RoleDto;
-import com.raul.blogapi.dto.UserDto;
+import com.raul.blogapi.dto.RoleDTO;
+import com.raul.blogapi.dto.UserDTO;
 import com.raul.blogapi.error.NullFieldException;
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Role;
@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
         private UserRepository userRepository;
 
         @Override
-        public List<UserDto> getAllUsers() {
+        public List<UserDTO> getAllUsers() {
             return  userRepository.findAll()
                     .stream()
                     .map(user -> toDto(user))
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         }
 
         @Override
-        public UserDto createUser(UserDto userDto) {
+        public UserDTO createUser(UserDTO userDto) {
             if (userDto.getName() == null || userDto.getBirthDate() == null) {
                 throw new NullFieldException("Name and birthdate cannot be null.");
             }
@@ -54,39 +54,46 @@ public class UserServiceImpl implements UserService {
         }
 
         @Override
-        public UserDto getUserById(Long id) {
+        public UserDTO getUserById(Long id) {
             User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
-            return new UserDto(user);
+            return new UserDTO(user);
         }
 
         @Override
-        public UserDto updateUser(Long id, UserDto user) {
+        public UserDTO updateUser(Long id, UserDTO user) {
             User userToUpdate = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
             userToUpdate.setName(user.getName());
             userToUpdate.setBirthDate(user.getBirthDate());
-            return new UserDto(userRepository.save(userToUpdate));
+            return new UserDTO(userRepository.save(userToUpdate));
         }
 
         @Override
-        public UserDto addRoleToUser(Long id, RoleDto role) {
+        public UserDTO addRoleToUser(Long id, RoleDTO role) {
             User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
             user.getRoles().add(new Role(role));
-            return new UserDto(userRepository.save(user));
+            return new UserDTO(userRepository.save(user));
         }
 
-        @Override
+    @Override
+    public UserDTO removeRoleFromUser(Long id, Long roleId) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.getRoles().removeIf(role -> role.getId().equals(roleId));
+        return new UserDTO(userRepository.save(user));
+    }
+
+    @Override
         public void deleteUser(Long id) {
             userRepository.deleteById(id);
         }
 
-        private User convertToEntity(UserDto userDto) {
+        private User convertToEntity(UserDTO userDto) {
             User user = new User();
             BeanUtils.copyProperties(userDto, user);
             return user;
         }
 
-        private UserDto toDto(User user) {
-            return new UserDto(user);
+        private UserDTO toDto(User user) {
+            return new UserDTO(user);
         }
 
 }

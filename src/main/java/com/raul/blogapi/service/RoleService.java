@@ -1,14 +1,14 @@
 package com.raul.blogapi.service;
 
-import com.raul.blogapi.dto.RoleDto;
+import com.raul.blogapi.dto.RoleDTO;
 
 import java.util.List;
 
 public interface RoleService {
-    List<RoleDto> getAllRoles();
-    RoleDto createRole(RoleDto role);
-    RoleDto getRoleById(Long id);
-    RoleDto updateRole(Long id, RoleDto role);
+    List<RoleDTO> getAllRoles();
+    RoleDTO createRole(RoleDTO role);
+    RoleDTO getRoleById(Long id);
+    RoleDTO updateRole(Long id, RoleDTO role);
     void deleteRole(Long id);
 
 }
