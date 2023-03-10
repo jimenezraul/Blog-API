@@ -28,6 +28,8 @@ public class UserDTO {
     @JsonView(Views.Private.class)
     private LocalDate birthDate;
     private String password;
+
+    private Boolean isEmailVerified;
     @JsonView(Views.Public.class)
     Collection<PostDTO> posts = new ArrayList<>();
     @JsonView(Views.Public.class)
@@ -44,8 +46,11 @@ public class UserDTO {
         this.numberOfPosts = savedUser.getPosts().stream().count();
     }
 
-    public UserDTO(String name, String username, String password) {
+    public UserDTO(String name, String username, String password, Boolean isEmailVerified) {
         this.username = username;
         this.password = password;
+        this.isEmailVerified = isEmailVerified || false;
     }
+
+
 }

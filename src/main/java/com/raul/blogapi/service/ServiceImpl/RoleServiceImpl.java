@@ -1,4 +1,4 @@
-package com.raul.blogapi.service.UserServiceImpl;
+package com.raul.blogapi.service.ServiceImpl;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.raul.blogapi.controller.Views;

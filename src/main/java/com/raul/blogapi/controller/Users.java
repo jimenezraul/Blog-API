@@ -37,12 +37,6 @@ public class Users {
         return service.getUserById(id);
     }
 
-    @PostMapping("/users")
-    public Long createUser(@Valid @RequestBody UserDTO user) {
-        UserDTO userDto = service.createUser(user);
-        return userDto.getId();
-    }
-
     @PutMapping("/users/{id}")
     @JsonView(Views.Public.class)
     public UserDTO updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO user) {
