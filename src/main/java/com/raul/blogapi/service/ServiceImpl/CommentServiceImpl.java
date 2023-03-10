@@ -1,4 +1,4 @@
-package com.raul.blogapi.service.UserServiceImpl;
+package com.raul.blogapi.service.ServiceImpl;
 
 import com.raul.blogapi.dto.CommentDTO;
 import com.raul.blogapi.error.UserNotFoundException;

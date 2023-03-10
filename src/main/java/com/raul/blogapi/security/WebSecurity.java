@@ -44,7 +44,7 @@ public class WebSecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/api/auth/*").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf().disable()
@@ -99,6 +99,14 @@ public class WebSecurity {
     @Qualifier("jwtRefreshTokenAuthProvider")
     JwtAuthenticationProvider jwtRefreshTokenAuthProvider() {
         JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtRefreshTokenDecoder());
+        provider.setJwtAuthenticationConverter(jwtToUserConverter);
+        return provider;
+    }
+
+    @Bean
+    @Qualifier("jwtAccessTokenAuthProvider")
+    JwtAuthenticationProvider jwtAccessTokenAuthProvider() {
+        JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtAccessTokenDecoder());
         provider.setJwtAuthenticationConverter(jwtToUserConverter);
         return provider;
     }

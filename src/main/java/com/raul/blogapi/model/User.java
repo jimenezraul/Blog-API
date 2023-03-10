@@ -35,7 +35,10 @@ public class User implements UserDetails {
     @Column(name = "name", nullable = false)
     @JsonView(Views.Public.class)
     private String name;
+    @NonNull
     private String username;
+    @NonNull
+    private String email;
     @NonNull
     private String password;
 
@@ -59,9 +62,10 @@ public class User implements UserDetails {
         this.id = userId;
     }
 
-    public User(String name, String username, String password, LocalDate birthDate) {
+    public User(String name, String username, String email, String password, LocalDate birthDate) {
         this.name = name;
         this.username = username;
+        this.email = email;
         this.password = password;
         this.birthDate = birthDate;
     }
@@ -106,5 +110,13 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean isEmailVerified() {
+        return isEmailVerified;
+    }
+
+    public void setVerified(boolean b) {
+        isEmailVerified = b;
     }
 }
