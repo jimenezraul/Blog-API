@@ -10,6 +10,7 @@ import com.raul.blogapi.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,11 @@ public class RoleServiceImpl implements RoleService {
             }
         });
         roleRepository.deleteById(id);
+    }
+
+    @Override
+    public Collection<RoleDTO> getRolesByUserId(Long id) {
+        return userRepository.findById(id).map(user -> user.getRoles().stream().map(RoleDTO::new).collect(Collectors.toList())).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     private Role convertToEntity(RoleDTO role) {
