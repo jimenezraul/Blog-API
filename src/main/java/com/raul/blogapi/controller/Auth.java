@@ -1,12 +1,10 @@
 package com.raul.blogapi.controller;
 
-import com.raul.blogapi.dto.UserDTO;
+import com.raul.blogapi.dto.*;
 import com.raul.blogapi.model.User;
 import com.raul.blogapi.security.TokenGenerator;
-import com.raul.blogapi.dto.LoginDTO;
-import com.raul.blogapi.dto.SignupDTO;
-import com.raul.blogapi.dto.TokenDTO;
 import com.raul.blogapi.service.EmailService;
+import com.raul.blogapi.service.RoleService;
 import com.raul.blogapi.service.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,11 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.Collections;
 
 @RestController
@@ -45,6 +45,9 @@ public class Auth {
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    RoleService roleService;
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody SignupDTO signupDTO) throws Exception {
@@ -72,11 +75,10 @@ public class Auth {
 
     @PostMapping("/login")
     public ResponseEntity login(HttpServletResponse response, @RequestBody LoginDTO loginDTO) {
+        Authentication authentication = daoAuthenticationProvider.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
 
-        Authentication authentication = daoAuthenticationProvider.authenticate(UsernamePasswordAuthenticationToken.unauthenticated(loginDTO.getUsername(), loginDTO.getPassword()));
-
-
-        User user = (User) userDetailsManager.loadUserByUsername(loginDTO.getUsername());
+        User user = (User) authentication.getPrincipal();
 
         if(!user.getIsEmailVerified()) {
             return ResponseEntity.badRequest().body("Email not verified");

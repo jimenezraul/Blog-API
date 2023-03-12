@@ -11,9 +11,11 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.sql.DataSource;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -119,4 +121,5 @@ public class User implements UserDetails {
     public void setVerified(boolean b) {
         isEmailVerified = b;
     }
+
 }

@@ -35,5 +35,10 @@ public class Role {
         this.id = role.getId();
         this.name = role.getName();
     }
+
+    public Role(Role role) {
+        this.id = role.getId();
+        this.name = role.getName();
+    }
 }
 
