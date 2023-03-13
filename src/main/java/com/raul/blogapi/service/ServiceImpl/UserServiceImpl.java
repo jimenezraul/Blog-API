@@ -5,6 +5,7 @@ import com.raul.blogapi.dto.UserDTO;
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Role;
 import com.raul.blogapi.model.User;
+import com.raul.blogapi.repository.RoleRepository;
 import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.service.UserService;
 import org.springframework.beans.BeanUtils;
@@ -27,6 +28,8 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -82,7 +85,13 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
 
     @Override
     public void createUser(UserDetails user) {
-        ((User) user).setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if(user != null){
+            ((User) user).setPassword(passwordEncoder.encode(user.getPassword()));
+            Role role = roleRepository.findByName("ROLE_USER");
+            ((User) user).getRoles().add(role);
+        }
+
         userRepository.save((User) user);
     }
 
