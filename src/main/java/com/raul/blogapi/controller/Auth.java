@@ -19,6 +19,8 @@ import org.springframework.security.oauth2.server.resource.BearerTokenAuthentica
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Collections;
 
 @RestController
@@ -99,6 +101,13 @@ public class Auth {
         Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshToken));
         Jwt jwt = (Jwt) authentication.getCredentials();
         // check if present in db and not revoked, etc
+        Instant now = Instant.now();
+        Instant expiresAt = jwt.getExpiresAt();
+        Duration duration = Duration.between(now, expiresAt);
+        long daysUntilExpired = duration.toDays();
+        if(daysUntilExpired < 7) {
+            // delete old refresh token and create new one
+        }
 
         TokenDTO tokens = tokenGenerator.createToken(authentication);
 
