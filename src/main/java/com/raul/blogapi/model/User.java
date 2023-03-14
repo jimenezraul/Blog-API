@@ -38,6 +38,8 @@ public class User implements UserDetails {
     @JsonView(Views.Public.class)
     private String name;
     @NonNull
+    @JsonView(Views.Public.class)
+    @Column(name = "username", nullable = false, unique = true)
     private String username;
     @NonNull
     private String email;
@@ -121,5 +123,5 @@ public class User implements UserDetails {
     public void setVerified(boolean b) {
         isEmailVerified = b;
     }
-
 }
+

@@ -19,5 +19,9 @@ public class RoleDTO {
         this.id = role.getId();
         this.name = role.getName();
     }
+
+    public RoleDTO(String roleUser) {
+        this.name = roleUser;
+    }
 }
 

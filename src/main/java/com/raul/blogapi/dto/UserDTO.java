@@ -23,6 +23,7 @@ public class UserDTO {
     @NonNull
     @JsonView(Views.Public.class)
     private String name;
+    @JsonView(Views.Public.class)
     private String username;
     @NonNull
     @JsonView(Views.Private.class)
@@ -40,6 +41,8 @@ public class UserDTO {
     public UserDTO(User savedUser) {
         this.id = savedUser.getId();
         this.name = savedUser.getName();
+        this.username = savedUser.getUsername();
+        this.isEmailVerified = savedUser.getIsEmailVerified();
         this.birthDate = savedUser.getBirthDate();
         this.posts = savedUser.getPosts().stream().map(PostDTO::new).toList();
         this.roles = savedUser.getRoles().stream().map(RoleDTO::new).toList();
@@ -50,6 +53,8 @@ public class UserDTO {
         this.username = username;
         this.password = password;
         this.isEmailVerified = isEmailVerified || false;
+        this.roles = new ArrayList<>();
+        this.roles.add(new RoleDTO("ROLE_USER"));
     }
 
 

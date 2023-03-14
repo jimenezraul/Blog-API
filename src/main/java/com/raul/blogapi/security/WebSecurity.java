@@ -31,6 +31,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @Slf4j
 public class WebSecurity {
+
     @Autowired
     JwtToUserConverter jwtToUserConverter;
     @Autowired
@@ -45,6 +46,7 @@ public class WebSecurity {
         http
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/csrf").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf().disable()

@@ -6,7 +6,7 @@ import com.raul.blogapi.security.TokenGenerator;
 import com.raul.blogapi.service.EmailService;
 import com.raul.blogapi.service.RoleService;
 import com.raul.blogapi.service.UserService;
-import jakarta.servlet.http.Cookie;
+import com.raul.blogapi.utils.Cookies;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,13 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.Collections;
 
 @RestController
@@ -85,18 +83,18 @@ public class Auth {
         }
         TokenDTO tokens = tokenGenerator.createToken(authentication);
 
-        setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
+        Cookies.setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
 
         return ResponseEntity.ok(tokens);
     }
 
     @GetMapping("/logout")
     public ResponseEntity logout(HttpServletResponse response) {
-        deleteCookie(response);
+        Cookies.deleteCookie(response);
         return ResponseEntity.ok("Logged out");
     }
 
-    @GetMapping("/token")
+    @GetMapping("/refresh")
     public ResponseEntity token(HttpServletResponse response, @CookieValue(name = "refreshToken") String refreshToken) {
         Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshToken));
         Jwt jwt = (Jwt) authentication.getCredentials();
@@ -104,7 +102,7 @@ public class Auth {
 
         TokenDTO tokens = tokenGenerator.createToken(authentication);
 
-        setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
+        Cookies.setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
 
         return ResponseEntity.ok(tokens);
     }
@@ -124,24 +122,5 @@ public class Auth {
         return ResponseEntity.ok("Email verified");
 
     }
-
-    public void setTokenCookies(HttpServletResponse response, String accessToken, String refreshToken) {
-        setCookie(response, "accessToken", accessToken, 3600);
-        setCookie(response, "refreshToken", refreshToken, 86400);
-    }
-
-    public void deleteCookie(HttpServletResponse response) {
-        setCookie(response, "accessToken", null, 0);
-        setCookie(response, "refreshToken", null, 0);
-    }
-
-    private void setCookie(HttpServletResponse response, String name, String value, int maxAge) {
-        Cookie cookie = new Cookie(name, value);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(maxAge);
-        response.addCookie(cookie);
-    }
-
 
 }
