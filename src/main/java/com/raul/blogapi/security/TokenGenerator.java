@@ -1,7 +1,6 @@
 package com.raul.blogapi.security;
 
 import com.raul.blogapi.dto.TokenDTO;
-import lombok.extern.slf4j.Slf4j;
 import com.raul.blogapi.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
