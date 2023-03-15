@@ -3,10 +3,16 @@ package com.raul.blogapi.service.ServiceImpl;
 import com.raul.blogapi.dto.RoleDTO;
 import com.raul.blogapi.dto.UserDTO;
 import com.raul.blogapi.error.UserNotFoundException;
+import com.raul.blogapi.model.Comment;
+import com.raul.blogapi.model.Post;
 import com.raul.blogapi.model.Role;
 import com.raul.blogapi.model.User;
+import com.raul.blogapi.repository.CommentRepository;
+import com.raul.blogapi.repository.PostRepository;
 import com.raul.blogapi.repository.RoleRepository;
 import com.raul.blogapi.repository.UserRepository;
+import com.raul.blogapi.service.CommentService;
+import com.raul.blogapi.service.PostService;
 import com.raul.blogapi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +36,10 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
     PasswordEncoder passwordEncoder;
     @Autowired
     private RoleRepository roleRepository;
+    @Autowired
+    private CommentRepository commentRepository;
+    @Autowired
+    private PostRepository postRepository;
 
     @Override
     public List<UserDTO> getAllUsers() {
@@ -51,6 +61,7 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
         userToUpdate.setName(userDto.getName());
         userToUpdate.setBirthDate(userDto.getBirthDate());
         userToUpdate.setIsEmailVerified(userDto.getIsEmailVerified());
+        userToUpdate.setUpdatedAt();
         return new UserDTO(userRepository.save(userToUpdate));
     }
 
@@ -69,19 +80,24 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
     }
 
     @Override
-        public void deleteUser(Long id) {
-            userRepository.deleteById(id);
-        }
+    public void deleteUser(Long id) {
+        List<Post> posts = postRepository.findByUserId(id);
+        List<Comment> comments = commentRepository.findByUserId(id);
 
-        private User convertToEntity(UserDTO userDto) {
-            User user = new User();
-            BeanUtils.copyProperties(userDto, user);
-            return user;
-        }
+        postRepository.deleteAll(posts);
+        commentRepository.deleteAll(comments);
+        userRepository.deleteById(id);
+    }
 
-        private UserDTO toDto(User user) {
-            return new UserDTO(user);
-        }
+    private User convertToEntity(UserDTO userDto) {
+        User user = new User();
+        BeanUtils.copyProperties(userDto, user);
+        return user;
+    }
+
+    private UserDTO toDto(User user) {
+        return new UserDTO(user);
+    }
 
     @Override
     public void createUser(UserDetails user) {
@@ -91,6 +107,10 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
             Role role = roleRepository.findByName("ROLE_USER");
             ((User) user).getRoles().add(role);
         }
+
+        // update created_at and updated_at
+        ((User) user).setCreatedAt();
+        ((User) user).setUpdatedAt();
 
         userRepository.save((User) user);
     }
@@ -129,6 +149,17 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
                 .orElseThrow(() -> new UsernameNotFoundException(
                         MessageFormat.format("username {0} not found", username)
                 ));
+    }
+
+    @Override
+    public UserDTO getUserByEmail(String email) {
+        User user = userRepository.findUserByEmail(email);
+
+        if(user == null){
+            throw new UserNotFoundException("User not found");
+        }
+
+        return new UserDTO(user);
     }
 }
 

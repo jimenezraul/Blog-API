@@ -44,8 +44,16 @@ public class Users {
     }
 
     @DeleteMapping("/users/{id}")
+    @JsonView(Views.Public.class)
     public void deleteUser(@PathVariable Long id) {
+        System.out.println(id);
         service.deleteUser(id);
+    }
+
+    @GetMapping("/users/email/{email}")
+    @JsonView(Views.Public.class)
+    public UserDTO getUserByEmail(@PathVariable String email) {
+        return service.getUserByEmail(email);
     }
 
 }

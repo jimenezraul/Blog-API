@@ -10,7 +10,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +33,13 @@ public class PostDTO {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     // get users with the same id too
     private Collection<CommentDTO> comments;
+    @JsonView(Views.Public.class)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Long numberOfComments;
+    @JsonView(Views.Public.class)
+    private LocalDateTime created_at;
+    @JsonView(Views.Public.class)
+    private LocalDateTime updated_at;
 
     public PostDTO(Post post) {
         this.id = post.getId();
@@ -38,8 +47,10 @@ public class PostDTO {
         this.userId = post.getUser().getId();
         this.userName = post.getUser().getName();
         this.comments = post.getComments().stream().map(CommentDTO::new).toList();
+        this.numberOfComments = post.getComments().stream().count();
+        this.created_at = post.getCreated_at();
+        this.updated_at = post.getUpdated_at();
     }
-
 
 }
 

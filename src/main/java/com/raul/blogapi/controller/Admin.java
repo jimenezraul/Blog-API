@@ -23,11 +23,6 @@ public class Admin {
     @JsonView(Views.Private.class)
     public String admin() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User authUser = (User) auth.getPrincipal();
-
-        UserDTO user = userService.getUserById(authUser.getId());
-
-        System.out.println(user);
 
         return auth.getPrincipal().toString();
     }

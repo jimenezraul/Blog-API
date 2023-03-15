@@ -12,11 +12,14 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.sql.DataSource;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -31,36 +34,36 @@ import java.util.Collections;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Public.class)
     private Long id;
     @Size(min = 2, message = "Name should have at least 2 characters")
     @Column(name = "name", nullable = false)
-    @JsonView(Views.Public.class)
     private String name;
     @NonNull
-    @JsonView(Views.Public.class)
     @Column(name = "username", nullable = false, unique = true)
     private String username;
     @NonNull
     private String email;
     @NonNull
     private String password;
+    private String imageUrl;
 
     private Boolean isEmailVerified = false;
     @Past(message = "Birth date should be in the past")
     @Column(name = "birth_date", nullable = false)
-    @JsonView(Views.Private.class)
     private LocalDate birthDate;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonView(Views.Private.class)
     private Collection<Post> posts = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    @JsonView(Views.Private.class)
     private Collection<Role> roles = new ArrayList<>();
+    @CreatedDate
+    private LocalDateTime created_at;
+
+    @LastModifiedDate
+    private LocalDateTime updated_at;
 
     public User(Long userId) {
         this.id = userId;
@@ -122,6 +125,14 @@ public class User implements UserDetails {
 
     public void setVerified(boolean b) {
         isEmailVerified = b;
+    }
+
+    public void setCreatedAt() {
+        this.created_at = LocalDateTime.now();
+    }
+
+    public void setUpdatedAt() {
+        this.updated_at = LocalDateTime.now();
     }
 }
 

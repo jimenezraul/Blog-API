@@ -1,6 +1,7 @@
 package com.raul.blogapi.service.ServiceImpl;
 
 import com.raul.blogapi.dto.CommentDTO;
+import com.raul.blogapi.dto.UserDTO;
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Comment;
 import com.raul.blogapi.model.Post;
@@ -8,8 +9,11 @@ import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.CommentRepository;
 import com.raul.blogapi.repository.PostRepository;
 import com.raul.blogapi.service.CommentService;
+import com.raul.blogapi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +25,8 @@ public class CommentServiceImpl implements CommentService {
     private CommentRepository commentRepository;
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    UserService userService;
 
 
     @Override
@@ -31,9 +37,15 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentDTO createComment(CommentDTO commentDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
         Comment comment = convertToEntity(commentDto);
+
         comment.setPost(new Post(commentDto.getPostId()));
-        comment.setUser(new User(commentDto.getUserId()));
+        comment.setUser(new User(user.getId()));
+        comment.setCreatedAt();
+        comment.setUpdatedAt();
         Comment savedComment = commentRepository.save(comment);
         return toDto(savedComment);
     }

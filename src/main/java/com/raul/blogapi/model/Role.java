@@ -22,13 +22,11 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.Public.class)
     private Long id;
     @JsonView(Views.Public.class)
     private String name;
 
     @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
-    @JsonView(Views.Private.class)
     private Collection<User> users = new ArrayList<>();
 
     public Role(RoleDTO role) {

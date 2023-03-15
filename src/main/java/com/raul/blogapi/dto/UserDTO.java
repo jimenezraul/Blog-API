@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -28,15 +29,23 @@ public class UserDTO {
     @NonNull
     @JsonView(Views.Private.class)
     private LocalDate birthDate;
+    @JsonView(Views.Private.class)
+    @NonNull
+    private String email;
     private String password;
+    @JsonView(Views.Public.class)
+    private String imageUrl;
 
     private Boolean isEmailVerified;
-    @JsonView(Views.Public.class)
-    Collection<PostDTO> posts = new ArrayList<>();
     @JsonView(Views.Public.class)
     Long numberOfPosts = 0L;
     @JsonView(Views.Private.class)
     private Collection<RoleDTO> roles = new ArrayList<>();
+
+    @JsonView(Views.Private.class)
+    private LocalDateTime created_at;
+    @JsonView(Views.Private.class)
+    private LocalDateTime updated_at;
 
     public UserDTO(User savedUser) {
         this.id = savedUser.getId();
@@ -44,9 +53,12 @@ public class UserDTO {
         this.username = savedUser.getUsername();
         this.isEmailVerified = savedUser.getIsEmailVerified();
         this.birthDate = savedUser.getBirthDate();
-        this.posts = savedUser.getPosts().stream().map(PostDTO::new).toList();
         this.roles = savedUser.getRoles().stream().map(RoleDTO::new).toList();
         this.numberOfPosts = savedUser.getPosts().stream().count();
+        this.email = savedUser.getEmail();
+        this.created_at = savedUser.getCreated_at();
+        this.updated_at = savedUser.getUpdated_at();
+        this.imageUrl = savedUser.getImageUrl() == null ? "https://i.imgur.com/3ZQZ9Zm.png" : savedUser.getImageUrl();
     }
 
     public UserDTO(String name, String username, String password, Boolean isEmailVerified) {

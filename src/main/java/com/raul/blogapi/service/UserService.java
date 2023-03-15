@@ -21,4 +21,5 @@ public interface UserService {
     void verifyUser(Long id);
 
     UserDetails loadUserByUsername(String username);
+    UserDTO getUserByEmail(String email);
 }

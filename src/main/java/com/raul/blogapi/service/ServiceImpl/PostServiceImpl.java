@@ -2,14 +2,18 @@ package com.raul.blogapi.service.ServiceImpl;
 
 import com.raul.blogapi.dto.PostDTO;
 import com.raul.blogapi.error.UserNotFoundException;
+import com.raul.blogapi.model.Comment;
 import com.raul.blogapi.model.Post;
 import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.PostRepository;
 import com.raul.blogapi.service.PostService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,8 +30,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostDTO createPost(PostDTO post) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+
         Post postModel = convertToEntity(post);
-        postModel.setUser(new User(post.getUserId()));
+        postModel.setUser(new User(user.getId()));
+        postModel.setCreatedAt();
+        postModel.setUpdatedAt();
         return new PostDTO(postRepository.save(postModel));
     }
 
@@ -56,11 +65,17 @@ public class PostServiceImpl implements PostService {
         postRepository.deleteById(id);
     }
 
+    @Override
+    public void deleteAllPostsByUserId(Long id) {
+        List<Post> posts = postRepository.findByUserId(id);
+        postRepository.deleteAll(posts);
+    }
+
+
     private Post convertToEntity(PostDTO postDto) {
         Post post = new Post();
         BeanUtils.copyProperties(postDto, post);
         return post;
     }
-
 
 }
