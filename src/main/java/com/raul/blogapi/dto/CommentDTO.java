@@ -38,7 +38,7 @@ public class CommentDTO {
         this.postId = comment.getPost().getId();
         this.userId = comment.getUser().getId();
         this.user = comment.getUser().getName();
-        this.created_at = comment.getCreated_at();
+        this.created_at = comment.getCreatedAt();
         this.updated_at = comment.getUpdated_at();
     }
 }

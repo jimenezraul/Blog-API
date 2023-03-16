@@ -2,6 +2,7 @@ package com.raul.blogapi.controller;
 
 import com.raul.blogapi.dto.*;
 import com.raul.blogapi.model.User;
+import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.security.TokenGenerator;
 import com.raul.blogapi.service.EmailService;
 import com.raul.blogapi.service.RoleService;
@@ -48,16 +49,18 @@ public class Auth {
 
     @Autowired
     RoleService roleService;
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody SignupDTO signupDTO) throws Exception {
         User user = new User(signupDTO.getName(), signupDTO.getUsername(), signupDTO.getEmail(), signupDTO.getPassword(), signupDTO.getBirthDate());
 
-        if(signupDTO.getName() == null || signupDTO.getUsername() == null || signupDTO.getPassword() == null || signupDTO.getBirthDate() == null) {
+        if (signupDTO.getName() == null || signupDTO.getUsername() == null || signupDTO.getPassword() == null || signupDTO.getBirthDate() == null) {
             return ResponseEntity.badRequest().body("Missing fields");
         }
 
-        if(userDetailsManager.userExists(user.getUsername())) {
+        if (userDetailsManager.userExists(user.getUsername())) {
             return ResponseEntity.badRequest().body("User already exists");
         }
 
@@ -66,7 +69,7 @@ public class Auth {
 
         EmailService email = emailService.sendVerificationEmail(user.getEmail(), tokenGenerator.createToken(authentication).getAccessToken());
 
-        if(email == null) {
+        if (email == null) {
             return ResponseEntity.badRequest().body("Something went wrong");
         }
 
@@ -80,7 +83,7 @@ public class Auth {
 
         User user = (User) authentication.getPrincipal();
 
-        if(!user.getIsEmailVerified()) {
+        if (!user.getIsEmailVerified()) {
             return ResponseEntity.badRequest().body("Email not verified");
         }
         TokenDTO tokens = tokenGenerator.createToken(authentication);
@@ -105,7 +108,7 @@ public class Auth {
         Instant expiresAt = jwt.getExpiresAt();
         Duration duration = Duration.between(now, expiresAt);
         long daysUntilExpired = duration.toDays();
-        if(daysUntilExpired < 7) {
+        if (daysUntilExpired < 7) {
             // delete old refresh token and create new one
         }
 
@@ -130,6 +133,28 @@ public class Auth {
 
         return ResponseEntity.ok("Email verified");
 
+    }
+
+    @PostMapping("/resend-verification-email")
+    public ResponseEntity resendVerificationEmail(@RequestBody ResendVerificationEmailDTO data) throws Exception {
+        User user = userRepository.findUserByEmail(data.getEmail());
+        if (user == null) {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+
+        if (user.getIsEmailVerified()) {
+            return ResponseEntity.badRequest().body("Email already verified");
+        }
+
+        Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, user.getPassword(), Collections.EMPTY_LIST);
+
+        EmailService emailResend = emailService.sendVerificationEmail(user.getEmail(), tokenGenerator.createToken(authentication).getAccessToken());
+
+        if (emailResend == null) {
+            return ResponseEntity.badRequest().body("Something went wrong");
+        }
+
+        return ResponseEntity.ok("Email sent");
     }
 
 }

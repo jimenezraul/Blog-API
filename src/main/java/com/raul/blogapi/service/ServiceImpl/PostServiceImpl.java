@@ -9,6 +9,9 @@ import com.raul.blogapi.repository.PostRepository;
 import com.raul.blogapi.service.PostService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,6 +29,13 @@ public class PostServiceImpl implements PostService {
     public List<PostDTO> getAllPost() {
         List<Post> posts = postRepository.findAll();
         return posts.stream().map(PostDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<PostDTO> getLatestPosts(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Post> postsPage = postRepository.findAll(pageRequest);
+        return postsPage.getContent().stream().map(PostDTO::new).collect(Collectors.toList());
     }
 
     @Override

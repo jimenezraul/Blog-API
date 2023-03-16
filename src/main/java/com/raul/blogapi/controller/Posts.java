@@ -18,8 +18,11 @@ public class Posts {
     private PostService service;
     @GetMapping("/posts")
     @JsonView(Views.Public.class)
-    public List<PostDTO> getAllPost() {
-        return service.getAllPost();
+    public List<PostDTO> getAllPost(@RequestParam(value = "page", defaultValue = "0") int page,
+                                    @RequestParam(value = "size", defaultValue = "50") int size) {
+
+        List<PostDTO> posts = service.getLatestPosts(page, size);
+        return  posts;
     }
 
     @GetMapping("/posts/{id}")

@@ -8,10 +8,10 @@ spring:
   profiles:
     active: dev
   datasource:
-    url: ${DB_URL}
+    url: ${DATABASE_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-    driver-class-name: ${MYSQL_DRIVER}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -26,7 +26,7 @@ spring:
           auth: true
           starttls:
             enable: true
-            required: true
+            required: trueBLOG-API
 
 logging:
   level:

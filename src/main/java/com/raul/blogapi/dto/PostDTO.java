@@ -48,7 +48,7 @@ public class PostDTO {
         this.userName = post.getUser().getName();
         this.comments = post.getComments().stream().map(CommentDTO::new).toList();
         this.numberOfComments = post.getComments().stream().count();
-        this.created_at = post.getCreated_at();
+        this.created_at = post.getCreatedAt();
         this.updated_at = post.getUpdated_at();
     }
 

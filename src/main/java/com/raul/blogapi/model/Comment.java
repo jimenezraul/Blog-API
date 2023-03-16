@@ -34,13 +34,14 @@ public class Comment {
     private User user;
 
     @CreatedDate
-    private LocalDateTime created_at;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updated_at;
 
     public void setCreatedAt() {
-        this.created_at = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     public void setUpdatedAt() {

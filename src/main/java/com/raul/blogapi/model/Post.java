@@ -31,7 +31,8 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Collection<Comment> comments = new ArrayList<>();
     @CreatedDate
-    private LocalDateTime created_at;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
     private LocalDateTime updated_at;
@@ -41,7 +42,7 @@ public class Post {
     }
 
     public void setCreatedAt() {
-        this.created_at = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now();
     }
 
     public void setUpdatedAt() {
