@@ -1,5 +1,4 @@
 package com.raul.blogapi.service.ServiceImpl;
-
 import com.raul.blogapi.dto.RoleDTO;
 import com.raul.blogapi.dto.UserDTO;
 import com.raul.blogapi.error.UserNotFoundException;
@@ -11,8 +10,6 @@ import com.raul.blogapi.repository.CommentRepository;
 import com.raul.blogapi.repository.PostRepository;
 import com.raul.blogapi.repository.RoleRepository;
 import com.raul.blogapi.repository.UserRepository;
-import com.raul.blogapi.service.CommentService;
-import com.raul.blogapi.service.PostService;
 import com.raul.blogapi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +28,6 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService, UserDetailsManager {
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
@@ -101,26 +97,20 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
 
     @Override
     public void createUser(UserDetails user) {
-
-        if(user != null){
-            ((User) user).setPassword(passwordEncoder.encode(user.getPassword()));
-            Role role = roleRepository.findByName("ROLE_USER");
-            ((User) user).getRoles().add(role);
+        if(user == null || user.getUsername() == null || user.getPassword() == null){
+            throw new IllegalArgumentException("Username and password cannot be null");
         }
 
-        // update created_at and updated_at
-        ((User) user).setCreatedAt();
-        ((User) user).setUpdatedAt();
+        User userToCreate = (User) user;
 
-        userRepository.save((User) user);
-    }
+        userToCreate.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role role = roleRepository.findByName("ROLE_USER");
+        userToCreate.getRoles().add(role);
 
-    @Override
-    public void verifyUser(Long id) {
-        userRepository.findById(id).ifPresent(user -> {
-            user.setVerified(true);
-            userRepository.save(user);
-        });
+        userToCreate.setCreatedAt();
+        userToCreate.setUpdatedAt();
+
+        userRepository.save(userToCreate);
     }
 
     @Override
@@ -160,6 +150,13 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
         }
 
         return new UserDTO(user);
+    }
+
+    @Override
+    public void removeRolesFromUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.getRoles().clear();
+        userRepository.save(user);
     }
 }
 

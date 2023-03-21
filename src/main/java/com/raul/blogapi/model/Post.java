@@ -20,7 +20,7 @@ import java.util.Collection;
 @ToString(exclude = "comments")
 public class Post {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Size(min = 10, message = "Description should have at least 10 characters")

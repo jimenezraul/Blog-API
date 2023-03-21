@@ -31,7 +31,6 @@ public class Users {
 
     @GetMapping("/me/{id}")
     @JsonView(Views.Private.class)
-    // preAuthorize is used to check if the user id is the same as the id in the path
     @PreAuthorize("#id == authentication.principal.id")
     public UserDTO getMe(@PathVariable Long id) {
         return service.getUserById(id);

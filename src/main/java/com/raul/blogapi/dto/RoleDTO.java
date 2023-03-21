@@ -20,8 +20,5 @@ public class RoleDTO {
         this.name = role.getName();
     }
 
-    public RoleDTO(String roleUser) {
-        this.name = roleUser;
-    }
 }
 

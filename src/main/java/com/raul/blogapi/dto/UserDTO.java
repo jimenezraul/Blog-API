@@ -5,8 +5,6 @@ import com.raul.blogapi.controller.Views;
 import com.raul.blogapi.model.User;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,12 +32,14 @@ public class UserDTO {
     private String password;
     @JsonView(Views.Public.class)
     private String imageUrl;
-
+    @JsonView(Views.Private.class)
     private Boolean isEmailVerified;
     @JsonView(Views.Public.class)
     Long numberOfPosts = 0L;
     @JsonView(Views.Private.class)
     private Collection<RoleDTO> roles = new ArrayList<>();
+    @JsonView(Views.Private.class)
+    private Collection<RefreshTokensDTO> refreshTokens = new ArrayList<>();
 
     @JsonView(Views.Private.class)
     private LocalDateTime created_at;
@@ -58,14 +58,7 @@ public class UserDTO {
         this.created_at = savedUser.getCreated_at();
         this.updated_at = savedUser.getUpdated_at();
         this.imageUrl = savedUser.getImageUrl() == null ? "https://i.imgur.com/3ZQZ9Zm.png" : savedUser.getImageUrl();
-    }
-
-    public UserDTO(String name, String username, String password, Boolean isEmailVerified) {
-        this.username = username;
-        this.password = password;
-        this.isEmailVerified = isEmailVerified || false;
-        this.roles = new ArrayList<>();
-        this.roles.add(new RoleDTO("ROLE_USER"));
+        this.refreshTokens = savedUser.getRefreshTokens().stream().map(RefreshTokensDTO::new).toList();
     }
 
 

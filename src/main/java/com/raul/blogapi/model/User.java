@@ -56,7 +56,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Post> posts = new ArrayList<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -66,6 +66,8 @@ public class User implements UserDetails {
 
     @LastModifiedDate
     private LocalDateTime updated_at;
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<RefreshTokens> refreshTokens = new ArrayList<>();
 
     public User(Long userId) {
         this.id = userId;
@@ -119,14 +121,6 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public boolean isEmailVerified() {
-        return isEmailVerified;
-    }
-
-    public void setVerified(boolean b) {
-        isEmailVerified = b;
     }
 
     public void setCreatedAt() {

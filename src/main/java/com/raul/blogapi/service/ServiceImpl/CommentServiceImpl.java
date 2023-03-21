@@ -1,7 +1,6 @@
 package com.raul.blogapi.service.ServiceImpl;
 
 import com.raul.blogapi.dto.CommentDTO;
-import com.raul.blogapi.dto.UserDTO;
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Comment;
 import com.raul.blogapi.model.Post;
@@ -9,7 +8,6 @@ import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.CommentRepository;
 import com.raul.blogapi.repository.PostRepository;
 import com.raul.blogapi.service.CommentService;
-import com.raul.blogapi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,8 +23,6 @@ public class CommentServiceImpl implements CommentService {
     private CommentRepository commentRepository;
     @Autowired
     PostRepository postRepository;
-    @Autowired
-    UserService userService;
 
 
     @Override
@@ -55,21 +51,6 @@ public class CommentServiceImpl implements CommentService {
         Comment commentModel = new Comment();
         BeanUtils.copyProperties(comment, commentModel);
         return commentModel;
-    }
-
-    @Override
-    public CommentDTO getCommentById(Long id) {
-        return null;
-    }
-
-    @Override
-    public List<CommentDTO> getCommentByPostId(Long id) {
-        return null;
-    }
-
-    @Override
-    public CommentDTO updateComment(Long id, CommentDTO comment) {
-        return null;
     }
 
     @Override

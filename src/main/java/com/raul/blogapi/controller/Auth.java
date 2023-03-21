@@ -5,9 +5,11 @@ import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.security.TokenGenerator;
 import com.raul.blogapi.service.EmailService;
+import com.raul.blogapi.service.RefreshTokenService;
 import com.raul.blogapi.service.RoleService;
 import com.raul.blogapi.service.UserService;
 import com.raul.blogapi.utils.Cookies;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -22,13 +24,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 public class Auth {
     @Autowired
-    UserService userDetailsManager;
+    UserService userService;
     @Autowired
     TokenGenerator tokenGenerator;
     @Autowired
@@ -42,15 +45,14 @@ public class Auth {
     JwtAuthenticationProvider accessTokenAuthProvider;
 
     @Autowired
-    UserService userService;
-
-    @Autowired
     EmailService emailService;
 
     @Autowired
     RoleService roleService;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private RefreshTokenService refreshTokenService;
 
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody SignupDTO signupDTO) throws Exception {
@@ -60,11 +62,11 @@ public class Auth {
             return ResponseEntity.badRequest().body("Missing fields");
         }
 
-        if (userDetailsManager.userExists(user.getUsername())) {
+        if (userService.userExists(user.getUsername())) {
             return ResponseEntity.badRequest().body("User already exists");
         }
 
-        userDetailsManager.createUser(user);
+        userService.createUser(user);
         Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.getPassword(), Collections.EMPTY_LIST);
 
         EmailService email = emailService.sendVerificationEmail(user.getEmail(), tokenGenerator.createToken(authentication).getAccessToken());
@@ -88,13 +90,20 @@ public class Auth {
         }
         TokenDTO tokens = tokenGenerator.createToken(authentication);
 
+        refreshTokenService.createRefreshToken(tokens.getRefreshToken(), user.getId());
+
         Cookies.setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
 
         return ResponseEntity.ok(tokens);
     }
 
     @GetMapping("/logout")
-    public ResponseEntity logout(HttpServletResponse response) {
+    public ResponseEntity logout(HttpServletResponse response, @CookieValue(name = "refreshToken") String refreshToken) {
+        Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshToken));
+        Jwt jwt = (Jwt) authentication.getCredentials();
+        RefreshTokensDTO token = refreshTokenService.getRefreshToken(refreshToken, Long.valueOf(jwt.getSubject()));
+
+        refreshTokenService.deleteRefreshToken(token.getId());
         Cookies.deleteCookie(response);
         return ResponseEntity.ok("Logged out");
     }
@@ -103,16 +112,26 @@ public class Auth {
     public ResponseEntity token(HttpServletResponse response, @CookieValue(name = "refreshToken") String refreshToken) {
         Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshToken));
         Jwt jwt = (Jwt) authentication.getCredentials();
+
         // check if present in db and not revoked, etc
+        RefreshTokensDTO token = refreshTokenService.getRefreshToken(refreshToken, Long.valueOf(jwt.getSubject()));
+
+        if(token == null || token.getIsRevoked()) {
+            Cookies.deleteCookie(response);
+            return ResponseEntity.badRequest().body("Refresh token not found");
+        }
+
         Instant now = Instant.now();
         Instant expiresAt = jwt.getExpiresAt();
         Duration duration = Duration.between(now, expiresAt);
         long daysUntilExpired = duration.toDays();
+        TokenDTO tokens = tokenGenerator.createToken(authentication);
+
         if (daysUntilExpired < 7) {
             // delete old refresh token and create new one
+            refreshTokenService.deleteRefreshToken(token.getId());
+            refreshTokenService.createRefreshToken(tokens.getRefreshToken(), Long.valueOf(jwt.getSubject()));
         }
-
-        TokenDTO tokens = tokenGenerator.createToken(authentication);
 
         Cookies.setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
 
@@ -124,7 +143,7 @@ public class Auth {
         Authentication authentication = accessTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(token));
         Jwt jwt = (Jwt) authentication.getCredentials();
         // check if present in db and not revoked, etc
-        UserDTO user = userDetailsManager.getUserById(Long.valueOf(jwt.getSubject()));
+        UserDTO user = userService.getUserById(Long.valueOf(jwt.getSubject()));
         System.out.println(user);
 
         user.setIsEmailVerified(true);

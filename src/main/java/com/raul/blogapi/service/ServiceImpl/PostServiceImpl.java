@@ -2,7 +2,6 @@ package com.raul.blogapi.service.ServiceImpl;
 
 import com.raul.blogapi.dto.PostDTO;
 import com.raul.blogapi.error.UserNotFoundException;
-import com.raul.blogapi.model.Comment;
 import com.raul.blogapi.model.Post;
 import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.PostRepository;
@@ -16,7 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,12 +22,6 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
-
-    @Override
-    public List<PostDTO> getAllPost() {
-        List<Post> posts = postRepository.findAll();
-        return posts.stream().map(PostDTO::new).collect(Collectors.toList());
-    }
 
     @Override
     public List<PostDTO> getLatestPosts(int page, int size) {
@@ -73,12 +65,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Long id) {
         postRepository.deleteById(id);
-    }
-
-    @Override
-    public void deleteAllPostsByUserId(Long id) {
-        List<Post> posts = postRepository.findByUserId(id);
-        postRepository.deleteAll(posts);
     }
 
 

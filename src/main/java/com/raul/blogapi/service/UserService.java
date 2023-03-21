@@ -18,8 +18,8 @@ public interface UserService {
     boolean userExists(String username);
 
     void createUser(UserDetails user);
-    void verifyUser(Long id);
 
-    UserDetails loadUserByUsername(String username);
     UserDTO getUserByEmail(String email);
+
+    void removeRolesFromUser(Long id);
 }
