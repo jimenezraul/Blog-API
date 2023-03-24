@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,4 +15,6 @@ public class TokenDTO {
     private String userId;
     private String accessToken;
     private String refreshToken;
+    private Boolean isLogged;
+    private Boolean isAdmin = false;
 }

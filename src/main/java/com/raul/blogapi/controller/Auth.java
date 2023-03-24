@@ -9,10 +9,11 @@ import com.raul.blogapi.service.RefreshTokenService;
 import com.raul.blogapi.service.RoleService;
 import com.raul.blogapi.service.UserService;
 import com.raul.blogapi.utils.Cookies;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Arrays;
 import java.util.Collections;
 
 @RestController
@@ -79,7 +79,7 @@ public class Auth {
     }
 
     @PostMapping("/login")
-    public ResponseEntity login(HttpServletResponse response, @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> login(HttpServletResponse response, @RequestBody LoginDTO loginDTO) {
         Authentication authentication = daoAuthenticationProvider.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
 
@@ -92,20 +92,29 @@ public class Auth {
 
         refreshTokenService.createRefreshToken(tokens.getRefreshToken(), user.getId());
 
+        tokens.setIsLogged(true);
+        User loggedUser = userRepository.findById(user.getId()).get();
+        loggedUser.getRoles().forEach(role -> {
+            if (role.getName().equals("ROLE_ADMIN")) {
+                tokens.setIsAdmin(true);
+            }
+        });
+
         Cookies.setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
 
         return ResponseEntity.ok(tokens);
     }
 
-    @GetMapping("/logout")
-    public ResponseEntity logout(HttpServletResponse response, @CookieValue(name = "refreshToken") String refreshToken) {
+    @PostMapping("/logout")
+    public void logout(HttpServletResponse response, @CookieValue(name = "refreshToken") String refreshToken) {
         Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshToken));
         Jwt jwt = (Jwt) authentication.getCredentials();
+
         RefreshTokensDTO token = refreshTokenService.getRefreshToken(refreshToken, Long.valueOf(jwt.getSubject()));
 
         refreshTokenService.deleteRefreshToken(token.getId());
         Cookies.deleteCookie(response);
-        return ResponseEntity.ok("Logged out");
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     @GetMapping("/refresh")

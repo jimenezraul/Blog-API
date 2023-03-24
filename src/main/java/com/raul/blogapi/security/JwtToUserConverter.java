@@ -24,7 +24,7 @@ public class JwtToUserConverter implements Converter<Jwt, UsernamePasswordAuthen
     public UsernamePasswordAuthenticationToken convert(Jwt jwt) {
         User userFromDb = userRepository.findById(Long.valueOf(jwt.getSubject())).orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<Role> roles = userFromDb.getRoles().stream().map(role -> new Role(role)).toList();
+        List<Role> roles = userFromDb.getRoles().stream().map(Role::new).toList();
 
         Collection<? extends GrantedAuthority> authorities = roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))

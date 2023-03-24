@@ -1,0 +1,18 @@
+[
+    {
+        "path": "/",
+        "name": "Blog"
+    },
+    {
+        "path": "/dashboard",
+        "name": "Dashboard"
+    },
+    {
+        "path": "/resources",
+        "name": "Resources"
+    },
+    {
+        "path": "/about-us",
+        "name": "About us"
+    }
+]
