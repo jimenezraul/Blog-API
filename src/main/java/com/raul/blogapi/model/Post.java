@@ -1,7 +1,5 @@
 package com.raul.blogapi.model;
 
-import com.fasterxml.jackson.annotation.JsonView;
-import com.raul.blogapi.controller.Views;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -23,8 +21,13 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(min = 5, message = "Title should have at least 5 characters")
+    @Column(nullable = false)
+    private String title;
+
     @Size(min = 10, message = "Description should have at least 10 characters")
-    private String description;
+    @Column(nullable = false, length = 5000)
+    private String body;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;

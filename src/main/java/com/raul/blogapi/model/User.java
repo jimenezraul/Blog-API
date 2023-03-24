@@ -2,6 +2,7 @@ package com.raul.blogapi.model;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.raul.blogapi.controller.Views;
+import com.raul.blogapi.dto.UserDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
@@ -79,6 +80,19 @@ public class User implements UserDetails {
         this.email = email;
         this.password = password;
         this.birthDate = birthDate;
+    }
+
+    public User(UserDTO userById) {
+        this.id = userById.getId();
+        this.name = userById.getName();
+        this.username = userById.getUsername();
+        this.email = userById.getEmail();
+        this.password = userById.getPassword();
+        this.birthDate = userById.getBirthDate();
+        this.imageUrl = userById.getImageUrl();
+        this.isEmailVerified = userById.getIsEmailVerified();
+        this.created_at = userById.getCreated_at();
+        this.updated_at = userById.getUpdated_at();
     }
 
     @Override

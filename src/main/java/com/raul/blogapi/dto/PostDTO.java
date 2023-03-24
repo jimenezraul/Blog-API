@@ -20,10 +20,13 @@ import java.util.Date;
 public class PostDTO {
     @JsonView(Views.Public.class)
     private Long id;
-    @Size(min = 10, message = "Description should have at least 10 characters")
+
     @JsonView(Views.Public.class)
-    private String description;
-    @NonNull
+    private String title;
+
+    @JsonView(Views.Public.class)
+    private String body;
+
     @JsonView(Views.Public.class)
     private Long userId;
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -43,7 +46,8 @@ public class PostDTO {
 
     public PostDTO(Post post) {
         this.id = post.getId();
-        this.description = post.getDescription();
+        this.title = post.getTitle();
+        this.body = post.getBody();
         this.userId = post.getUser().getId();
         this.userName = post.getUser().getName();
         this.comments = post.getComments().stream().map(CommentDTO::new).toList();

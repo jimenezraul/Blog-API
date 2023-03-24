@@ -61,9 +61,10 @@ function LoginForm() {
         username: username,
         password: password,
       });
-   
+  
       if (res.isLogged) {
         localStorage.setItem('isLogged', 'true');
+        localStorage.setItem('id', res.userId);
         if (res.isAdmin) {
           localStorage.setItem('isAdmin', 'true');
         }

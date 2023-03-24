@@ -8,7 +8,7 @@ const Signup = lazy(() => import("../pages/Signup"));
 
 const Public = () => {
     return (
-      <div className="flex flex-1">
+      <div className="flex flex-1 bg-gray-100">
         <Suspense fallback={<div className="h-full w-full flex items-center justify-center"></div>}>
           <Outlet />
         </Suspense>

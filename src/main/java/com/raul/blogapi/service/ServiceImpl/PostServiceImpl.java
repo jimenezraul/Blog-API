@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private UserServiceImpl userService;
 
     @Override
     public List<PostDTO> getLatestPosts(int page, int size) {
@@ -35,10 +37,13 @@ public class PostServiceImpl implements PostService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
-        Post postModel = convertToEntity(post);
-        postModel.setUser(new User(user.getId()));
+        Post postModel = new Post();
+        postModel.setId(null);
+        postModel.setTitle(post.getTitle());
+        postModel.setBody(post.getBody());
         postModel.setCreatedAt();
         postModel.setUpdatedAt();
+        postModel.setUser(user);
         return new PostDTO(postRepository.save(postModel));
     }
 
@@ -58,7 +63,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDTO updatePost(Long id, PostDTO post) {
         Post postToUpdate = postRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Post not found"));
-        postToUpdate.setDescription(post.getDescription());
+        postToUpdate.setBody(post.getBody());
         return new PostDTO(postRepository.save(postToUpdate));
     }
 

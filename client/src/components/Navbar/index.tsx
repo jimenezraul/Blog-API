@@ -15,6 +15,7 @@ const Navbar = () => {
     await FetchData('/api/v1/auth/logout', 'POST');
     localStorage.removeItem('isLogged');
     localStorage.removeItem('isAdmin');
+    localStorage.removeItem('id');
     dispatch(setAccessToken(''));
 
     navigate('/');
