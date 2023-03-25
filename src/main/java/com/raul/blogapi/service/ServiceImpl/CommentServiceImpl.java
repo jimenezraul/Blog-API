@@ -46,6 +46,12 @@ public class CommentServiceImpl implements CommentService {
         return toDto(savedComment);
     }
 
+    @Override
+    public List<CommentDTO> getCommentsByPost(Long id) {
+        List<Comment> comments = commentRepository.findAllByPostId(id);
+        return comments.stream().map(comment -> toDto(comment)).collect(Collectors.toList());
+    }
+
 
     private Comment convertToEntity(CommentDTO comment) {
         Comment commentModel = new Comment();

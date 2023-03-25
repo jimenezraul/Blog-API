@@ -35,6 +35,11 @@ public class Comments {
         comments.deleteComment(id);
     }
 
+    @GetMapping("/posts/{id}/comments")
+    public List<CommentDTO> getCommentsByPost(@PathVariable Long id) {
+        return comments.getCommentsByPost(id);
+    }
+
     private CommentDTO toDto(Comment comment) {
         return new CommentDTO(comment);
     }

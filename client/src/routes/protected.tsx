@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
+import BlogDetails from '../pages/BlogDetails';
 
 const Home = lazy(() => import('../pages/Home'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
@@ -25,6 +26,10 @@ export const protectedRoutes = [
     children: [
       { path: '/', element: <Home /> },
       { path: 'dashboard', element: <Dashboard /> },
+      {
+        path: '/blog-details/:id',
+        element: <BlogDetails />,
+      },
       { path: '*', element: <Navigate to='.' /> },
     ],
   },
