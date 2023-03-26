@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { FetchData } from '../utils/FetchData';
 import ProfileCard from '../components/ProfileCard';
 import BlogPost from '../components/Posts';
+import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [data, setData] = useState({
@@ -39,6 +40,12 @@ const Dashboard = () => {
           <ProfileCard {...data} />
         </div>
         <div className='w-full md:w-1/2'>
+          {/* add a new post button */}
+          <div className='flex justify-center mb-8'>
+            <Link to="/add-new-post" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
+              Add a new post
+            </Link>
+          </div>
           {posts.map((post: any) => {
             return (
               <BlogPost

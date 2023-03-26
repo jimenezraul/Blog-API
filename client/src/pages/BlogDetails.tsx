@@ -70,8 +70,14 @@ const BlogDetails = () => {
         text: comment,
         postId: id,
       });
-   
-      setComments([res, ...comments]);
+
+      setComments([
+        {
+          ...res,
+          created_at: Intl.DateTimeFormat().format(new Date(res.created_at)),
+        },
+        ...comments,
+      ]);
     } catch (error) {
       console.log(error);
     }
@@ -163,7 +169,12 @@ const BlogDetails = () => {
         <h3 className='mt-4 text-xl font-bold text-gray-900 mb-5'>Comments</h3>
         {comments.length ? (
           comments.map((comment: any) => (
-            <Comments key={comment.id} comment={comment} comments={comments} setComments={setComments} />
+            <Comments
+              key={comment.id}
+              comment={comment}
+              comments={comments}
+              setComments={setComments}
+            />
           ))
         ) : (
           <p>No comments yet</p>
