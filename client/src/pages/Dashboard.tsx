@@ -48,7 +48,7 @@ const Dashboard = () => {
           </div>
           {posts.map((post: any) => {
             return (
-              <BlogPost
+                <BlogPost
                 key={post.id}
                 title={post.title}
                 id={post.id}
@@ -58,7 +58,7 @@ const Dashboard = () => {
                   new Date(post.created_at)
                 )}
                 commentsCount={post.numberOfComments}
-              />
+                />
             );
           })}
         </div>

@@ -15,19 +15,21 @@ const Post = ({
   };
   
   return (
-    <div key={id} className='bg-white shadow-lg rounded-lg max-w-2xl mx-auto px-4 py-8'>
+    <div key={id} className='mb-4 bg-white shadow-lg rounded-lg max-w-2xl mx-auto px-4 py-8'>
       <h1 className='text-3xl font-bold mb-4'>{title}</h1>
       <p className='text-gray-600 mb-4'>
         By {author} on {createdAt}
       </p>
       <div dangerouslySetInnerHTML={{ __html: body }} />
       <p className='text-gray-600 mb-4'>Comments: {commentsCount}</p>
+      <div className='flex justify-end'>
       <button
         onClick={handleReadMore}
         className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
       >
         Read More
-      </button>
+        </button>
+        </div>
     </div>
   );
 };

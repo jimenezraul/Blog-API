@@ -1,7 +1,34 @@
+import { FetchData } from '../utils/FetchData';
+import { useNavigate } from 'react-router-dom';
+
 const AddNewPost = () => {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('submit');
+    const target = e.target as typeof e.target & {
+      title: { value: string };
+      body: { value: string };
+    };
+    const title = target?.title?.value;
+    const body = target?.body?.value;
+
+    try {
+      if (title === '' || body === '') {
+        throw new Error('Please fill in all fields');
+      }
+      if (body.length < 10) {
+        throw new Error('Body must be at least 10 characters long');
+      }
+
+      await FetchData('/api/v1/posts', 'POST', {
+        title,
+        body,
+      });
+
+      navigate('/dashboard');
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -26,7 +53,7 @@ const AddNewPost = () => {
               </label>
               <input
                 className='w-full bg-white shadow text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3'
-                id='grid-title'
+                name='title'
                 type='text'
                 placeholder='Title'
               />
@@ -45,7 +72,7 @@ const AddNewPost = () => {
               </label>
               <textarea
                 className='w-full p-2 border border-gray-300 rounded shadow'
-                id='grid-body'
+                name='body'
                 placeholder='Body'
               />
               <p className='text-gray-600 text-xs italic'>

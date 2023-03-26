@@ -5,6 +5,7 @@ import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Post;
 import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.PostRepository;
+import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.service.PostService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
     @Autowired
-    private UserServiceImpl userService;
+    private UserRepository userRepository;
 
     @Override
     public List<PostDTO> getLatestPosts(int page, int size) {
@@ -36,6 +37,7 @@ public class PostServiceImpl implements PostService {
     public PostDTO createPost(PostDTO post) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
+        User loggedUser = userRepository.getById(user.getId());
 
         Post postModel = new Post();
         postModel.setId(null);
@@ -43,7 +45,7 @@ public class PostServiceImpl implements PostService {
         postModel.setBody(post.getBody());
         postModel.setCreatedAt();
         postModel.setUpdatedAt();
-        postModel.setUser(user);
+        postModel.setUser(loggedUser);
         return new PostDTO(postRepository.save(postModel));
     }
 
@@ -55,7 +57,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDTO> getPostByUserId(Long id) {
-        List<Post> posts = postRepository.findByUserId(id);
+        List<Post> posts = postRepository.findAllByUserIdOrderByCreatedAtDesc(id);
         return posts.stream().map(PostDTO::new).collect(Collectors.toList());
     }
 

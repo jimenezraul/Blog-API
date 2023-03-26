@@ -13,20 +13,10 @@ const postInitialValues = {
   updated_at: '',
 };
 
-const commentInitialValues = {
-  created_at: '',
-  id: '',
-  postId: '',
-  text: '',
-  updated_at: '',
-  user: '',
-  userId: '',
-};
-
 const BlogDetails = () => {
   const id = window.location.pathname.split('/')[2];
   const [data, setData] = useState(postInitialValues);
-  const [comments, setComments] = useState([commentInitialValues]);
+  const [comments, setComments] = useState < CommentProps[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -99,7 +89,7 @@ const BlogDetails = () => {
         Back
       </button>
 
-      <div className='mx-auto sm:text-center lg:max-w-2xl'>
+      <div className='mx-auto sm:text-center lg:max-w-2xl px-8'>
         <div className='max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12'>
           {isThisWeek && (
             <div>

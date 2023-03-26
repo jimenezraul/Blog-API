@@ -5,6 +5,7 @@ import com.raul.blogapi.dto.PostDTO;
 import com.raul.blogapi.service.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -38,8 +39,9 @@ public class Posts {
     }
 
     @PostMapping("/posts")
-    public Long createPost(@Valid @RequestBody PostDTO post) {
-        return service.createPost(post).getId();
+    public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO post) {
+        service.createPost(post);
+        return ResponseEntity.ok(post);
     }
 
     @PutMapping("/posts/{id}")
