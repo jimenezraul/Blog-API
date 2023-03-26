@@ -1,12 +1,14 @@
 package com.raul.blogapi.service.ServiceImpl;
 
 import com.raul.blogapi.dto.CommentDTO;
+import com.raul.blogapi.dto.UserDTO;
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Comment;
 import com.raul.blogapi.model.Post;
 import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.CommentRepository;
 import com.raul.blogapi.repository.PostRepository;
+import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.service.CommentService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,8 @@ public class CommentServiceImpl implements CommentService {
     private CommentRepository commentRepository;
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    UserRepository userRepository;
 
 
     @Override
@@ -36,19 +40,23 @@ public class CommentServiceImpl implements CommentService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
+        User loggedUser = userRepository.findById(user.getId()).orElseThrow(() -> new UserNotFoundException("User not found"));
+
         Comment comment = convertToEntity(commentDto);
 
         comment.setPost(new Post(commentDto.getPostId()));
-        comment.setUser(new User(user.getId()));
+        comment.setUser(loggedUser);
         comment.setCreatedAt();
         comment.setUpdatedAt();
-        Comment savedComment = commentRepository.save(comment);
-        return toDto(savedComment);
+        CommentDTO savedComment = new CommentDTO(commentRepository.save(comment));
+
+        return savedComment;
     }
 
     @Override
     public List<CommentDTO> getCommentsByPost(Long id) {
-        List<Comment> comments = commentRepository.findAllByPostId(id);
+        List<Comment> comments = commentRepository.findAllByPostIdOrderByCreatedAtDesc(id);
+
         return comments.stream().map(comment -> toDto(comment)).collect(Collectors.toList());
     }
 

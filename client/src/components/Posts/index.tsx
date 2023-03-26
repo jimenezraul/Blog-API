@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-const BlogPost = ({
+const Post = ({
   id,
   title,
   body,
@@ -15,7 +15,7 @@ const BlogPost = ({
   };
   
   return (
-    <div key={id} className='max-w-2xl mx-auto px-4 py-8'>
+    <div key={id} className='bg-white shadow-lg rounded-lg max-w-2xl mx-auto px-4 py-8'>
       <h1 className='text-3xl font-bold mb-4'>{title}</h1>
       <p className='text-gray-600 mb-4'>
         By {author} on {createdAt}
@@ -32,4 +32,4 @@ const BlogPost = ({
   );
 };
 
-export default BlogPost;
+export default Post;

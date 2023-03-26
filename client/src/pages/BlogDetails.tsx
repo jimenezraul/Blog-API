@@ -52,13 +52,39 @@ const BlogDetails = () => {
     fetchData();
   }, [id]);
 
+  const [comment, setComment] = useState('');
+
+  const handleCommentChange = (event: any) => {
+    setComment(event.target.value);
+  };
+
+  const handleCommentSubmit = async (event: any) => {
+    event.preventDefault();
+    // check if comment is empty and if is less than 10 characters
+    if (comment.length < 5 || comment === '') {
+      return;
+    }
+
+    try {
+      const res = await FetchData(`/api/v1/comments`, 'POST', {
+        text: comment,
+        postId: id,
+      });
+   
+      setComments([res, ...comments]);
+    } catch (error) {
+      console.log(error);
+    }
+
+    setComment('');
+  };
+
   const today = new Date();
   const postDate = new Date(data?.created_at);
   const isThisWeek = postDate > new Date(today.setDate(today.getDate() - 7));
 
   return (
-    <div className='px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
-      {/* button to go back  */}
+    <div className='bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
       <button
         className='transition duration-300 px-3 py-2 mb-5 bg-blue-400 text-white rounded shadow-md hover:bg-blue-600 focus:outline-none'
         aria-label='Go back'
@@ -71,8 +97,8 @@ const BlogDetails = () => {
         <div className='max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12'>
           {isThisWeek && (
             <div>
-              <p className='inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400'>
-                Brand new
+              <p className='inline-block px-3 py-1 mb-4 text-xs font-semibold tracking-wider text-white bg-blue-400 uppercase rounded-full bg-teal-accent-400'>
+                New Post
               </p>
             </div>
           )}
@@ -113,12 +139,31 @@ const BlogDetails = () => {
         </div>
         <div dangerouslySetInnerHTML={{ __html: data.body }} />
       </div>
-      <div className='flex flex-col items-center justify-center mt-8'>
+      <div className='flex flex-col space-y-4 items-center justify-center mt-8'>
+        <div className='bg-slate-100 p-2 border border-gray-300 rounded w-full shadow'>
+          <label className='block font-semibold mb-2' htmlFor='comment'>
+            New comment
+          </label>
+          <textarea
+            className='w-full p-2 border border-gray-300 rounded shadow'
+            name='comment'
+            id='comment'
+            rows={3}
+            value={comment}
+            onChange={handleCommentChange}
+          ></textarea>
+          <button
+            className='transition float-right duration-300 px-3 py-2 mt-4 bg-blue-400 text-white rounded shadow-md hover:bg-blue-600 focus:outline-none'
+            aria-label='Add comment'
+            onClick={handleCommentSubmit}
+          >
+            Add comment
+          </button>
+        </div>
         <h3 className='mt-4 text-xl font-bold text-gray-900 mb-5'>Comments</h3>
-        <hr className='mb-5' />
         {comments.length ? (
           comments.map((comment: any) => (
-            <Comments key={comment.id} comment={comment} />
+            <Comments key={comment.id} comment={comment} comments={comments} setComments={setComments} />
           ))
         ) : (
           <p>No comments yet</p>

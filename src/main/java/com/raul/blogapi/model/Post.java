@@ -44,6 +44,12 @@ public class Post {
         this.id = postId;
     }
 
+    public Post(String s, String s1, User user1) {
+        this.title = s;
+        this.body = s1;
+        this.user = user1;
+    }
+
     public void setCreatedAt() {
         this.createdAt = LocalDateTime.now();
     }

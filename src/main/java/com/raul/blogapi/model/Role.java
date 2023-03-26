@@ -39,4 +39,7 @@ public class Role {
         this.name = role.getName();
     }
 
+    public Role(String role) {
+        this.name = role;
+    }
 }

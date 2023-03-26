@@ -26,8 +26,8 @@ public class Comments {
     }
 
     @PostMapping("/comments")
-    public Long createComment(@Valid @RequestBody CommentDTO comment) {
-        return comments.createComment(comment).getId();
+    public CommentDTO createComment(@Valid @RequestBody CommentDTO comment) {
+        return comments.createComment(comment);
     }
 
     @DeleteMapping("/comments/{id}")

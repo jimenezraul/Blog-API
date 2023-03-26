@@ -144,5 +144,9 @@ public class User implements UserDetails {
     public void setUpdatedAt() {
         this.updated_at = LocalDateTime.now();
     }
+
+    public void addRole(Role adminRole) {
+        this.roles.add(adminRole);
+    }
 }
 

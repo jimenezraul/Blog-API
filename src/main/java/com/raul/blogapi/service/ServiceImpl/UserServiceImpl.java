@@ -110,7 +110,8 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
         userToCreate.setCreatedAt();
         userToCreate.setUpdatedAt();
 
-        userRepository.save(userToCreate);
+        User userCreated = userRepository.save(userToCreate);
+
     }
 
     @Override

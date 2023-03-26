@@ -17,7 +17,7 @@ public interface UserService {
 
     boolean userExists(String username);
 
-    void createUser(UserDetails user);
+   void createUser(UserDetails user);
 
     UserDTO getUserByEmail(String email);
 

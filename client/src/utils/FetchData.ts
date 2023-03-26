@@ -26,8 +26,14 @@ export const FetchData: any = async (
     });
 
     if (response.ok) {
-      const data = await response.json();
+      if (endpoint === '/api/v1/auth/logout') {
+        return response;
+      }
+      if (method === 'DELETE') {
+        return response;
+      }
 
+      const data = await response.json();
       return data;
     }
 

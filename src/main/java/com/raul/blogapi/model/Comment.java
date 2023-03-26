@@ -29,8 +29,6 @@ public class Comment {
     private Post post;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @NonNull
-    @ToString.Exclude
     private User user;
 
     @CreatedDate
@@ -39,6 +37,12 @@ public class Comment {
 
     @LastModifiedDate
     private LocalDateTime updated_at;
+
+    public Comment(String s, Post post1, User user2) {
+        this.text = s;
+        this.post = post1;
+        this.user = user2;
+    }
 
     public void setCreatedAt() {
         this.createdAt = LocalDateTime.now();
