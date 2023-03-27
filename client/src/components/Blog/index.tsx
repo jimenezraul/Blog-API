@@ -1,7 +1,6 @@
 import { FetchData } from '../../utils/FetchData';
 import { useState, useEffect } from 'react';
 import { useNavigate, useMatch } from 'react-router-dom';
-import Auth from '../../auth';
 
 const Blog = () => {
   const navigate = useNavigate();
@@ -39,11 +38,7 @@ const Blog = () => {
   }, []);
 
   const handleLoadMore = (link: string) => {
-    if (Auth.isAuthenticated()) {
-      navigate(link);
-      return;
-    }
-    navigate(`/login?redirect=${link}`);
+    navigate(link);
   };
 
   return (

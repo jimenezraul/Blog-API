@@ -4,18 +4,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import menu from './menu.json';
 import { useAppDispatch } from '../../app/hooks';
 import { setAccessToken } from '../../app/features/accessTokenSlice';
+import Auth from '../../auth';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const isLogged = localStorage.getItem('isLogged');
+  const isLogged = Auth.isAuthenticated();
 
   const handleLogout = async () => {
     await FetchData('/api/v1/auth/logout', 'POST');
-    localStorage.removeItem('isLogged');
-    localStorage.removeItem('isAdmin');
-    localStorage.removeItem('id');
+    localStorage.removeItem('user');
     dispatch(setAccessToken(''));
 
     navigate('/');

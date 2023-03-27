@@ -5,6 +5,7 @@ const Home = lazy(() => import("../pages/Home"));
 const About = lazy(() => import("../pages/About"));
 const Login = lazy(() => import("../pages/Login"));
 const Signup = lazy(() => import("../pages/Signup"));
+const BlogDetails = lazy(() => import("../pages/BlogDetails"));
 
 const Public = () => {
     return (
@@ -31,6 +32,10 @@ const Public = () => {
         {
           path: '/signup',
           element: <Signup />,
+        },
+        {
+          path: '/blog-details/:id',
+          element: <BlogDetails />,
         },
         {
           path: '/about',

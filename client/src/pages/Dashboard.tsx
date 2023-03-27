@@ -3,6 +3,7 @@ import { FetchData } from '../utils/FetchData';
 import ProfileCard from '../components/ProfileCard';
 import BlogPost from '../components/Posts';
 import { Link } from 'react-router-dom';
+import Auth from '../auth';
 
 const Dashboard = () => {
   const [data, setData] = useState({
@@ -17,7 +18,7 @@ const Dashboard = () => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    const id = localStorage.getItem('id');
+    const id = Auth.getUserId();
 
     async function getData() {
       const response = await FetchData(`/api/v1/me/${id}`, 'GET');

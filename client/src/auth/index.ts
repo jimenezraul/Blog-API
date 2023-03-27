@@ -1,7 +1,29 @@
-const Auth = {
-    isAuthenticated: function() {
-        return localStorage.getItem('isLogged') === 'true';
-    }
+interface UserAuth {
+  isLogged: boolean;
+  id: number;
+  isAdmin: boolean;
 }
 
-export default Auth
+const Auth = {
+  getUser: function (): UserAuth | null {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+  },
+
+  isAuthenticated: function (): boolean {
+    const user = this.getUser();
+    return Boolean(user && user.isLogged);
+  },
+
+  isAdmin: function (): boolean {
+    const user = this.getUser();
+    return Boolean(user && user.isAdmin);
+  },
+
+  getUserId: function (): number | null {
+      const user = this.getUser();
+    return user ? user.id : null;
+  },
+};
+
+export default Auth;

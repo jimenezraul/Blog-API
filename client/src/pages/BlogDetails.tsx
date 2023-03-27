@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react';
 import Comments from '../components/Comments';
 import { FetchData } from '../utils/FetchData';
+import Auth from '../auth';
+import { useNavigate } from 'react-router-dom';
 
 const postInitialValues = {
   id: '',
   title: '',
   body: '',
-  userId: '',
+  userId: null,
   userName: '',
   numberOfComments: '',
   created_at: '',
@@ -14,9 +16,11 @@ const postInitialValues = {
 };
 
 const BlogDetails = () => {
+  const isLoggedIn = Auth.isAuthenticated();
   const id = window.location.pathname.split('/')[2];
   const [data, setData] = useState(postInitialValues);
-  const [comments, setComments] = useState < CommentProps[]>([]);
+  const [comments, setComments] = useState<CommentProps[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -75,6 +79,16 @@ const BlogDetails = () => {
     setComment('');
   };
 
+  const handleRedirect = () => {
+    const link = `/blog-details/${id}`;
+
+    if (Auth.isAuthenticated()) {
+      navigate(link);
+      return;
+    }
+    navigate(`/login?redirect=${link}`);
+  };
+
   const today = new Date();
   const postDate = new Date(data?.created_at);
   const isThisWeek = postDate > new Date(today.setDate(today.getDate() - 7));
@@ -122,7 +136,7 @@ const BlogDetails = () => {
                   height='24'
                 />
               </svg>
-              <span className='relative'>{data.title}</span>
+              <span className='relative'>{data?.title}</span>
             </span>
           </h2>
         </div>
@@ -133,31 +147,41 @@ const BlogDetails = () => {
             alt=''
           />
         </div>
-        <div dangerouslySetInnerHTML={{ __html: data.body }} />
+        <div dangerouslySetInnerHTML={{ __html: data?.body }} />
       </div>
-      <div className='flex flex-col space-y-4 items-center justify-center mt-8'>
-        <div className='bg-slate-100 p-2 border border-gray-300 rounded w-full shadow'>
-          <label className='block font-semibold mb-2' htmlFor='comment'>
-            New comment
-          </label>
-          <textarea
-            className='w-full p-2 border border-gray-300 rounded shadow'
-            name='comment'
-            id='comment'
-            rows={3}
-            value={comment}
-            onChange={handleCommentChange}
-          ></textarea>
+      <div className='flex flex-col items-center justify-center mt-8'>
+        {isLoggedIn ? (
+          <div className='bg-slate-100 p-2 border border-gray-300 rounded w-full shadow'>
+            <label className='block font-semibold mb-2' htmlFor='comment'>
+              New comment
+            </label>
+            <textarea
+              className='w-full p-2 border border-gray-300 rounded shadow'
+              name='comment'
+              id='comment'
+              rows={3}
+              value={comment}
+              onChange={handleCommentChange}
+            ></textarea>
+            <button
+              className='transition float-right duration-300 px-3 py-2 mt-4 bg-blue-400 text-white rounded shadow-md hover:bg-blue-600 focus:outline-none'
+              aria-label='Add comment'
+              onClick={handleCommentSubmit}
+            >
+              Add comment
+            </button>
+          </div>
+        ) : (
           <button
-            className='transition float-right duration-300 px-3 py-2 mt-4 bg-blue-400 text-white rounded shadow-md hover:bg-blue-600 focus:outline-none'
-            aria-label='Add comment'
-            onClick={handleCommentSubmit}
+            onClick={handleRedirect}
+            className='transition duration-300 px-3 py-2 mt-4 bg-blue-400 text-white rounded shadow-md hover:bg-blue-600 focus:outline-none'
           >
-            Add comment
+            Login to comment
           </button>
-        </div>
+        )}
         <h3 className='mt-4 text-xl font-bold text-gray-900 mb-5'>Comments</h3>
-        {comments.length ? (
+        <div className='w-full flex flex-col space-y-2 bg-slate-300 p-3 rounded-lg shadow-lg'>
+        {comments?.length ? (
           comments.map((comment: any) => (
             <Comments
               key={comment.id}
@@ -168,7 +192,8 @@ const BlogDetails = () => {
           ))
         ) : (
           <p>No comments yet</p>
-        )}
+          )}
+          </div>
       </div>
     </div>
   );

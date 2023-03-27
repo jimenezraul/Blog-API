@@ -48,6 +48,8 @@ public class WebSecurity {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/csrf").permitAll()
                         .requestMatchers("/api/v1/posts").permitAll()
+                        .requestMatchers("/api/v1/posts/{id}").permitAll()
+                        .requestMatchers("/api/v1/posts/{id}/comments").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf().disable()

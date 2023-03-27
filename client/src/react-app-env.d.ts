@@ -26,6 +26,6 @@ interface CommentProps {
     text: string;
     updated_at: string;
     user: string;
-    userId: string;
+    userId: number;
   };
 }

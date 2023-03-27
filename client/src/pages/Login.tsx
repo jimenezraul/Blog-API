@@ -3,27 +3,7 @@ import { useState } from 'react';
 import { FetchData } from '../utils/FetchData';
 import { useAppDispatch } from '../app/hooks';
 import { setAccessToken } from '../app/features/accessTokenSlice';
-const menuInput = [
-  {
-    name: 'username',
-    type: 'text',
-    placeholder: 'Enter your username',
-  },
-  {
-    name: 'password',
-    type: 'password',
-    placeholder: 'Enter your password',
-  },
-];
-
-const initialState = {
-  username: '',
-  password: '',
-  error: {
-    username: '',
-    password: '',
-  },
-};
+import { menuInput, initialState } from '../utils/loginInputs';
 
 function LoginForm() {
   const location = useLocation();
@@ -32,6 +12,8 @@ function LoginForm() {
   const navigate = useNavigate();
   const [state, setState] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
+
+  const link = redirectLink ? redirectLink : '/dashboard';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,7 +26,6 @@ function LoginForm() {
       },
     });
   };
-  const link = redirectLink ? redirectLink : '/dashboard';
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -66,11 +47,17 @@ function LoginForm() {
       });
 
       if (res.isLogged) {
-        localStorage.setItem('isLogged', 'true');
-        localStorage.setItem('id', res.userId);
+        const userData = {
+          isLogged: true,
+          id: Number(res.userId),
+          isAdmin: false,
+        };
+
         if (res.isAdmin) {
-          localStorage.setItem('isAdmin', 'true');
+          userData.isAdmin = true;
         }
+
+        localStorage.setItem('user', JSON.stringify(userData));
         dispatch(setAccessToken(res.accessToken));
         setIsLoading(false);
       }
