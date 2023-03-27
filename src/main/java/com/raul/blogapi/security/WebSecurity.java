@@ -47,6 +47,7 @@ public class WebSecurity {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/csrf").permitAll()
+                        .requestMatchers("/api/v1/posts").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf().disable()

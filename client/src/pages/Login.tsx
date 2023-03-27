@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { FetchData } from '../utils/FetchData';
 import { useAppDispatch } from '../app/hooks';
@@ -26,6 +26,8 @@ const initialState = {
 };
 
 function LoginForm() {
+  const location = useLocation();
+  const redirectLink = new URLSearchParams(location.search).get('redirect');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [state, setState] = useState(initialState);
@@ -42,6 +44,7 @@ function LoginForm() {
       },
     });
   };
+  const link = redirectLink ? redirectLink : '/dashboard';
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,7 +64,7 @@ function LoginForm() {
         username: username,
         password: password,
       });
-  
+
       if (res.isLogged) {
         localStorage.setItem('isLogged', 'true');
         localStorage.setItem('id', res.userId);
@@ -71,7 +74,7 @@ function LoginForm() {
         dispatch(setAccessToken(res.accessToken));
         setIsLoading(false);
       }
-      navigate('/dashboard');
+      navigate(link);
     } catch (err) {
       console.log(err);
     }
