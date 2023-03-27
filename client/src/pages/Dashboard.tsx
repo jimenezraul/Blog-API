@@ -34,14 +34,14 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className='mt-10 container mx-auto'>
-      <div className='flex flex-wrap justify-center p-5'>
-        <div className='w-full md:w-1/2'>
+    <div className='container mx-auto'>
+      <div className='flex flex-wrap h-full justify-center'>
+        <div className='w-full md:w-1/2 pt-28'>
           <ProfileCard {...data} />
         </div>
-        <div className='w-full md:w-1/2'>
+        <div className='w-full md:w-1/2 bg-slate-200 pt-10 p-5'>
           {/* add a new post button */}
-          <div className='flex justify-center mb-8'>
+          <div className='flex justify-center mb-7'>
             <Link to="/add-new-post" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
               Add a new post
             </Link>

@@ -1,14 +1,16 @@
 import { FetchData } from '../../utils/FetchData';
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useMatch } from 'react-router-dom';
 import Auth from '../../auth';
 
 const Blog = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
+  const isHomeOrDashboard = useMatch("/");
+  
+  let fetchPost: any;
+  if (isHomeOrDashboard) {
+    fetchPost = async () => {
       const res = await FetchData('/api/v1/posts?size=3', 'GET');
       const newData = res?.map((post: any) => {
         return {
@@ -18,7 +20,22 @@ const Blog = () => {
       });
       setPosts(newData);
     };
-    fetchData();
+  } else {
+    fetchPost = async () => {
+      const res = await FetchData('/api/v1/posts', 'GET');
+      const newData = res?.map((post: any) => {
+        return {
+          ...post,
+          created_at: Intl.DateTimeFormat().format(new Date(post.created_at)),
+        };
+      });
+      setPosts(newData);
+    };
+  }
+
+  useEffect(() => {
+    fetchPost();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLoadMore = (link: string) => {
