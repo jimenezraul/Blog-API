@@ -3,48 +3,33 @@ import Comments from '../components/Comments';
 import { FetchData } from '../utils/FetchData';
 import Auth from '../auth';
 import { useNavigate } from 'react-router-dom';
-
-const postInitialValues = {
-  id: '',
-  title: '',
-  body: '',
-  userId: null,
-  userName: '',
-  numberOfComments: '',
-  created_at: '',
-  updated_at: '',
-};
+import { useAppDispatch } from '../app/hooks';
+import { setAlert } from '../app/features/alertSlice';
+import Alert from '../components/NotificationAlert';
+import { postInitialValues } from '../utils/initialValues';
 
 const BlogDetails = () => {
+  const dispatch = useAppDispatch();
   const isLoggedIn = Auth.isAuthenticated();
   const id = window.location.pathname.split('/')[2];
-  const [data, setData] = useState(postInitialValues);
+  const [data, setData] = useState<PostsInitialState>(postInitialValues);
   const [comments, setComments] = useState<CommentProps[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      const res = await FetchData(`/api/v1/posts/${id}`, 'GET');
-      setData(res);
-    };
-    const fetchComments = async () => {
-      const res = await FetchData(`/api/v1/posts/${id}/comments`, 'GET');
+  Promise.all([
+    FetchData(`/api/v1/posts/${id}`, 'GET'),
+    FetchData(`/api/v1/posts/${id}/comments`, 'GET'),
+  ]).then(([postData, commentsData]) => {
+    setData(postData);
+    const newData = commentsData?.map((comment:any) => ({
+      ...comment,
+      created_at: Intl.DateTimeFormat().format(new Date(comment.created_at)),
+    }));
+    setComments(newData);
+  });
+}, [id]);
 
-      const newData = res?.map((comment: any) => {
-        return {
-          ...comment,
-          created_at: Intl.DateTimeFormat().format(
-            new Date(comment.created_at)
-          ),
-        };
-      });
-
-      setComments(newData);
-    };
-
-    fetchComments();
-    fetchData();
-  }, [id]);
 
   const [comment, setComment] = useState('');
 
@@ -56,6 +41,24 @@ const BlogDetails = () => {
     event.preventDefault();
     // check if comment is empty and if is less than 10 characters
     if (comment.length < 5 || comment === '') {
+      if (comment === '') {
+        dispatch(
+          setAlert({
+            message: 'Comment cannot be empty',
+            type: 'WARNING',
+            show: true,
+          })
+        );
+        return;
+      }
+      dispatch(
+        setAlert({
+          message: 'Comment must be at least 5 characters long',
+          type: 'WARNING',
+          show: true,
+        })
+      );
+
       return;
     }
 
@@ -94,7 +97,8 @@ const BlogDetails = () => {
   const isThisWeek = postDate > new Date(today.setDate(today.getDate() - 7));
 
   return (
-    <div className='bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+    <div className='relative w-full bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+      <Alert />
       <button
         className='transition duration-300 px-3 py-2 mb-5 bg-blue-400 text-white rounded shadow-md hover:bg-blue-600 focus:outline-none'
         aria-label='Go back'
@@ -151,7 +155,7 @@ const BlogDetails = () => {
       </div>
       <div className='flex flex-col items-center justify-center mt-8'>
         {isLoggedIn ? (
-          <div className='bg-slate-100 p-2 border border-gray-300 rounded w-full shadow'>
+          <div className='bg-slate-100  p-2 border border-gray-300 rounded w-full max-w-3xl shadow'>
             <label className='block font-semibold mb-2' htmlFor='comment'>
               New comment
             </label>
@@ -180,20 +184,20 @@ const BlogDetails = () => {
           </button>
         )}
         <h3 className='mt-4 text-xl font-bold text-gray-900 mb-5'>Comments</h3>
-        <div className='w-full flex flex-col space-y-2 bg-slate-300 p-3 rounded-lg shadow-lg'>
-        {comments?.length ? (
-          comments.map((comment: any) => (
-            <Comments
-              key={comment.id}
-              comment={comment}
-              comments={comments}
-              setComments={setComments}
-            />
-          ))
-        ) : (
-          <p>No comments yet</p>
+        <div className='w-full max-w-3xl flex flex-col space-y-4 bg-slate-100 p-3 '>
+          {comments?.length ? (
+            comments.map((comment: any) => (
+              <Comments
+                key={comment.id}
+                comment={comment}
+                comments={comments}
+                setComments={setComments}
+              />
+            ))
+          ) : (
+            <p>No comments yet</p>
           )}
-          </div>
+        </div>
       </div>
     </div>
   );

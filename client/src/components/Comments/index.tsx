@@ -29,7 +29,7 @@ const Comments = ({ comment, comments, setComments }: Comment) => {
     <>
       <div
         key={comment.id}
-        className='w-full max-w-3xl bg-white rounded-lg overflow-hidden'
+        className='w-full max-w-3xl bg-white shadow-lg rounded-lg overflow-hidden'
       >
         <div className='relative flex text-white p-6 bg-slate-500'>
           <p className='text-base'>By: <span className='font-bold'>{comment.user}</span></p>

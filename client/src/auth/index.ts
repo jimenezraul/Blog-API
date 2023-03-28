@@ -21,8 +21,11 @@ const Auth = {
   },
 
   getUserId: function (): number | null {
-      const user = this.getUser();
+    const user = this.getUser();
     return user ? user.id : null;
+  },
+  logout: function (): void {
+    localStorage.removeItem('user');
   },
 };
 

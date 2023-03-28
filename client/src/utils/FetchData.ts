@@ -1,7 +1,13 @@
 import { store } from '../app/store';
 import { setAccessToken } from '../app/features/accessTokenSlice';
+import Auth from '../auth';
 
 const BASE_URL = 'http://localhost:8080';
+
+const getAccessToken = () => {
+  const token = store.getState().token.access_token;
+  return token ? token : null;
+};
 
 export const FetchData: any = async (
   endpoint: string,
@@ -10,20 +16,23 @@ export const FetchData: any = async (
   options: any = {}
 ) => {
   try {
+    const token = getAccessToken();
     if (store.getState().token.access_token) {
       options.headers = {
-        Authorization: `Bearer ${store.getState().token.access_token}`,
+        Authorization: `Bearer ${token}`,
       };
     }
-    const response = await fetch(BASE_URL + endpoint, {
+    const requestOptions = {
       method,
-      credentials: 'include',
+      credentials: 'include' as const,
       headers: {
         'Content-Type': 'application/json',
-        ...options?.headers,
+        ...options.headers,
       },
       body: body && JSON.stringify(body),
-    });
+    };
+
+    const response = await fetch(BASE_URL + endpoint, requestOptions);
 
     if (response.ok) {
       if (endpoint === '/api/v1/auth/logout') {
@@ -40,7 +49,7 @@ export const FetchData: any = async (
     if (response.status === 401) {
       throw response;
     }
-    console.log(response);
+
     return response;
   } catch (error: any) {
     if (error.status === 401) {
@@ -52,7 +61,12 @@ export const FetchData: any = async (
           },
           credentials: 'include',
         });
+
+        if (!response.ok) {
+          throw response;
+        }
         const data = await response.json();
+
         if (data.accessToken) {
           store.dispatch(setAccessToken(data.accessToken));
           options.headers = {
@@ -63,8 +77,8 @@ export const FetchData: any = async (
         }
       } catch (error: any) {
         console.log(error);
-        localStorage.removeItem('isLogged');
-        localStorage.removeItem('isAdmin');
+        Auth.logout();
+        window.location.href = '/login';
       }
     }
 

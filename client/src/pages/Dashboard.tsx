@@ -19,19 +19,17 @@ const Dashboard = () => {
 
   useEffect(() => {
     const id = Auth.getUserId();
-
-    async function getData() {
-      const response = await FetchData(`/api/v1/me/${id}`, 'GET');
+    Promise.all([
+      FetchData(`/api/v1/me/${id}`, 'GET'),
+      FetchData(`/api/v1/posts/user/${id}`, 'GET'),
+    ]).then(([userData, postsData]) => {
       setData({
-        ...response,
-        createdAt: Intl.DateTimeFormat().format(new Date(response.created_at)),
-        updatedAt: Intl.DateTimeFormat().format(new Date(response.updated_at)),
+        ...userData,
+        createdAt: Intl.DateTimeFormat().format(new Date(userData.created_at)),
+        updatedAt: Intl.DateTimeFormat().format(new Date(userData.updated_at)),
       });
-      const postsData = await FetchData(`/api/v1/posts/user/${id}`, 'GET');
-  
       setPosts(postsData);
-    }
-    getData();
+    });
   }, []);
 
   return (
@@ -40,16 +38,19 @@ const Dashboard = () => {
         <div className='w-full md:w-1/2 pt-28'>
           <ProfileCard {...data} />
         </div>
-        <div className='w-full md:w-1/2 bg-slate-200 pt-10 p-5'>
+        <div className='w-full md:w-1/2 pt-10 p-5'>
           {/* add a new post button */}
           <div className='flex justify-center mb-7'>
-            <Link to="/add-new-post" className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'>
+            <Link
+              to='/add-new-post'
+              className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+            >
               Add a new post
             </Link>
           </div>
           {posts.map((post: any) => {
             return (
-                <BlogPost
+              <BlogPost
                 key={post.id}
                 title={post.title}
                 id={post.id}
@@ -59,7 +60,7 @@ const Dashboard = () => {
                   new Date(post.created_at)
                 )}
                 commentsCount={post.numberOfComments}
-                />
+              />
             );
           })}
         </div>

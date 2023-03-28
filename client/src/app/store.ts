@@ -1,8 +1,10 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import accessTokenSlice from './features/accessTokenSlice';
+import alertSlice from './features/alertSlice';
 
 export const store = configureStore({
   reducer: {
+    alert: alertSlice,
     token: accessTokenSlice,
   },
 });

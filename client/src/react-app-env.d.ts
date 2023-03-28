@@ -29,3 +29,14 @@ interface CommentProps {
     userId: number;
   };
 }
+
+interface PostsInitialState {
+  id: string;
+  title: string;
+  body: string;
+  userId: null;
+  userName: string;
+  numberOfComments: string;
+  created_at: string;
+  updated_at: string;
+}

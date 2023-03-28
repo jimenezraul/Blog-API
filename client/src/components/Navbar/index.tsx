@@ -14,7 +14,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     await FetchData('/api/v1/auth/logout', 'POST');
-    localStorage.removeItem('user');
+    Auth.logout();
     dispatch(setAccessToken(''));
 
     navigate('/');

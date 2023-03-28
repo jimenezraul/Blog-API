@@ -8,7 +8,7 @@ const AddNewPost = lazy(() => import('../pages/AddNewPost'));
 
 const Protected = () => {
   return (
-    <div className='flex flex-1 bg-gray-100'>
+    <div className='relative flex flex-1 bg-gray-100 overflow-hidden'>
       <Suspense
         fallback={
           <div className='h-full w-full flex items-center justify-center'></div>
@@ -31,7 +31,7 @@ export const protectedRoutes = [
         path: '/blog-details/:id',
         element: <BlogDetails />,
       },
-      {path: '/add-new-post', element: <AddNewPost />},
+      { path: '/add-new-post', element: <AddNewPost /> },
       { path: '*', element: <Navigate to='.' /> },
     ],
   },
