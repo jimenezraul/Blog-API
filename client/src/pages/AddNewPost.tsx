@@ -1,7 +1,11 @@
 import { FetchData } from '../utils/FetchData';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch } from '../app/hooks';
+import { setAlert } from '../app/features/alertSlice';
+import Alert from '../components/NotificationAlert';
 
 const AddNewPost = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,13 +30,18 @@ const AddNewPost = () => {
       });
 
       navigate('/dashboard');
-    } catch (error) {
-      console.log(error);
+    } catch (error:any) {
+        dispatch(setAlert({ 
+            message: error.message,
+            type: 'WARNING',
+            show: true
+        }));
     }
   };
 
   return (
-    <div className='w-full bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+    <div className='relative w-full bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+      <Alert />
       <button
         className='transition duration-300 px-3 py-2 mb-5 bg-blue-400 text-white rounded shadow-md hover:bg-blue-600 focus:outline-none'
         aria-label='Go back'

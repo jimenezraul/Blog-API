@@ -5,12 +5,15 @@ import { useNavigate, useMatch } from 'react-router-dom';
 const Blog = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-  const isHomeOrDashboard = useMatch("/");
+  const isHome = useMatch("/");
   
   let fetchPost: any;
-  if (isHomeOrDashboard) {
+  if (isHome) {
     fetchPost = async () => {
       const res = await FetchData('/api/v1/posts?size=3', 'GET');
+
+      if (!res) return;
+    
       const newData = res?.map((post: any) => {
         return {
           ...post,
@@ -67,9 +70,7 @@ const Blog = () => {
               >
                 {post.title}
               </a>
-              <p className='mb-2 text-gray-700'>
-                {post.body.substring(0, 100)}
-              </p>
+              <div dangerouslySetInnerHTML={{ __html: post.body.substring(0, 100) }} />
               <p className='mb-2 text-gray-700'>
                 {post.numberOfComments} comments
               </p>

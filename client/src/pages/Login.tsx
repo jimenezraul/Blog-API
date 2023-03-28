@@ -3,7 +3,9 @@ import { useState } from 'react';
 import { FetchData } from '../utils/FetchData';
 import { useAppDispatch } from '../app/hooks';
 import { setAccessToken } from '../app/features/accessTokenSlice';
+import { setAlert } from '../app/features/alertSlice';
 import { menuInput, initialState } from '../utils/loginInputs';
+import Alert from '../components/NotificationAlert';
 
 function LoginForm() {
   const location = useLocation();
@@ -46,6 +48,11 @@ function LoginForm() {
         password: password,
       });
 
+      if (!res) {
+        setIsLoading(false);
+        return;
+      }
+
       if (res.isLogged) {
         const userData = {
           isLogged: true,
@@ -69,7 +76,8 @@ function LoginForm() {
 
   return (
     <div className='flex flex-1 justify-center'>
-      <div className='w-full flex justify-center bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+      <div className='relative w-full flex justify-center bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+        <Alert />
         <div className='flex items-center justify-center w-full'>
           <div className='bg-white p-8 rounded-lg shadow-md max-w-md w-full'>
             <h2 className='text-2xl font-bold mb-4 text-center'>Login</h2>

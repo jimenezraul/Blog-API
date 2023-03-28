@@ -15,7 +15,7 @@ const Dashboard = () => {
     updatedAt: '',
   });
 
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState<BlogPostProps[]>([]);
 
   useEffect(() => {
     const id = Auth.getUserId();
@@ -60,6 +60,7 @@ const Dashboard = () => {
                   new Date(post.created_at)
                 )}
                 commentsCount={post.numberOfComments}
+                setPosts={setPosts}
               />
             );
           })}

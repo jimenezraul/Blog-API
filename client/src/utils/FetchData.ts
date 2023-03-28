@@ -1,6 +1,7 @@
 import { store } from '../app/store';
 import { setAccessToken } from '../app/features/accessTokenSlice';
 import Auth from '../auth';
+import { setAlert } from '../app/features/alertSlice';
 
 const BASE_URL = 'http://localhost:8080';
 
@@ -81,7 +82,13 @@ export const FetchData: any = async (
         window.location.href = '/login';
       }
     }
-
+    store.dispatch(
+      setAlert({
+        message: 'Something went wrong. Please try again later.',
+        type: 'ERROR',
+        show: true,
+      })
+    );
     console.log(error);
   }
 };

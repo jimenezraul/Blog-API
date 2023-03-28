@@ -144,7 +144,7 @@ const BlogDetails = () => {
             </span>
           </h2>
         </div>
-        <div className='mb-4 transition-shadow duration-300 hover:shadow-xl lg:mb-6'>
+        <div className='mb-4'>
           <img
             className='object-cover w-full h-56 rounded shadow-lg sm:h-64 md:h-80 lg:h-96'
             src='https://images.pexels.com/photos/3727459/pexels-photo-3727459.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260'

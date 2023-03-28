@@ -68,6 +68,11 @@ public class BlogApiApplication {
 			post2.setUpdatedAt();
 			postRepository.save(post2);
 
+			Post post3 = new Post("My New Post Title 3", "This is the new content of the post with more than 20 characters 3", user2);
+			post3.setCreatedAt();
+			post3.setUpdatedAt();
+			postRepository.save(post3);
+
 			// Create comments
 			Comment comment1 = new Comment("Comment 1", post1,user2);
 			comment1.setCreatedAt();

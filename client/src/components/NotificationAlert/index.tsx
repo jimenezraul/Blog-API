@@ -25,7 +25,7 @@ const Alert = () => {
   return (
     <div
       className={`${
-        !show ? 'translate-x-full opacity-0' : 'translate-x-20 opacity-100'
+        !show ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'
       } transform ease-in-out duration-700 absolute top-0 right-0 w-full max-w-md mx-4 mt-4`}
     >
       <div
