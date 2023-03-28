@@ -17,19 +17,22 @@ const BlogDetails = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-  Promise.all([
-    FetchData(`/api/v1/posts/${id}`, 'GET'),
-    FetchData(`/api/v1/posts/${id}/comments`, 'GET'),
-  ]).then(([postData, commentsData]) => {
-    setData(postData);
-    const newData = commentsData?.map((comment:any) => ({
-      ...comment,
-      created_at: Intl.DateTimeFormat().format(new Date(comment.created_at)),
-    }));
-    setComments(newData);
-  });
-}, [id]);
-
+    Promise.all([
+      FetchData(`/api/v1/posts/${id}`, 'GET'),
+      FetchData(`/api/v1/posts/${id}/comments`, 'GET'),
+    ]).then(([postData, commentsData]) => {
+      const newPostData = {
+        ...postData,
+        created_at: Intl.DateTimeFormat().format(new Date(postData.created_at)),
+      };
+      setData(newPostData);
+      const newData = commentsData?.map((comment: any) => ({
+        ...comment,
+        created_at: Intl.DateTimeFormat().format(new Date(comment.created_at)),
+      }));
+      setComments(newData);
+    });
+  }, [id]);
 
   const [comment, setComment] = useState('');
 
@@ -107,7 +110,7 @@ const BlogDetails = () => {
         Back
       </button>
 
-      <div className='mx-auto sm:text-center lg:max-w-2xl px-8'>
+      <div className='mx-auto sm:text-center lg:max-w-3xl'>
         <div className='max-w-xl mb-10 md:mx-auto sm:text-center lg:max-w-2xl md:mb-12'>
           {isThisWeek && (
             <div>
@@ -145,6 +148,9 @@ const BlogDetails = () => {
           </h2>
         </div>
         <div className='mb-4'>
+        <p className='text-start text-base text-gray-700 md:text-lg'>
+            By {data?.userName} - {data?.created_at}
+          </p>
           <img
             className='object-cover w-full h-56 rounded shadow-lg sm:h-64 md:h-80 lg:h-96'
             src='https://images.pexels.com/photos/3727459/pexels-photo-3727459.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260'

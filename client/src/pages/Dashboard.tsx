@@ -33,38 +33,36 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className='container mx-auto'>
-      <div className='flex flex-wrap h-full justify-center'>
-        <div className='w-full md:w-1/2 pt-28'>
-          <ProfileCard {...data} />
+    <div className='flex flex-wrap w-full bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+      <div className='w-full md:w-1/2 pt-28'>
+        <ProfileCard {...data} />
+      </div>
+      <div className='w-full md:w-1/2 pt-10'>
+        {/* add a new post button */}
+        <div className='flex justify-center mb-7'>
+          <Link
+            to='/add-new-post'
+            className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+          >
+            Add a new post
+          </Link>
         </div>
-        <div className='w-full md:w-1/2 pt-10 p-5'>
-          {/* add a new post button */}
-          <div className='flex justify-center mb-7'>
-            <Link
-              to='/add-new-post'
-              className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
-            >
-              Add a new post
-            </Link>
-          </div>
-          {posts.map((post: any) => {
-            return (
-              <BlogPost
-                key={post.id}
-                title={post.title}
-                id={post.id}
-                body={post.body}
-                author={post.userName}
-                createdAt={Intl.DateTimeFormat().format(
-                  new Date(post.created_at)
-                )}
-                commentsCount={post.numberOfComments}
-                setPosts={setPosts}
-              />
-            );
-          })}
-        </div>
+        {posts.map((post: any) => {
+          return (
+            <BlogPost
+              key={post.id}
+              title={post.title}
+              id={post.id}
+              body={post.body}
+              author={post.userName}
+              createdAt={Intl.DateTimeFormat().format(
+                new Date(post.created_at)
+              )}
+              commentsCount={post.numberOfComments}
+              setPosts={setPosts}
+            />
+          );
+        })}
       </div>
     </div>
   );

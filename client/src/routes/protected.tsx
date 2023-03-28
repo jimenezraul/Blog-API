@@ -5,6 +5,8 @@ import BlogDetails from '../pages/BlogDetails';
 const Home = lazy(() => import('../pages/Home'));
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const AddNewPost = lazy(() => import('../pages/AddNewPost'));
+const AboutUs = lazy(() => import('../pages/AboutUs'));
+const AllPosts = lazy(() => import('../pages/AllPosts'));
 
 const Protected = () => {
   return (
@@ -30,6 +32,14 @@ export const protectedRoutes = [
       {
         path: '/blog-details/:id',
         element: <BlogDetails />,
+      },
+      {
+        path: '/about-us',
+        element: <AboutUs />,
+      },
+      {
+        path: '/all-posts',
+        element: <AllPosts />,
       },
       { path: '/add-new-post', element: <AddNewPost /> },
       { path: '*', element: <Navigate to='.' /> },

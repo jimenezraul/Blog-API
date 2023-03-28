@@ -1,19 +1,19 @@
 import { FetchData } from '../../utils/FetchData';
 import { useState, useEffect } from 'react';
-import { useNavigate, useMatch } from 'react-router-dom';
+import { useNavigate, useMatch, Link } from 'react-router-dom';
 
 const Blog = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
-  const isHome = useMatch("/");
-  
+  const isHome = useMatch('/');
+
   let fetchPost: any;
   if (isHome) {
     fetchPost = async () => {
       const res = await FetchData('/api/v1/posts?size=3', 'GET');
 
       if (!res) return;
-    
+
       const newData = res?.map((post: any) => {
         return {
           ...post,
@@ -37,7 +37,7 @@ const Blog = () => {
 
   useEffect(() => {
     fetchPost();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLoadMore = (link: string) => {
@@ -45,7 +45,10 @@ const Blog = () => {
   };
 
   return (
-    <div className='px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+    <div className='flex flex-col flex-1 bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+      <h1 className='text-3xl font-bold text-gray-800 mb-8'>
+        Latest Posts
+      </h1>
       <div className='grid gap-8 lg:grid-cols-3 sm:max-w-sm sm:mx-auto lg:max-w-full'>
         {posts.map((post: any) => (
           <div
@@ -62,15 +65,19 @@ const Blog = () => {
                 By {post.userName}
                 <span className='text-gray-600'>— {post.created_at}</span>
               </p>
-              <a
-                href='/'
+              <Link
+                to={`/blog-details/${post.id}`}
                 aria-label='Category'
                 title='Visit the East'
                 className='inline-block mb-3 text-2xl font-bold leading-5 transition-colors duration-200 hover:text-deep-purple-accent-700'
               >
                 {post.title}
-              </a>
-              <div dangerouslySetInnerHTML={{ __html: post.body.substring(0, 100) }} />
+              </Link>
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: post.body.substring(0, 100),
+                }}
+              />
               <p className='mb-2 text-gray-700'>
                 {post.numberOfComments} comments
               </p>
@@ -84,6 +91,26 @@ const Blog = () => {
             </div>
           </div>
         ))}
+      </div>
+      <div className='flex justify-end w-full p-5'>
+        <Link
+          to='/all-posts'
+          className='inline-flex w-32 items-center bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded'
+        >
+          View All
+          <svg
+            className='w-4 h-4 ml-2'
+            viewBox='0 0 24 24'
+            fill='none'
+            stroke='currentColor'
+            stroke-width='2'
+            stroke-linecap='round'
+            stroke-linejoin='round'
+          >
+            <path d='M5 12h14'></path>
+            <path d='M12 5l7 7-7 7'></path>
+          </svg>
+        </Link>
       </div>
     </div>
   );
