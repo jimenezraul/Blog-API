@@ -6,11 +6,11 @@ const Header = () => {
       <div className='px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
         <div className='flex flex-col items-center justify-between xl:flex-row'>
           <div className='w-full max-w-xl mb-12 xl:pr-16 xl:mb-0 xl:w-7/12'>
-            <h2 className='max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight text-white sm:text-4xl sm:leading-none'>
-              CodeCraft <br className='hidden md:block' />
-              Mastering the Art of Coding.
+            <h2 className='max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none text-red-500'>
+              CodeCraft <br className='block' />
+              <span className="text-blue-500" >Mastering the <span className='text-yellow-400'>Art</span> of Coding.</span>
             </h2>
-            <p className='max-w-xl mb-4 text-base text-gray-400 md:text-lg'>
+            <p className='max-w-xl mb-4 text-base text-gray-300 md:text-lg'>
               CodeCraft is a tech blog dedicated to exploring the world of
               coding, programming, and software development. Our expert team of
               writers and developers provide insights, tips, and tricks on how
@@ -20,7 +20,7 @@ const Header = () => {
             <Link
               to='/'
               aria-label=''
-              className='inline-flex items-center font-semibold tracking-wider transition-colors duration-200 text-blue-400 hover:text-blue-700'
+              className='inline-flex items-center font-semibold tracking-wider transition-colors duration-200 text-blue-500 hover:text-blue-700'
             >
               Learn more
               <svg

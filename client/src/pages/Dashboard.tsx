@@ -50,6 +50,7 @@ const Dashboard = () => {
   function handlePageChange(newPage: number) {
     setPage(newPage);
     navigate(`${location.pathname}?page=${newPage}`);
+    window.scrollTo(0, 0);
   }
 
   return (
@@ -99,19 +100,32 @@ const Dashboard = () => {
                 Prev
               </button>
               {Array.from({ length: totalPages }).map((_, i) => {
-                return (
-                  <button
-                    key={i}
-                    className={`${
-                      page === i + 1
-                        ? 'text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 '
-                        : 'leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'
-                    } px-3 py-2`}
-                    onClick={() => handlePageChange(i + 1)}
-                  >
-                    {i + 1}
-                  </button>
+                // calculate the current group of pages being displayed
+                const currentPageGroup = Math.ceil(page / 10);
+                const pageGroupStart = (currentPageGroup - 1) * 10 + 1;
+                const pageGroupEnd = Math.min(
+                  currentPageGroup * 10,
+                  totalPages
                 );
+
+                // display the buttons only for the current group of pages
+                if (i + 1 >= pageGroupStart && i + 1 <= pageGroupEnd) {
+                  return (
+                    <button
+                      key={i}
+                      className={`${
+                        page === i + 1
+                          ? 'text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 '
+                          : 'leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700'
+                      } px-3 py-2`}
+                      onClick={() => handlePageChange(i + 1)}
+                    >
+                      {i + 1}
+                    </button>
+                  );
+                } else {
+                  return null;
+                }
               })}
               <button
                 className={`${

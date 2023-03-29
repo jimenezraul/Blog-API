@@ -10,7 +10,7 @@ const Blog = () => {
   let fetchPost: any;
   if (isHome) {
     fetchPost = async () => {
-      const res = await FetchData('/api/v1/posts?size=3', 'GET');
+      const res = await FetchData('/api/v1/posts?size=6', 'GET');
 
       if (!res) return;
 
@@ -46,20 +46,20 @@ const Blog = () => {
 
   return (
     <div className='flex flex-col w-full flex-1 bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
-      <h1 className='text-3xl font-bold text-gray-800 mb-8'>
+      <h1 className='text-3xl font-bold text-blue-900 mb-8'>
         Latest Posts
       </h1>
-      <div className='grid gap-8 lg:grid-cols-3 sm:max-w-sm sm:mx-auto lg:max-w-full'>
+      <div className='grid gap-8 sm:grid-cols-2 lg:grid-cols-3 sm:max-w-md md:max-w-full sm:mx-auto'>
         {posts.map((post: any) => (
           <div
             key={post.id}
             className='overflow-hidden transition-shadow duration-300 bg-white rounded shadow-lg border'
           >
-            <img
+            {/* <img
               src='https://images.pexels.com/photos/2408666/pexels-photo-2408666.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=500'
               className='object-cover w-full h-64'
               alt=''
-            />
+            /> */}
             <div className='p-5'>
               <p className='mb-3 text-xs font-semibold tracking-wide uppercase'>
                 By {post.userName}
@@ -69,7 +69,7 @@ const Blog = () => {
                 to={`/blog-details/${post.id}`}
                 aria-label='Category'
                 title='Visit the East'
-                className='inline-block mb-3 text-2xl font-bold leading-5 transition-colors duration-200 hover:text-deep-purple-accent-700'
+                className='inline-block mb-3 text-2xl font-bold leading-5 transition-colors duration-200 hover:text-deep-purple-accent-700 text-blue-900'
               >
                 {post.title}
               </Link>
@@ -84,7 +84,7 @@ const Blog = () => {
               <button
                 onClick={() => handleLoadMore(`/blog-details/${post.id}`)}
                 aria-label=''
-                className='inline-flex items-center font-semibold transition-colors duration-200 text-deep-purple-accent-400 hover:text-deep-purple-800'
+                className='inline-flex items-center font-semibold transition-colors duration-200 text-deep-purple-accent-400 hover:text-deep-purple-800 text-blue-700 hover:text-blue-900'
               >
                 Learn more
               </button>
@@ -103,9 +103,9 @@ const Blog = () => {
             viewBox='0 0 24 24'
             fill='none'
             stroke='currentColor'
-            stroke-width='2'
-            stroke-linecap='round'
-            stroke-linejoin='round'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
           >
             <path d='M5 12h14'></path>
             <path d='M12 5l7 7-7 7'></path>

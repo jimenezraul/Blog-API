@@ -45,7 +45,7 @@ const Post = ({
 
   return (
     <>
-      <div className='sm:max-w-sm sm:mx-auto lg:max-w-full pb-3'>
+      <div className='sm:max-w-sm sm:mx-auto lg:max-w-full p-3'>
         <div
           key={id}
           className='relative overflow-hidden transition-shadow duration-300 bg-white rounded-lg shadow-lg border border-slate-300'
@@ -68,7 +68,7 @@ const Post = ({
               href='/'
               aria-label='Category'
               title='Visit the East'
-              className='inline-block mb-3 text-2xl font-bold leading-5 transition-colors duration-200 hover:text-deep-purple-accent-700'
+              className='inline-block mb-3 text-2xl font-bold leading-5 transition-colors duration-200 hover:text-deep-purple-accent-700 text-blue-900'
             >
               {title}
             </a>

@@ -3,7 +3,7 @@ import React from 'react';
 function AboutUs() {
   return (
     <div className='w-full bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
-      <h1 className='text-4xl font-bold mb-8'>About Us</h1>
+      <h1 className='text-4xl font-bold mb-8 text-blue-900'>About Us</h1>
       <div className='flex flex-wrap -mx-4'>
         <div className='w-full md:w-1/2 px-4 mb-8'>
           <img
@@ -31,7 +31,7 @@ function AboutUs() {
           </p>
         </div>
         <div className='w-full md:w-1/2 px-4 mb-8'>
-          <h2 className='text-2xl font-bold mb-4'>Our Mission</h2>
+          <h2 className='text-2xl font-bold mb-4 text-blue-900'>Our Mission</h2>
           <p className='text-lg mb-4'>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
             fermentum molestie nunc, ac commodo lacus auctor sed. Nullam at
@@ -41,7 +41,7 @@ function AboutUs() {
             Donec nec volutpat leo, ac dignissim massa. Sed at urna sit amet
             sapien facilisis lacinia.
           </p>
-          <h2 className='text-2xl font-bold mb-4'>Our Vision</h2>
+          <h2 className='text-2xl font-bold mb- text-blue-900'>Our Vision</h2>
           <p className='text-lg mb-4'>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
             fermentum molestie nunc, ac commodo lacus auctor sed. Nullam at

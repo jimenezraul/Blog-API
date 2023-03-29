@@ -31,7 +31,7 @@ const Comments = ({ comment, comments, setComments }: Comment) => {
         key={comment.id}
         className='w-full max-w-3xl bg-white shadow-lg rounded-lg overflow-hidden'
       >
-        <div className='relative flex text-white p-6 bg-slate-500'>
+        <div className='relative flex p-6 bg-slate-300'>
           <p className='text-base'>By: <span className='font-bold'>{comment.user}</span></p>
           <p className='text-base'>{comment.created_at}</p>
           {isAdmin || userId === comment?.userId ? (
