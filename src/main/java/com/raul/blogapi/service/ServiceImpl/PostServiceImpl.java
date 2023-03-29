@@ -56,8 +56,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDTO> getPostByUserId(Long id) {
-        List<Post> posts = postRepository.findAllByUserIdOrderByCreatedAtDesc(id);
+    public List<PostDTO> getPostByUserId(Long id, int page, int size) {
+        List<Post> posts = postRepository.findAllByUserId(id, PageRequest.of(page, size, Sort.by("createdAt").descending()));
         return posts.stream().map(PostDTO::new).collect(Collectors.toList());
     }
 
@@ -72,6 +72,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deletePost(Long id) {
         postRepository.deleteById(id);
+    }
+
+    @Override
+    public Long getPostByUserIdCount(Long id) {
+        return postRepository.countByUserId(id);
     }
 
 

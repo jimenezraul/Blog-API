@@ -34,8 +34,9 @@ public class Posts {
 
     @GetMapping("/posts/user/{id}")
     @JsonView(Views.Private.class)
-    public List<PostDTO> getPostByUserId(@PathVariable Long id) {
-        return service.getPostByUserId(id);
+    public List<PostDTO> getPostByUserId(@PathVariable Long id, @RequestParam(value = "page", defaultValue = "0") int page,
+                                         @RequestParam(value = "size", defaultValue = "50") int size) {
+        return service.getPostByUserId(id, page, size);
     }
 
     @PostMapping("/posts")
@@ -52,5 +53,10 @@ public class Posts {
     @DeleteMapping("/posts/{id}")
     public void deletePost(@PathVariable Long id) {
         service.deletePost(id);
+    }
+
+    @GetMapping("/posts/user/{id}/count")
+    public Long getPostByUserIdCount(@PathVariable Long id) {
+        return service.getPostByUserIdCount(id);
     }
 }

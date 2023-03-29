@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { FetchData } from '../utils/FetchData';
 import { useAppDispatch } from '../app/hooks';
 import { setAccessToken } from '../app/features/accessTokenSlice';
-import { setAlert } from '../app/features/alertSlice';
 import { menuInput, initialState } from '../utils/loginInputs';
 import Alert from '../components/NotificationAlert';
 
@@ -15,7 +14,7 @@ function LoginForm() {
   const [state, setState] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
 
-  const link = redirectLink ? redirectLink : '/dashboard';
+  const link = redirectLink ? redirectLink : '/dashboard?page=1';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

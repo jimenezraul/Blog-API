@@ -45,7 +45,7 @@ const Blog = () => {
   };
 
   return (
-    <div className='flex flex-col flex-1 bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+    <div className='flex flex-col w-full flex-1 bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
       <h1 className='text-3xl font-bold text-gray-800 mb-8'>
         Latest Posts
       </h1>
