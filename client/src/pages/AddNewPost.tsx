@@ -1,5 +1,5 @@
 import { FetchData } from '../utils/FetchData';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../app/hooks';
 import { setAlert } from '../app/features/alertSlice';
 import Alert from '../components/NotificationAlert';
@@ -7,6 +7,11 @@ import Alert from '../components/NotificationAlert';
 const AddNewPost = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPage = parseInt(
+    new URLSearchParams(location.search).get('page') || '1'
+  );
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
@@ -29,13 +34,15 @@ const AddNewPost = () => {
         body,
       });
 
-      navigate('/dashboard');
-    } catch (error:any) {
-        dispatch(setAlert({ 
-            message: error.message,
-            type: 'WARNING',
-            show: true
-        }));
+      navigate(`/dashboard?page=${currentPage}`);
+    } catch (error: any) {
+      dispatch(
+        setAlert({
+          message: error.message,
+          type: 'WARNING',
+          show: true,
+        })
+      );
     }
   };
 

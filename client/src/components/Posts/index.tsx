@@ -1,8 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { FetchData } from '../../utils/FetchData';
+import { useEffect, useState } from 'react';
 
 interface PostProps extends BlogPostProps {
   setPosts: React.Dispatch<React.SetStateAction<BlogPostProps[]>>;
+  setTotalPages: React.Dispatch<React.SetStateAction<number>>;
+  page: number;
+  postsLength: number
 }
 
 const Post = ({
@@ -13,20 +17,26 @@ const Post = ({
   createdAt,
   commentsCount,
   setPosts,
+  setTotalPages,
+  page,
+  postsLength,
 }: PostProps) => {
   const navigate = useNavigate();
-
   const handleReadMore = () => {
     navigate(`/blog-details/${id}`);
   };
-
+  
   const handlePostDelete = async () => {
     try {
-      const response = await FetchData(`/api/v1/posts/${id}`, 'DELETE')
+      const response = await FetchData(`/api/v1/posts/${id}`, 'DELETE');
       if (response.status === 200) {
         setPosts((prevPosts) => {
           return prevPosts.filter((post) => post.id !== id);
         });
+        if (postsLength === 1) {
+          setTotalPages((prevTotalPages) => prevTotalPages - 1);
+          navigate(`/dashboard?page=${page - 1}`);
+        }
       }
     } catch (error) {
       console.log(error);
