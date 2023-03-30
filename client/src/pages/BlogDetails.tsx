@@ -147,17 +147,19 @@ const BlogDetails = () => {
             </span>
           </h2>
         </div>
-        <div className='mb-4'>
-        <p className='text-start text-base text-gray-700 md:text-lg'>
-            By {data?.userName} - {data?.created_at}
-          </p>
-          <img
-            className='object-cover w-full h-56 rounded shadow-lg sm:h-64 md:h-80 lg:h-96'
-            src='https://images.pexels.com/photos/3727459/pexels-photo-3727459.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260'
-            alt=''
-          />
+        <div className='bg-white rounded-lg shadow-lg border'>
+          <div className='mb-4'>
+            <img
+              className='object-cover w-full h-56 rounded shadow-lg sm:h-64 md:h-80 lg:h-96'
+              src='https://images.pexels.com/photos/3727459/pexels-photo-3727459.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260'
+              alt=''
+            />
+            <p className='p-5 bg-slate-300 text-start text-base md:text-lg'>
+              - Posted by <span className='font-bold'>{data?.userName}</span> on {data?.created_at}
+            </p>
+          </div>
+          <div className='p-5 text-start' dangerouslySetInnerHTML={{ __html: data?.body }} />
         </div>
-        <div dangerouslySetInnerHTML={{ __html: data?.body }} />
       </div>
       <div className='flex flex-col items-center justify-center mt-8'>
         {isLoggedIn ? (
@@ -190,7 +192,7 @@ const BlogDetails = () => {
           </button>
         )}
         <h3 className='mt-4 text-xl font-bold text-gray-900 mb-5'>Comments</h3>
-        <div className='w-full max-w-3xl flex flex-col space-y-4 bg-slate-100 p-3 '>
+        <div className='w-full max-w-3xl flex flex-col space-y-4'>
           {comments?.length ? (
             comments.map((comment: any) => (
               <Comments
@@ -201,7 +203,7 @@ const BlogDetails = () => {
               />
             ))
           ) : (
-            <p>No comments yet</p>
+            <p className='text-center'>No comments yet</p>
           )}
         </div>
       </div>

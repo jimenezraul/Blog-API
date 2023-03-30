@@ -40,9 +40,9 @@ public class Posts {
     }
 
     @PostMapping("/posts")
-    public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO post) {
+    public ResponseEntity<Long> createPost(@Valid @RequestBody PostDTO post) {
         service.createPost(post);
-        return ResponseEntity.ok(post);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/posts/{id}")
