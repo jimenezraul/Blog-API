@@ -42,9 +42,9 @@ const Comments = ({ comment, comments, setComments }: Comment) => {
           ) : null}
         </div>
         <div className='px-6 py-4 '>
-          <h2 className='text-gray-700 text-xl font-semibold'>
+          <p>
             {comment.text}
-          </h2>
+          </p>
         </div>
       </div>
     </>
