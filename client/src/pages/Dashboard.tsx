@@ -15,7 +15,7 @@ const Dashboard = () => {
     updatedAt: '',
   });
   const [page, setPage] = useState(1);
-  const [posts, setPosts] = useState<BlogPostProps[]>([]);
+  const [posts, setPosts] = useState<PostProps[]>([]);
   const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
@@ -38,8 +38,8 @@ const Dashboard = () => {
     ]).then(([userData, postCount, postsData]) => {
       setData({
         ...userData,
-        createdAt: Intl.DateTimeFormat().format(new Date(userData.created_at)),
-        updatedAt: Intl.DateTimeFormat().format(new Date(userData.updated_at)),
+        created_at: Intl.DateTimeFormat().format(new Date(userData.created_at)),
+        updated_at: Intl.DateTimeFormat().format(new Date(userData.updated_at)),
       });
       setTotalPages(Math.ceil(postCount / size));
       setPosts(postsData);
@@ -74,9 +74,10 @@ const Dashboard = () => {
               key={post.id}
               title={post.title}
               id={post.id}
-              body={post.body}
+              content={post.content}
               author={post.userName}
-              createdAt={Intl.DateTimeFormat().format(
+              tags={post.tags}
+              created_at={Intl.DateTimeFormat().format(
                 new Date(post.created_at)
               )}
               commentsCount={post.numberOfComments}

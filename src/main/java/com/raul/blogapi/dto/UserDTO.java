@@ -38,8 +38,6 @@ public class UserDTO {
     Long numberOfPosts = 0L;
     @JsonView(Views.Private.class)
     private Collection<RoleDTO> roles = new ArrayList<>();
-    @JsonView(Views.Private.class)
-    private Collection<RefreshTokensDTO> refreshTokens = new ArrayList<>();
 
     @JsonView(Views.Private.class)
     private LocalDateTime created_at;
@@ -58,7 +56,6 @@ public class UserDTO {
         this.created_at = savedUser.getCreated_at();
         this.updated_at = savedUser.getUpdated_at();
         this.imageUrl = savedUser.getImageUrl() == null ? "https://i.imgur.com/3ZQZ9Zm.png" : savedUser.getImageUrl();
-        this.refreshTokens = savedUser.getRefreshTokens().stream().map(RefreshTokensDTO::new).toList();
     }
 
 

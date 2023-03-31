@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "tags")
+@Entity(name = "tag")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

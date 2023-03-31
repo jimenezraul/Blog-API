@@ -1,10 +1,10 @@
 export const postInitialValues = {
-    id: '',
-    title: '',
-    body: '',
-    userId: null,
-    userName: '',
-    numberOfComments: '',
-    created_at: '',
-    updated_at: '',
-  };
+  id: '',
+  title: '',
+  content: '',
+  author: '',
+  created_at: '',
+  commentsCount: 0,
+  updated_at: '',
+  tags: [],
+};

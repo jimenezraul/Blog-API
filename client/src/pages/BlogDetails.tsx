@@ -12,7 +12,7 @@ const BlogDetails = () => {
   const dispatch = useAppDispatch();
   const isLoggedIn = Auth.isAuthenticated();
   const id = window.location.pathname.split('/')[2];
-  const [data, setData] = useState<PostsInitialState>(postInitialValues);
+  const [data, setData] = useState<PostProps>(postInitialValues);
   const [comments, setComments] = useState<CommentProps[]>([]);
   const navigate = useNavigate();
 
@@ -21,6 +21,7 @@ const BlogDetails = () => {
       FetchData(`/api/v1/posts/${id}`, 'GET'),
       FetchData(`/api/v1/posts/${id}/comments`, 'GET'),
     ]).then(([postData, commentsData]) => {
+      
       const newPostData = {
         ...postData,
         created_at: Intl.DateTimeFormat().format(new Date(postData.created_at)),
@@ -124,7 +125,7 @@ const BlogDetails = () => {
               <svg
                 viewBox='0 0 52 24'
                 fill='currentColor'
-                className='absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 sm:block'
+                className='absolute top-0 left-0 z-0 hidden w-32 -mt-8 -ml-20 text-blue-gray-100 lg:w-32 lg:-ml-28 lg:-mt-10 md:block'
               >
                 <defs>
                   <pattern
@@ -155,10 +156,29 @@ const BlogDetails = () => {
               alt=''
             />
             <p className='p-5 bg-slate-300 text-start text-base md:text-lg'>
-              - Posted by <span className='font-bold'>{data?.userName}</span> on {data?.created_at}
+              - Posted by <span className='font-bold'>{data?.author}</span> on{' '}
+              {data?.created_at}
             </p>
           </div>
-          <div className='p-5 text-start' dangerouslySetInnerHTML={{ __html: data?.body }} />
+          <div
+            className='p-5 text-start'
+            dangerouslySetInnerHTML={{ __html: data?.content }}
+          />
+          {/* tags */}
+          <div className='flex flex-col p-5'>
+            <p className='font-bold pb-2 text-start'>Tags: </p>
+            <hr className='mb-4' />
+            <div className='flex flex-wrap justify-start'>
+              {data?.tags?.map((tag: any) => (
+                <div
+                  key={tag}
+                  className='px-3 py-1 mb-4 mr-2 text-xs font-semibold tracking-wider text-white bg-slate-400 uppercase rounded-full bg-teal-accent-400'
+                >
+                  {tag}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
       <div className='flex flex-col items-center justify-center mt-8'>

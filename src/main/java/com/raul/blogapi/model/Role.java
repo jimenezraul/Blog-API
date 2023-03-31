@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
-@Table(name = "roles")
+@Table(name = "role")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

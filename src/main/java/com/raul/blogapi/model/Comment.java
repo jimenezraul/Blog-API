@@ -23,12 +23,11 @@ public class Comment {
     @Column(nullable = false, length = 5000)
     private String text;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", referencedColumnName = "id")
-    @NonNull
+    @JoinColumn(name = "post_id", referencedColumnName = "id", nullable = false)
     @ToString.Exclude
     private Post post;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
     @CreatedDate

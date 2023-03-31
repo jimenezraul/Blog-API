@@ -9,13 +9,14 @@ interface LoginForm {
   };
 }
 
-interface BlogPostProps {
+interface PostProps {
   id: string;
   title: string;
-  body: string;
+  content: string;
   author: string;
-  createdAt: string;
+  created_at: string;
   commentsCount: number;
+  tags: string[];
 }
 
 interface CommentProps {
@@ -28,15 +29,4 @@ interface CommentProps {
     user: string;
     userId: number;
   };
-}
-
-interface PostsInitialState {
-  id: string;
-  title: string;
-  body: string;
-  userId: null;
-  userName: string;
-  numberOfComments: string;
-  created_at: string;
-  updated_at: string;
 }

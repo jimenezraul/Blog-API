@@ -62,7 +62,7 @@ const Blog = () => {
             /> */}
             <div className='p-5'>
               <p className='mb-3 text-xs font-semibold tracking-wide uppercase'>
-                By {post.userName}
+                By {post.author}
                 <span className='text-gray-600'>— {post.created_at}</span>
               </p>
               <Link
@@ -75,7 +75,7 @@ const Blog = () => {
               </Link>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: post.body.substring(0, 100),
+                  __html: post.content.substring(0, 100),
                 }}
               />
               <p className='mb-2 text-gray-700'>

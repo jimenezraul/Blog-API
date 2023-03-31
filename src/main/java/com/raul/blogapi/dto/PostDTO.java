@@ -29,16 +29,9 @@ public class PostDTO {
 
     @JsonView(Views.Public.class)
     private String content;
-
-    @JsonView(Views.Public.class)
-    private Long userId;
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonView(Views.Public.class)
-    private String userName;
-    @JsonView(Views.Public.class)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    // get users with the same id too
-    private Collection<CommentDTO> comments;
+    private String author;
     @JsonView(Views.Public.class)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Long numberOfComments;
@@ -55,9 +48,7 @@ public class PostDTO {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
-        this.userId = post.getUser().getId();
-        this.userName = post.getUser().getName();
-        this.comments = post.getComments().stream().map(CommentDTO::new).toList();
+        this.author = post.getUser().getName();
         this.numberOfComments = post.getComments().stream().count();
         this.created_at = post.getCreatedAt();
         this.updated_at = post.getUpdatedAt();

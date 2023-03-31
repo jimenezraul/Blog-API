@@ -83,7 +83,22 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDTO updatePost(Long id, PostDTO post) {
         Post postToUpdate = postRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Post not found"));
-        postToUpdate.setContent(post.getContent());
+        if (post.getTitle() != null) {
+            postToUpdate.setTitle(post.getTitle());
+        }
+        if (post.getContent() != null) {
+            postToUpdate.setContent(post.getContent());
+        }
+        if (post.getTags() != null) {
+            List<Tag> tags = new ArrayList<>();
+            for (String tagString : post.getTags()) {
+                Tag tag = new Tag(tagString);
+                tags.add(tag);
+            }
+            postToUpdate.setTags(tags);
+        }
+
+        postToUpdate.setUpdatedAt();
         return new PostDTO(postRepository.save(postToUpdate));
     }
 

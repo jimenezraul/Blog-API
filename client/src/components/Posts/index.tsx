@@ -2,8 +2,8 @@ import { useNavigate } from 'react-router-dom';
 import { FetchData } from '../../utils/FetchData';
 import { useEffect, useState } from 'react';
 
-interface PostProps extends BlogPostProps {
-  setPosts: React.Dispatch<React.SetStateAction<BlogPostProps[]>>;
+interface Props extends PostProps {
+  setPosts: React.Dispatch<React.SetStateAction<PostProps[]>>;
   setTotalPages: React.Dispatch<React.SetStateAction<number>>;
   page: number;
   postsLength: number
@@ -12,15 +12,15 @@ interface PostProps extends BlogPostProps {
 const Post = ({
   id,
   title,
-  body,
+  content,
   author,
-  createdAt,
+  created_at,
   commentsCount,
   setPosts,
   setTotalPages,
   page,
   postsLength,
-}: PostProps) => {
+}: Props) => {
   const navigate = useNavigate();
   const handleReadMore = () => {
     navigate(`/blog-details/${id}`);
@@ -62,7 +62,7 @@ const Post = ({
           <div className='p-5'>
             <p className='mb-3 text-xs font-semibold tracking-wide uppercase'>
               By {author}
-              <span className='text-gray-600'>— {createdAt}</span>
+              <span className='text-gray-600'>— {created_at}</span>
             </p>
             <a
               href='/'
@@ -72,7 +72,7 @@ const Post = ({
             >
               {title}
             </a>
-            <div dangerouslySetInnerHTML={{ __html: body.substring(0, 100) }} />
+            <div dangerouslySetInnerHTML={{ __html: content.substring(0, 100) }} />
             <p className='mb-2 text-gray-700'>{commentsCount} comments</p>
             <button
               onClick={handleReadMore}
