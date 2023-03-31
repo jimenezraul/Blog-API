@@ -47,7 +47,7 @@ export const publicRoutes = [
         element: <AllPosts />,
       },
       {
-        path: '/about',
+        path: '/about-us',
         element: <AboutUs />,
       },
       { path: '*', element: <Navigate to='/login' /> },

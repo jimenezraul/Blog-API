@@ -74,7 +74,7 @@ function LoginForm() {
   };
 
   return (
-    <div className='flex flex-1 justify-center'>
+    <div className='flex flex-1 justify-center overflow-hidden'>
       <div className='relative w-full flex justify-center bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
         <Alert />
         <div className='flex items-center justify-center w-full'>

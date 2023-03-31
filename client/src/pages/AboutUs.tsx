@@ -7,7 +7,7 @@ function AboutUs() {
       <div className='flex flex-wrap -mx-4'>
         <div className='w-full md:w-1/2 px-4 mb-8'>
           <img
-            src='https://via.placeholder.com/500x500'
+            src='https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2670&q=80'
             alt='Company Logo'
             className='w-full mb-4 rounded-lg'
           />
