@@ -1,22 +1,18 @@
 package com.raul.blogapi;
-import com.raul.blogapi.model.Comment;
-import com.raul.blogapi.model.Post;
-import com.raul.blogapi.model.Role;
-import com.raul.blogapi.model.User;
+import com.raul.blogapi.model.*;
 import com.raul.blogapi.repository.CommentRepository;
 import com.raul.blogapi.repository.PostRepository;
 import com.raul.blogapi.repository.RoleRepository;
 import com.raul.blogapi.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootApplication
@@ -61,6 +57,14 @@ public class BlogApiApplication {
 			Post post1 = new Post("Getting Started with React", "<p class=\"font-bold\">React</p> is a popular front-end <span class=\"italic\">JavaScript</span> library for building user interfaces. If you're new to <span class=\"font-bold\">React</span>, don't worry! There are plenty of resources out there to help you get started. Check out the official <a href=\"https://reactjs.org/docs/getting-started.html\" class=\"text-blue-500 hover:underline\">documentation</a> for a step-by-step guide.", user1);
 			post1.setCreatedAt();
 			post1.setUpdatedAt();
+			List<Tag> tags = new ArrayList<>();
+			tags.add(new Tag("#react"));
+			tags.add(new Tag("#javascript"));
+			tags.add(new Tag("#frontend"));
+			tags.add(new Tag("#library"));
+			tags.add(new Tag("#userinterfaces"));
+			post1.setTags(tags);
+
 			postRepository.save(post1);
 
 			Post post2 = new Post("Python vs JavaScript: Which is Better for Web Development?", "If you're considering learning a programming language for web development, you might be wondering whether to choose <span class=\"font-bold\">Python</span> or <span class=\"font-bold\">JavaScript</span>. While both languages have their strengths and weaknesses, <span class=\"italic\">JavaScript</span> is generally more popular for front-end development, while <span class=\"italic\">Python</span> is often used for back-end development. Ultimately, the choice depends on your goals and the specific project you're working on.", user2);

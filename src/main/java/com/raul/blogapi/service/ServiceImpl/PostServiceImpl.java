@@ -3,8 +3,11 @@ package com.raul.blogapi.service.ServiceImpl;
 import com.raul.blogapi.dto.PostDTO;
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Post;
+import com.raul.blogapi.model.Tag;
 import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.PostRepository;
+import com.raul.blogapi.repository.RoleRepository;
+import com.raul.blogapi.repository.TagRepository;
 import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.service.PostService;
 import org.springframework.beans.BeanUtils;
@@ -16,7 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +31,8 @@ public class PostServiceImpl implements PostService {
     private PostRepository postRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    TagRepository tagRepository;
 
     @Override
     public List<PostDTO> getLatestPosts(int page, int size) {
@@ -42,12 +50,22 @@ public class PostServiceImpl implements PostService {
         Post postModel = new Post();
         postModel.setId(null);
         postModel.setTitle(post.getTitle());
-        postModel.setBody(post.getBody());
+        postModel.setContent(post.getContent());
         postModel.setCreatedAt();
         postModel.setUpdatedAt();
         postModel.setUser(loggedUser);
+
+        // Convert the array of tag strings into Tag entities
+        List<Tag> tags = new ArrayList<>();
+        for (String tagString : post.getTags()) {
+            Tag tag = new Tag(tagString);
+            tags.add(tag);
+        }
+        postModel.setTags(tags);
+
         return new PostDTO(postRepository.save(postModel));
     }
+
 
     @Override
     public PostDTO getPostById(Long id) {
@@ -65,7 +83,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostDTO updatePost(Long id, PostDTO post) {
         Post postToUpdate = postRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Post not found"));
-        postToUpdate.setBody(post.getBody());
+        postToUpdate.setContent(post.getContent());
         return new PostDTO(postRepository.save(postToUpdate));
     }
 
