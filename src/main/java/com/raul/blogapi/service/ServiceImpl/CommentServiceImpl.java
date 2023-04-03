@@ -10,6 +10,7 @@ import com.raul.blogapi.repository.CommentRepository;
 import com.raul.blogapi.repository.PostRepository;
 import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.service.CommentService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -60,6 +62,22 @@ public class CommentServiceImpl implements CommentService {
         return comments.stream().map(comment -> toDto(comment)).collect(Collectors.toList());
     }
 
+    @Override
+    public CommentDTO updateComment(Long commentId, CommentDTO comment) {
+        Comment existingComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new UserNotFoundException("Comment not found"));
+
+        existingComment.setText(comment.getText());
+        existingComment.setUpdatedAt();
+
+        Comment updatedComment = commentRepository.save(existingComment);
+
+        CommentDTO updatedCommentDTO = new CommentDTO(updatedComment);
+        return updatedCommentDTO;
+    }
+
+
+
 
     private Comment convertToEntity(CommentDTO comment) {
         Comment commentModel = new Comment();
@@ -75,6 +93,12 @@ public class CommentServiceImpl implements CommentService {
         post.getComments().remove(comment);
         postRepository.save(post);
         commentRepository.deleteById(id);
+    }
+
+    @Override
+    public CommentDTO getCommentById(Long id) {
+        Comment comment = commentRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Comment not found"));
+        return toDto(comment);
     }
 
     private CommentDTO toDto(Comment comment) {

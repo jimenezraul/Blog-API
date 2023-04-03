@@ -28,6 +28,8 @@ interface CommentProps {
     updated_at: string;
     user: string;
     userId: number;
+    formattedDate: string;
+    formattedUpdatedDate: string;
   };
 }
 

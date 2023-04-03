@@ -7,6 +7,7 @@ import com.raul.blogapi.service.CommentService;
 import com.raul.blogapi.service.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,6 +29,17 @@ public class Comments {
     @PostMapping("/comments")
     public CommentDTO createComment(@Valid @RequestBody CommentDTO comment) {
         return comments.createComment(comment);
+    }
+
+    @GetMapping("/comments/{id}")
+    @JsonView(Views.Public.class)
+    public CommentDTO getCommentById(@PathVariable Long id) {
+        return comments.getCommentById(id);
+    }
+
+    @PutMapping("/comments/{id}")
+    public ResponseEntity<CommentDTO> updateComment(@PathVariable Long id, @Valid @RequestBody CommentDTO comment) {
+        return ResponseEntity.ok(comments.updateComment(id, comment));
     }
 
     @DeleteMapping("/comments/{id}")

@@ -3,9 +3,7 @@ package com.raul.blogapi.dto;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.raul.blogapi.controller.Views;
 import com.raul.blogapi.model.Comment;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import com.raul.blogapi.utils.DateUtils;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +30,8 @@ public class CommentDTO {
     private String user;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
+    private String formattedDate;
+    private String formattedUpdatedDate;
 
     public CommentDTO(Comment comment) {
         BeanUtils.copyProperties(comment, this);
@@ -40,5 +40,7 @@ public class CommentDTO {
         this.user = comment.getUser().getName();
         this.created_at = comment.getCreatedAt();
         this.updated_at = comment.getUpdated_at();
+        this.formattedDate = DateUtils.formatTime(comment.getCreatedAt());
+        this.formattedUpdatedDate = DateUtils.formatTime(comment.getUpdated_at());
     }
 }

@@ -3,13 +3,11 @@ import Comments from '../components/Comments';
 import { FetchData } from '../utils/FetchData';
 import Auth from '../auth';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../app/hooks';
-import { setAlert } from '../app/features/alertSlice';
 import Alert from '../components/NotificationAlert';
 import { postInitialValues } from '../utils/initialValues';
+import CommentForm from '../components/CommentForm';
 
 const BlogDetails = () => {
-  const dispatch = useAppDispatch();
   const isLoggedIn = Auth.isAuthenticated();
   const id = window.location.pathname.split('/')[2];
   const [data, setData] = useState<PostProps>(postInitialValues);
@@ -21,70 +19,14 @@ const BlogDetails = () => {
       FetchData(`/api/v1/posts/${id}`, 'GET'),
       FetchData(`/api/v1/posts/${id}/comments`, 'GET'),
     ]).then(([postData, commentsData]) => {
-      
       const newPostData = {
         ...postData,
         created_at: Intl.DateTimeFormat().format(new Date(postData.created_at)),
       };
       setData(newPostData);
-      const newData = commentsData?.map((comment: any) => ({
-        ...comment,
-        created_at: Intl.DateTimeFormat().format(new Date(comment.created_at)),
-      }));
-      setComments(newData);
+      setComments(commentsData);
     });
   }, [id]);
-
-  const [comment, setComment] = useState('');
-
-  const handleCommentChange = (event: any) => {
-    setComment(event.target.value);
-  };
-
-  const handleCommentSubmit = async (event: any) => {
-    event.preventDefault();
-    // check if comment is empty and if is less than 10 characters
-    if (comment.length < 5 || comment === '') {
-      if (comment === '') {
-        dispatch(
-          setAlert({
-            message: 'Comment cannot be empty',
-            type: 'WARNING',
-            show: true,
-          })
-        );
-        return;
-      }
-      dispatch(
-        setAlert({
-          message: 'Comment must be at least 5 characters long',
-          type: 'WARNING',
-          show: true,
-        })
-      );
-
-      return;
-    }
-
-    try {
-      const res = await FetchData(`/api/v1/comments`, 'POST', {
-        text: comment,
-        postId: id,
-      });
-
-      setComments([
-        {
-          ...res,
-          created_at: Intl.DateTimeFormat().format(new Date(res.created_at)),
-        },
-        ...comments,
-      ]);
-    } catch (error) {
-      console.log(error);
-    }
-
-    setComment('');
-  };
 
   const handleRedirect = () => {
     const link = `/blog-details/${id}`;
@@ -183,26 +125,11 @@ const BlogDetails = () => {
       </div>
       <div className='flex flex-col items-center justify-center mt-8'>
         {isLoggedIn ? (
-          <div className='bg-slate-100  p-2 border border-gray-300 rounded w-full max-w-3xl shadow'>
-            <label className='block font-semibold mb-2' htmlFor='comment'>
-              New comment
-            </label>
-            <textarea
-              className='w-full p-2 border border-gray-300 rounded shadow'
-              name='comment'
-              id='comment'
-              rows={3}
-              value={comment}
-              onChange={handleCommentChange}
-            ></textarea>
-            <button
-              className='transition float-right duration-300 px-3 py-2 mt-4 bg-blue-400 text-white rounded shadow-md hover:bg-blue-600 focus:outline-none'
-              aria-label='Add comment'
-              onClick={handleCommentSubmit}
-            >
-              Add comment
-            </button>
-          </div>
+          <CommentForm
+            postId={id}
+            comments={comments}
+            setComments={setComments}
+          />
         ) : (
           <button
             onClick={handleRedirect}
