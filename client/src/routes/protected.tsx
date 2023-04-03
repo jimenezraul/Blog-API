@@ -43,7 +43,7 @@ export const protectedRoutes = [
         element: <AllPosts />,
       },
       {
-        path: '/edit-post/:id',
+        path: '/edit-post',
         element: <EditPost />,
       },
       { path: '/add-new-post', element: <AddNewPost /> },

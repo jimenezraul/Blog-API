@@ -1,9 +1,7 @@
+import NewPostForm from '../components/NewPostForm';
+
 const EditPost = () => {
-  return (
-    <div>
-      <h1>Edit Post</h1>
-    </div>
-  );
+  return <NewPostForm />;
 };
 
 export default EditPost;

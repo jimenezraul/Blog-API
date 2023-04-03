@@ -50,7 +50,7 @@ const Post = ({
           className='relative overflow-hidden transition-shadow duration-300 bg-white rounded-lg shadow-lg border border-slate-300'
         >
           <div className='absolute top-0 right-0 p-3'>
-            <i onClick={()=> navigate(`/edit-post/${id}`)} className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-blue-500 hover:text-blue-600 cursor-pointer text-xl fa-solid fa-pen-to-square'></i>
+            <i onClick={()=> navigate(`/edit-post?post=${id}`)} className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-blue-500 hover:text-blue-600 cursor-pointer text-xl fa-solid fa-pen-to-square'></i>
             <i
               onClick={handlePostDelete}
               className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-red-500 hover:text-red-600 cursor-pointer text-xl fa-solid fa-trash'
