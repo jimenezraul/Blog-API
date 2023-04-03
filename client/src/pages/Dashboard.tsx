@@ -7,12 +7,12 @@ import Auth from '../auth';
 
 const Dashboard = () => {
   const [data, setData] = useState({
-    createdAt: '',
+    created_at: '',
     email: '',
     id: '',
     imageUrl: '',
     name: '',
-    updatedAt: '',
+    updated_at: '',
   });
   const [page, setPage] = useState(1);
   const [posts, setPosts] = useState<PostProps[]>([]);
@@ -75,7 +75,7 @@ const Dashboard = () => {
               title={post.title}
               id={post.id}
               content={post.content}
-              author={post.userName}
+              author={post.author}
               tags={post.tags}
               created_at={Intl.DateTimeFormat().format(
                 new Date(post.created_at)

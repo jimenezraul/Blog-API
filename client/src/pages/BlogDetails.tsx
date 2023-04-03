@@ -150,11 +150,11 @@ const BlogDetails = () => {
         </div>
         <div className='bg-white rounded-lg shadow-lg border'>
           <div className='mb-4'>
-            <img
+            {/* <img
               className='object-cover w-full h-56 rounded shadow-lg sm:h-64 md:h-80 lg:h-96'
               src='https://images.pexels.com/photos/3727459/pexels-photo-3727459.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;h=750&amp;w=1260'
               alt=''
-            />
+            /> */}
             <p className='p-5 bg-slate-300 text-start text-base md:text-lg'>
               - Posted by <span className='font-bold'>{data?.author}</span> on{' '}
               {data?.created_at}

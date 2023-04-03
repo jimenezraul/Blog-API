@@ -7,6 +7,7 @@ const Dashboard = lazy(() => import('../pages/Dashboard'));
 const AddNewPost = lazy(() => import('../pages/AddNewPost'));
 const AboutUs = lazy(() => import('../pages/AboutUs'));
 const AllPosts = lazy(() => import('../pages/AllPosts'));
+const EditPost = lazy(() => import('../pages/EditPost'));
 
 const Protected = () => {
   return (
@@ -40,6 +41,10 @@ export const protectedRoutes = [
       {
         path: '/all-posts',
         element: <AllPosts />,
+      },
+      {
+        path: '/edit-post/:id',
+        element: <EditPost />,
       },
       { path: '/add-new-post', element: <AddNewPost /> },
       { path: '*', element: <Navigate to='.' /> },

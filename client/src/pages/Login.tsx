@@ -43,8 +43,8 @@ function LoginForm() {
     if (error.username || error.password) return;
     try {
       const res = await FetchData('/api/v1/auth/login', 'POST', {
-        username: username,
-        password: password,
+        username: username.trim(),
+        password: password.trim(),
       });
 
       if (!res) {

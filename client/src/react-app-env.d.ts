@@ -30,3 +30,12 @@ interface CommentProps {
     userId: number;
   };
 }
+
+interface ProfileCardProps {
+  id: string;
+  name: string;
+  email: string;
+  imageUrl: string;
+  created_at: string;
+  updated_at: string;
+}

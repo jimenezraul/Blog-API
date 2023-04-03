@@ -22,7 +22,9 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.server.resource.BearerTokenAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collections;
@@ -55,15 +57,16 @@ public class Auth {
     private RefreshTokenService refreshTokenService;
 
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody SignupDTO signupDTO) throws Exception {
+    public ResponseEntity<Void> register(@RequestBody SignupDTO signupDTO) throws Exception {
         User user = new User(signupDTO.getName(), signupDTO.getUsername(), signupDTO.getEmail(), signupDTO.getPassword(), signupDTO.getBirthDate());
 
+
         if (signupDTO.getName() == null || signupDTO.getUsername() == null || signupDTO.getPassword() == null || signupDTO.getBirthDate() == null) {
-            return ResponseEntity.badRequest().body("Missing fields");
+            return ResponseEntity.badRequest().build();
         }
 
         if (userService.userExists(user.getUsername())) {
-            return ResponseEntity.badRequest().body("User already exists");
+            return ResponseEntity.badRequest().build();
         }
 
         userService.createUser(user);
@@ -72,10 +75,10 @@ public class Auth {
         EmailService email = emailService.sendVerificationEmail(user.getEmail(), tokenGenerator.createToken(authentication).getAccessToken());
 
         if (email == null) {
-            return ResponseEntity.badRequest().body("Something went wrong");
+            return (ResponseEntity<Void>) ResponseEntity.badRequest();
         }
 
-        return ResponseEntity.ok("User created, please verify your email");
+        return ResponseEntity.created(null).build();
     }
 
     @PostMapping("/login")

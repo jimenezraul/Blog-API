@@ -32,8 +32,8 @@ public class Users {
     @GetMapping("/me/{id}")
     @JsonView(Views.Private.class)
     @PreAuthorize("#id == authentication.principal.id")
-    public UserDTO getMe(@PathVariable Long id) {
-        return service.getUserById(id);
+    public ResponseEntity<UserDTO> getMe(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getUserById(id));
     }
 
     @PutMapping("/users/{id}")

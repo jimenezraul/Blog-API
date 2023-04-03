@@ -43,6 +43,10 @@ export const FetchData: any = async (
         return response;
       }
 
+      if (response.status === 201) {
+        return response;
+      }
+
       const data = await response.json();
       return data;
     }

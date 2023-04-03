@@ -57,6 +57,4 @@ public class UserDTO {
         this.updated_at = savedUser.getUpdated_at();
         this.imageUrl = savedUser.getImageUrl() == null ? "https://i.imgur.com/3ZQZ9Zm.png" : savedUser.getImageUrl();
     }
-
-
 }

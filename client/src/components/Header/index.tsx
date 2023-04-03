@@ -7,11 +7,11 @@ const Header = () => {
         <div className='flex flex-col items-center justify-between xl:flex-row'>
           <div className='w-full max-w-xl mb-12 xl:pr-16 xl:mb-0 xl:w-7/12'>
             <h2 className='max-w-lg mb-6 font-sans text-3xl font-bold tracking-tight sm:text-4xl sm:leading-none text-red-500'>
-              TechTalk X <br className='block' />
+              TechTalk Blog <br className='block' />
               <span className="text-blue-500" ><span className="text-green-500">Mastering</span><span className='text-yellow-400'> the Art</span> of Coding.</span>
             </h2>
             <p className='max-w-xl mb-4 text-base text-gray-300 md:text-lg'>
-            TechTalk X is a tech blog dedicated to exploring the world of
+            TechTalk Blog is a blog dedicated to exploring the world of
               coding, programming, and software development. Our expert team of
               writers and developers provide insights, tips, and tricks on how
               to master the craft of coding, improve your skills, and stay

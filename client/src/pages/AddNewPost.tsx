@@ -16,22 +16,27 @@ const AddNewPost = () => {
     e.preventDefault();
     const target = e.target as typeof e.target & {
       title: { value: string };
-      body: { value: string };
+      content: { value: string };
+      tags: { value: string };
     };
     const title = target?.title?.value;
-    const body = target?.body?.value;
+    const content = target?.content?.value;
+    const tags = target?.tags?.value;
+
+    const tagsArray = tags.split(' ').map((tag) => tag.trim());
 
     try {
-      if (title === '' || body === '') {
+      if (title === '' || content === '') {
         throw new Error('Please fill in all fields');
       }
-      if (body.length < 10) {
+      if (content.length < 10) {
         throw new Error('Body must be at least 10 characters long');
       }
 
       await FetchData('/api/v1/posts', 'POST', {
         title,
-        body,
+        content,
+        tags: tagsArray,
       });
 
       navigate(`/dashboard?page=${currentPage}`);
@@ -85,15 +90,33 @@ const AddNewPost = () => {
                   className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'
                   htmlFor='grid-body'
                 >
-                  Body
+                  Content
                 </label>
                 <textarea
                   className='w-full p-2 border border-gray-300 rounded shadow'
-                  name='body'
-                  placeholder='Body'
+                  name='content'
+                  placeholder='Content'
                 />
                 <p className='text-gray-600 text-xs italic'>
-                  Add a body for your post
+                  Add a content for your post
+                </p>
+              </div>
+            </div>
+            <div className='flex flex-wrap -mx-3 mb-6'>
+              <div className='w-full px-3'>
+                <label
+                  className='block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2'
+                  htmlFor='grid-body'
+                >
+                  Tags
+                </label>
+                <textarea
+                  className='w-full p-2 border border-gray-300 rounded shadow'
+                  name='tags'
+                  placeholder='Tags e.g. #javascript #react #typescript'
+                />
+                <p className='text-gray-600 text-xs italic'>
+                  Add your tags for your post
                 </p>
               </div>
             </div>

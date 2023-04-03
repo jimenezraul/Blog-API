@@ -5,9 +5,11 @@ import com.raul.blogapi.dto.PostDTO;
 import com.raul.blogapi.service.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -42,7 +44,10 @@ public class Posts {
     @PostMapping("/posts")
     public ResponseEntity<Long> createPost(@Valid @RequestBody PostDTO post) {
         service.createPost(post);
-        return ResponseEntity.ok().build();
+        URI location = URI.create(String.format("/posts/%s", post.getId()));
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(location);
+        return ResponseEntity.created(location).headers(headers).body(post.getId());
     }
 
     @PutMapping("/posts/{id}")
@@ -56,7 +61,7 @@ public class Posts {
     }
 
     @GetMapping("/posts/user/{id}/count")
-    public Long getPostByUserIdCount(@PathVariable Long id) {
-        return service.getPostByUserIdCount(id);
+    public ResponseEntity<Long> getPostByUserIdCount(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getPostByUserIdCount(id));
     }
 }

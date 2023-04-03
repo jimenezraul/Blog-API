@@ -1,12 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { FetchData } from '../../utils/FetchData';
-import { useEffect, useState } from 'react';
 
 interface Props extends PostProps {
   setPosts: React.Dispatch<React.SetStateAction<PostProps[]>>;
   setTotalPages: React.Dispatch<React.SetStateAction<number>>;
   page: number;
-  postsLength: number
+  postsLength: number;
 }
 
 const Post = ({
@@ -25,7 +24,7 @@ const Post = ({
   const handleReadMore = () => {
     navigate(`/blog-details/${id}`);
   };
-  
+
   const handlePostDelete = async () => {
     try {
       const response = await FetchData(`/api/v1/posts/${id}`, 'DELETE');
@@ -50,10 +49,13 @@ const Post = ({
           key={id}
           className='relative overflow-hidden transition-shadow duration-300 bg-white rounded-lg shadow-lg border border-slate-300'
         >
-          <i
-            onClick={handlePostDelete}
-            className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 absolute text-red-500 hover:text-red-600 cursor-pointer top-3 text-xl right-5 fa-solid fa-trash'
-          ></i>
+          <div className='absolute top-0 right-0 p-3'>
+            <i onClick={()=> navigate(`/edit-post/${id}`)} className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-blue-500 hover:text-blue-600 cursor-pointer text-xl fa-solid fa-pen-to-square'></i>
+            <i
+              onClick={handlePostDelete}
+              className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-red-500 hover:text-red-600 cursor-pointer text-xl fa-solid fa-trash'
+            ></i>
+          </div>
           <img
             src='https://images.pexels.com/photos/2408666/pexels-photo-2408666.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=500'
             className='object-cover w-full h-64'
@@ -72,7 +74,9 @@ const Post = ({
             >
               {title}
             </a>
-            <div dangerouslySetInnerHTML={{ __html: content.substring(0, 100) }} />
+            <div
+              dangerouslySetInnerHTML={{ __html: content.substring(0, 100) }}
+            />
             <p className='mb-2 text-gray-700'>{commentsCount} comments</p>
             <button
               onClick={handleReadMore}
