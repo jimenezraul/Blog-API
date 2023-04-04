@@ -8,9 +8,9 @@ interface Comment extends CommentProps {
 }
 
 const Comments = ({ comment, comments, setComments }: Comment) => {
-  const [formattedDate, formattedTime] = comment.formattedDate.split(' ');
+  const [formattedDate, formattedTime] = comment?.formattedDate?.split(' ');
   const [formattedUpdatedDate, formattedUpdatedTime] =
-    comment.formattedUpdatedDate.split(' ');
+    comment?.formattedUpdatedDate?.split(' ');
   const navigation = useNavigate();
   const isAdmin = Auth.isAdmin();
   const userId = Auth.getUserId();
@@ -33,7 +33,7 @@ const Comments = ({ comment, comments, setComments }: Comment) => {
   const handleEditComment = async () => {
     navigation(`/blog-details/${comment.postId}?edit=${comment.id}`);
   };
-  console.log(comment);
+
   return (
     <>
       <div

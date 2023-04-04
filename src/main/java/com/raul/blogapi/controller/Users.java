@@ -25,8 +25,8 @@ public class Users {
     }
     @JsonView(Views.Public.class)
     @GetMapping("/users/{id}")
-    public UserDTO getUser(@PathVariable Long id) {
-        return service.getUserById(id);
+    public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getUserById(id));
     }
 
     @GetMapping("/me/{id}")
@@ -38,21 +38,21 @@ public class Users {
 
     @PutMapping("/users/{id}")
     @JsonView(Views.Public.class)
-    public UserDTO updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO user) {
-        return service.updateUser(id, user);
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody UserDTO user) {
+        return ResponseEntity.ok(service.updateUser(id, user));
     }
 
     @DeleteMapping("/users/{id}")
     @JsonView(Views.Public.class)
-    public void deleteUser(@PathVariable Long id) {
-        System.out.println(id);
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         service.deleteUser(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/users/email/{email}")
     @JsonView(Views.Public.class)
-    public UserDTO getUserByEmail(@PathVariable String email) {
-        return service.getUserByEmail(email);
+    public ResponseEntity<UserDTO> getUserByEmail(@PathVariable String email) {
+        return ResponseEntity.ok(service.getUserByEmail(email));
     }
 
 }

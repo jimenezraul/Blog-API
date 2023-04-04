@@ -21,24 +21,25 @@ public class Posts {
     private PostService service;
     @GetMapping("/posts")
     @JsonView(Views.Public.class)
-    public List<PostDTO> getAllPost(@RequestParam(value = "page", defaultValue = "0") int page,
+    public ResponseEntity<List<PostDTO>> getAllPost(@RequestParam(value = "page", defaultValue = "0") int page,
                                     @RequestParam(value = "size", defaultValue = "50") int size) {
 
         List<PostDTO> posts = service.getLatestPosts(page, size);
-        return  posts;
+        return  ResponseEntity.ok(posts);
     }
 
     @GetMapping("/posts/{id}")
     @JsonView(Views.Public.class)
-    public PostDTO getPostById(@PathVariable Long id) {
-        return service.getPostById(id);
+    public ResponseEntity<PostDTO> getPostById(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getPostById(id));
     }
 
     @GetMapping("/posts/user/{id}")
     @JsonView(Views.Private.class)
-    public List<PostDTO> getPostByUserId(@PathVariable Long id, @RequestParam(value = "page", defaultValue = "0") int page,
-                                         @RequestParam(value = "size", defaultValue = "50") int size) {
-        return service.getPostByUserId(id, page, size);
+    public ResponseEntity<List<PostDTO>> getPostByUserId(@PathVariable Long id,
+                                                         @RequestParam(value = "page", defaultValue = "0") int page,
+                                                         @RequestParam(value = "size", defaultValue = "50") int size) {
+        return ResponseEntity.ok(service.getPostByUserId(id, page, size));
     }
 
     @PostMapping("/posts")
@@ -51,13 +52,14 @@ public class Posts {
     }
 
     @PutMapping("/posts/{id}")
-    public PostDTO updatePost(@PathVariable Long id, @Valid @RequestBody PostDTO post) {
-        return service.updatePost(id, post);
+    public ResponseEntity<PostDTO> updatePost(@PathVariable Long id, @Valid @RequestBody PostDTO post) {
+        return ResponseEntity.ok(service.updatePost(id, post));
     }
 
     @DeleteMapping("/posts/{id}")
-    public void deletePost(@PathVariable Long id) {
+    public ResponseEntity<?> deletePost(@PathVariable Long id) {
         service.deletePost(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/posts/user/{id}/count")

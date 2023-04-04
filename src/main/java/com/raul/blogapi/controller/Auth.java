@@ -140,7 +140,6 @@ public class Auth {
         TokenDTO tokens = tokenGenerator.createToken(authentication);
 
         if (daysUntilExpired < 7) {
-            // delete old refresh token and create new one
             refreshTokenService.deleteRefreshToken(token.getId());
             refreshTokenService.createRefreshToken(tokens.getRefreshToken(), Long.valueOf(jwt.getSubject()));
         }
@@ -151,12 +150,11 @@ public class Auth {
     }
 
     @GetMapping("/verify-email/{token}")
-    public ResponseEntity verify(@PathVariable String token) {
+    public ResponseEntity<String> verify(@PathVariable String token) {
         Authentication authentication = accessTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(token));
         Jwt jwt = (Jwt) authentication.getCredentials();
-        // check if present in db and not revoked, etc
+
         UserDTO user = userService.getUserById(Long.valueOf(jwt.getSubject()));
-        System.out.println(user);
 
         user.setIsEmailVerified(true);
 

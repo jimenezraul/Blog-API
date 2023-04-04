@@ -48,7 +48,7 @@ const BlogDetails = () => {
       <button
         className='transition duration-300 px-3 py-2 mb-5 bg-blue-400 text-white rounded shadow-md hover:bg-blue-600 focus:outline-none'
         aria-label='Go back'
-        onClick={() => window.history.back()}
+        onClick={() => navigate(-1)}
       >
         Back
       </button>

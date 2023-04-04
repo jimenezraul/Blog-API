@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -24,54 +25,45 @@ public class Roles {
     private UserService userService;
 
     @GetMapping("/roles")
-    public List<RoleDTO> getAllRoles() {
-        return roleService.getAllRoles();
+    public ResponseEntity<List<RoleDTO>> getAllRoles() {
+        return ResponseEntity.ok(roleService.getAllRoles());
     }
 
     @PostMapping("/roles")
-    public Long createRole(@RequestBody RoleDTO role) {
-        return roleService.createRole(role).getId();
+    public ResponseEntity<Long> createRole(@RequestBody RoleDTO role) {
+        RoleDTO roleDTO = roleService.createRole(role);
+        URI location = URI.create(String.format("/roles/%s", roleDTO.getId()));
+
+        return ResponseEntity.created(location).body(roleDTO.getId());
     }
 
     @GetMapping("/roles/{id}")
     @JsonView(Views.Private.class)
     public ResponseEntity<RoleDTO> getRoleById(@PathVariable Long id) {
         ResponseEntity<RoleDTO> role = ResponseEntity.of(Optional.ofNullable(roleService.getRoleById(id)));
-        System.out.println(role);
         return role;
     }
 
     @PutMapping("/roles/user/{id}")
-    public void addRoleToUser(@PathVariable Long id, @RequestBody RoleDTO role) {
-        userService.addRoleToUser(id, role);
+    public ResponseEntity<UserDTO> addRoleToUser(@PathVariable Long id, @RequestBody RoleDTO role) {
+        return ResponseEntity.ok(userService.addRoleToUser(id, role));
     }
 
     @DeleteMapping("/roles/user/{id}/role/{roleId}")
-    public void deleteRoleFromUser(@PathVariable("id") Long id, @PathVariable("roleId") Long roleId) {
+    public ResponseEntity<?> deleteRoleFromUser(@PathVariable("id") Long id, @PathVariable("roleId") Long roleId) {
         userService.removeRoleFromUser(id, roleId);
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/roles/{id}")
-    public RoleDTO updateRole(@PathVariable Long id, @RequestBody RoleDTO role) {
-        return roleService.updateRole(id, role);
-    }
-
-    @DeleteMapping("/roles/user/{id}")
-    public void deleteRoleFromUser(@PathVariable Long id, @RequestBody RoleDTO role) {
-        System.out.println(role);
-        Optional<UserDTO> users = Optional.ofNullable(userService.getUserById(id));
-        if (users.isPresent()) {
-            UserDTO user = users.get();
-            Collection<RoleDTO> roles = user.getRoles();
-            roles.removeIf(r -> r.getId().equals(role.getId()));
-            user.setRoles(roles);
-            userService.updateUser(id, user);
-        }
+    public ResponseEntity<RoleDTO> updateRole(@PathVariable Long id, @RequestBody RoleDTO role) {
+        return ResponseEntity.ok(roleService.updateRole(id, role));
     }
 
     @DeleteMapping("/roles/{id}")
-    public void deleteRole(@PathVariable Long id) {
+    public ResponseEntity<?> deleteRole(@PathVariable Long id) {
         roleService.deleteRole(id);
+        return ResponseEntity.ok().build();
     }
 
 }

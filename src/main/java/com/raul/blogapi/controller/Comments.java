@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,19 +23,20 @@ public class Comments {
 
     @GetMapping("/comments")
     @JsonView(Views.Public.class)
-    public List<CommentDTO> getAllComments() {
-        return comments.getAllComments();
+    public ResponseEntity<List<CommentDTO>> getAllComments() {
+        return ResponseEntity.ok(comments.getAllComments());
     }
 
     @PostMapping("/comments")
-    public CommentDTO createComment(@Valid @RequestBody CommentDTO comment) {
-        return comments.createComment(comment);
+    public ResponseEntity<CommentDTO> createComment(@Valid @RequestBody CommentDTO comment) {
+        URI location = URI.create(String.format("/comments/%s", comment.getId()));
+        return ResponseEntity.created(location).body(comments.createComment(comment));
     }
 
     @GetMapping("/comments/{id}")
     @JsonView(Views.Public.class)
-    public CommentDTO getCommentById(@PathVariable Long id) {
-        return comments.getCommentById(id);
+    public ResponseEntity<CommentDTO> getCommentById(@PathVariable Long id) {
+        return ResponseEntity.ok(comments.getCommentById(id));
     }
 
     @PutMapping("/comments/{id}")
@@ -43,16 +45,13 @@ public class Comments {
     }
 
     @DeleteMapping("/comments/{id}")
-    public void deleteComment(@PathVariable Long id) {
+    public ResponseEntity<?> deleteComment(@PathVariable Long id) {
         comments.deleteComment(id);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/posts/{id}/comments")
-    public List<CommentDTO> getCommentsByPost(@PathVariable Long id) {
-        return comments.getCommentsByPost(id);
-    }
-
-    private CommentDTO toDto(Comment comment) {
-        return new CommentDTO(comment);
+    public ResponseEntity<List<CommentDTO>> getCommentsByPost(@PathVariable Long id) {
+        return ResponseEntity.ok(comments.getCommentsByPost(id));
     }
 }

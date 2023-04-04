@@ -56,7 +56,6 @@ const CommentForm = ({ postId, comments, setComments }: any) => {
         const editComment = comments.find(
           (comment: any) => comment.id === Number(editId)
         );
-        console.log(editComment);
 
         const res = await FetchData(`/api/v1/comments/${editId}`, 'PUT', {
           text: comment,
@@ -84,13 +83,13 @@ const CommentForm = ({ postId, comments, setComments }: any) => {
         postId: postId,
       });
 
-      setComments([
-        {
-          ...res,
-          created_at: Intl.DateTimeFormat().format(new Date(res.created_at)),
-        },
-        ...comments,
-      ]);
+      if (!res.ok) {
+        throw new Error('Something went wrong');
+      }
+
+      const data = await res.json();
+
+      setComments([data, ...comments]);
     } catch (error) {
       console.log(error);
     }
