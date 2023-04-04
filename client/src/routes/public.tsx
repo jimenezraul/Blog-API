@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
+import ForgotPassword from '../pages/ForgotPassword';
 
 const Home = lazy(() => import('../pages/Home'));
 const AboutUs = lazy(() => import('../pages/AboutUs'));
@@ -37,6 +38,10 @@ export const publicRoutes = [
       {
         path: '/signup',
         element: <Signup />,
+      },
+      {
+        path: '/forgot-password',
+        element: <ForgotPassword />,
       },
       {
         path: '/blog-details/:id',
