@@ -12,6 +12,7 @@ target/
 .settings
 .springBeans
 .sts4-cache
+.DS_Store
 
 ### IntelliJ IDEA ###
 .idea
@@ -34,3 +35,7 @@ build/
 
 ### Env ###
 env.properties
+
+### Maven ###
+/access-refresh-token-keys
+/out

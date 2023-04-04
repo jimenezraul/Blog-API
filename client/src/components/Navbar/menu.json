@@ -1,0 +1,14 @@
+[
+    {
+        "path": "/",
+        "name": "Blog"
+    },
+    {
+        "path": "/dashboard?page=1",
+        "name": "Dashboard"
+    },
+    {
+        "path": "/about-us",
+        "name": "About us"
+    }
+]
