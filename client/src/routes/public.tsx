@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
+import ForgotPassword from '../pages/ForgotPassword';
 
 const Home = lazy(() => import('../pages/Home'));
 const AboutUs = lazy(() => import('../pages/AboutUs'));
@@ -10,7 +11,7 @@ const AllPosts = lazy(() => import('../pages/AllPosts'));
 
 const Public = () => {
   return (
-    <div className='flex flex-1 bg-gray-100'>
+    <div className='relative flex flex-1 bg-gray-100'>
       <Suspense
         fallback={
           <div className='h-full w-full flex items-center justify-center'></div>
@@ -37,6 +38,10 @@ export const publicRoutes = [
       {
         path: '/signup',
         element: <Signup />,
+      },
+      {
+        path: '/forgot-password',
+        element: <ForgotPassword />,
       },
       {
         path: '/blog-details/:id',

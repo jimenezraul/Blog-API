@@ -30,7 +30,6 @@ import java.util.Collections;
 
 @Entity(name = "user")
 @NoArgsConstructor
-@RequiredArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
@@ -41,19 +40,15 @@ public class User implements UserDetails {
     @Size(min = 2, message = "Name should have at least 2 characters")
     @Column(name = "name", nullable = false)
     private String name;
-    @NonNull
     @Column(name = "username", nullable = false, unique = true)
     private String username;
-    @NonNull
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
-    @NonNull
+    @Column(name = "password", nullable = false)
     private String password;
     private String imageUrl;
 
     private Boolean isEmailVerified = false;
-    @Past(message = "Birth date should be in the past")
-    @Column(name = "birth_date", nullable = false)
-    private LocalDate birthDate;
     @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Post> posts = new ArrayList<>();
 
@@ -74,12 +69,11 @@ public class User implements UserDetails {
         this.id = userId;
     }
 
-    public User(String name, String username, String email, String password, LocalDate birthDate) {
+    public User(String name, String username, String email, String password) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.birthDate = birthDate;
     }
 
     public User(UserDTO userById) {
@@ -88,7 +82,6 @@ public class User implements UserDetails {
         this.username = userById.getUsername();
         this.email = userById.getEmail();
         this.password = userById.getPassword();
-        this.birthDate = userById.getBirthDate();
         this.imageUrl = userById.getImageUrl();
         this.isEmailVerified = userById.getIsEmailVerified();
         this.created_at = userById.getCreated_at();
@@ -101,7 +94,6 @@ public class User implements UserDetails {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", username='" + username + '\'' +
-                ", birthDate=" + birthDate +
                 ", posts=" + posts +
                 ", roles=" + roles +
                 '}';

@@ -41,3 +41,18 @@ interface ProfileCardProps {
   created_at: string;
   updated_at: string;
 }
+
+interface SignUpForm {
+  name: string;
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  error: {
+    name: string;
+    username: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  };
+}

@@ -18,7 +18,7 @@ const Header = () => {
               up-to-date with the latest programming trends.
             </p>
             <Link
-              to='/'
+              to='/about-us'
               aria-label=''
               className='inline-flex items-center font-semibold tracking-wider transition-colors duration-200 text-blue-500 hover:text-blue-700'
             >

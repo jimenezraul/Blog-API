@@ -4,6 +4,7 @@ import { useAppDispatch } from '../../app/hooks';
 import { setAlert } from '../../app/features/alertSlice';
 import Alert from '../NotificationAlert';
 import { useState, useEffect } from 'react';
+import AlertType from '../../enum/alert';
 
 const initialState = {
   title: '',
@@ -72,11 +73,14 @@ const NewPostForm = () => {
     });
 
     if (error.title || error.content || error.tags) {
-      setAlert({
-        message: 'Please fill in all fields',
-        type: 'WARNING',
-        show: true,
-      });
+      dispatch(
+        setAlert({
+          message: 'Please fill in all fields',
+          type: AlertType.WARNING,
+          show: true,
+        })
+      );
+      return;
     }
 
     const tagsArray = tags.split(' ').map((tag: string) => tag.trim());
@@ -107,7 +111,7 @@ const NewPostForm = () => {
       dispatch(
         setAlert({
           message: error.message,
-          type: 'WARNING',
+          type: AlertType.ERROR,
           show: true,
         })
       );

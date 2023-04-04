@@ -27,6 +27,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @RestController
@@ -57,28 +58,28 @@ public class Auth {
     private RefreshTokenService refreshTokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody SignupDTO signupDTO) throws Exception {
-        User user = new User(signupDTO.getName(), signupDTO.getUsername(), signupDTO.getEmail(), signupDTO.getPassword(), signupDTO.getBirthDate());
+    public ResponseEntity<ResponseDTO> register(@RequestBody SignupDTO signupDTO) throws Exception {
+
+        User user = new User(signupDTO.getName(), signupDTO.getUsername(), signupDTO.getEmail(), signupDTO.getPassword());
 
 
-        if (signupDTO.getName() == null || signupDTO.getUsername() == null || signupDTO.getPassword() == null || signupDTO.getBirthDate() == null) {
-            return ResponseEntity.badRequest().build();
+        String userReturn = userService.saveUser(user);
+        ResponseDTO responseDTO = new ResponseDTO();
+
+        if (userReturn.equals("Username or email already exists")) {
+            responseDTO.setMessage(userReturn);
+            responseDTO.setStatus(String.valueOf(HttpStatus.CONFLICT.value()));
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(responseDTO);
         }
 
-        if (userService.userExists(user.getUsername())) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        userService.createUser(user);
         Authentication authentication = UsernamePasswordAuthenticationToken.authenticated(user, signupDTO.getPassword(), Collections.EMPTY_LIST);
 
         EmailService email = emailService.sendVerificationEmail(user.getEmail(), tokenGenerator.createToken(authentication).getAccessToken());
 
-        if (email == null) {
-            return (ResponseEntity<Void>) ResponseEntity.badRequest();
-        }
+        responseDTO.setMessage(userReturn);
+        responseDTO.setStatus(String.valueOf(HttpStatus.CREATED.value()));
 
-        return ResponseEntity.created(null).build();
+        return ResponseEntity.created(new URI("/api/v1/auth/register")).body(responseDTO);
     }
 
     @PostMapping("/login")

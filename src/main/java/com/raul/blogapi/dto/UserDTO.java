@@ -18,16 +18,11 @@ public class UserDTO {
     @JsonView(Views.Public.class)
     private Long id;
     @Size(min = 2, message = "Name should have at least 2 characters")
-    @NonNull
     @JsonView(Views.Public.class)
     private String name;
     @JsonView(Views.Public.class)
     private String username;
-    @NonNull
     @JsonView(Views.Private.class)
-    private LocalDate birthDate;
-    @JsonView(Views.Private.class)
-    @NonNull
     private String email;
     private String password;
     @JsonView(Views.Public.class)
@@ -49,7 +44,6 @@ public class UserDTO {
         this.name = savedUser.getName();
         this.username = savedUser.getUsername();
         this.isEmailVerified = savedUser.getIsEmailVerified();
-        this.birthDate = savedUser.getBirthDate();
         this.roles = savedUser.getRoles().stream().map(RoleDTO::new).toList();
         this.numberOfPosts = savedUser.getPosts().stream().count();
         this.email = savedUser.getEmail();

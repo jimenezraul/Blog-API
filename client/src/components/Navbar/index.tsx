@@ -5,6 +5,7 @@ import menu from './menu.json';
 import { useAppDispatch } from '../../app/hooks';
 import { setAccessToken } from '../../app/features/accessTokenSlice';
 import Auth from '../../auth';
+import { setUser } from '../../app/features/userSlice';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Navbar = () => {
     await FetchData('/api/v1/auth/logout', 'POST');
     Auth.logout();
     dispatch(setAccessToken(''));
-
+    dispatch(setUser({ id: null }));
     navigate('/');
   };
 
@@ -127,7 +128,7 @@ const Navbar = () => {
                         className='inline-flex items-center'
                       >
                         <span className='ml-2 text-xl font-bold tracking-wide text-gray-800 uppercase'>
-                        TECH TALK BLOG
+                          TECH TALK BLOG
                         </span>
                       </a>
                     </div>

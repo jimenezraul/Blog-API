@@ -8,12 +8,11 @@ interface TokenState {
 export const AccessTokenSlice = createSlice({
   name: 'accessToken',
   initialState: {
-    access_token: localStorage.getItem('access_token')
-      ? ''
-      : null,
+    access_token: null,
   } as TokenState,
+
   reducers: {
-      setAccessToken: (state, action: PayloadAction<String>) => {
+    setAccessToken: (state, action: PayloadAction<String>) => {
       state.access_token = action.payload;
     },
   },

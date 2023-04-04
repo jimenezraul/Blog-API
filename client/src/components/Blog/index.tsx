@@ -46,9 +46,7 @@ const Blog = () => {
 
   return (
     <div className='flex flex-col w-full flex-1 bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
-      <h1 className='text-3xl font-bold text-blue-900 mb-8'>
-        Latest Posts
-      </h1>
+      <h1 className='text-3xl font-bold text-blue-900 mb-8'>Latest Posts</h1>
       <div className='grid gap-8 sm:grid-cols-2 lg:grid-cols-3 sm:max-w-md md:max-w-full sm:mx-auto'>
         {posts.map((post: any) => (
           <div
@@ -75,7 +73,7 @@ const Blog = () => {
               </Link>
               <div
                 dangerouslySetInnerHTML={{
-                  __html: post.content.substring(0, 100),
+                  __html: post.content.substring(0, 100) + '<span class="font-bold">...</span>',
                 }}
               />
               <p className='mb-2 text-gray-700'>
