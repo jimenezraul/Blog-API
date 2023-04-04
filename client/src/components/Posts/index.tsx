@@ -49,18 +49,18 @@ const Post = ({
           key={id}
           className='relative overflow-hidden transition-shadow duration-300 bg-white rounded-lg shadow-lg border border-slate-300'
         >
-          <div className='absolute top-0 right-0 p-3'>
+          <div className='absolute -top-3 right-0 p-3'>
             <i onClick={()=> navigate(`/edit-post?post=${id}`)} className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-blue-500 hover:text-blue-600 cursor-pointer text-xl fa-solid fa-pen-to-square'></i>
             <i
               onClick={handlePostDelete}
               className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-red-500 hover:text-red-600 cursor-pointer text-xl fa-solid fa-trash'
             ></i>
           </div>
-          <img
+          {/* <img
             src='https://images.pexels.com/photos/2408666/pexels-photo-2408666.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=500'
             className='object-cover w-full h-64'
             alt=''
-          />
+          /> */}
           <div className='p-5'>
             <p className='mb-3 text-xs font-semibold tracking-wide uppercase'>
               By {author}

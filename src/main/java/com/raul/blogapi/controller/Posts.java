@@ -66,4 +66,9 @@ public class Posts {
     public ResponseEntity<Long> getPostByUserIdCount(@PathVariable Long id) {
         return ResponseEntity.ok(service.getPostByUserIdCount(id));
     }
+
+    @GetMapping("/posts/count")
+    public ResponseEntity<Long> getPostCount() {
+        return ResponseEntity.ok(service.getPostCount());
+    }
 }

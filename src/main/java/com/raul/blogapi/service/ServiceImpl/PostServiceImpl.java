@@ -112,6 +112,11 @@ public class PostServiceImpl implements PostService {
         return postRepository.countByUserId(id);
     }
 
+    @Override
+    public Long getPostCount() {
+        return postRepository.count();
+    }
+
 
     private Post convertToEntity(PostDTO postDto) {
         Post post = new Post();

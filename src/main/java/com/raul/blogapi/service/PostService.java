@@ -15,4 +15,5 @@ public interface PostService {
     void deletePost(Long id);
     Long getPostByUserIdCount(Long id);
 
+    Long getPostCount();
 }
