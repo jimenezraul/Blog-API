@@ -1,18 +1,16 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { useAppDispatch } from '../app/hooks';
+import { setAlert } from '../app/features/alertSlice';
+import { FetchData } from '../utils/FetchData';
+import Alert from '../components/NotificationAlert';
 
 const signupInpit = [
   {
-    id: 'firstName',
-    name: 'First Name',
+    id: 'name',
+    name: 'Name',
     type: 'text',
-    placeholder: 'Enter your first name',
-  },
-  {
-    id: 'lastName',
-    name: 'Last Name',
-    type: 'text',
-    placeholder: 'Enter your last name',
+    placeholder: 'Enter your full name',
   },
   {
     id: 'email',
@@ -40,23 +38,25 @@ const signupInpit = [
   },
 ];
 
-function Signup() {
-  const [state, setState] = useState({
-    firstName: '',
-    lastName: '',
+const initialState = {
+  name: '',
+  email: '',
+  username: '',
+  password: '',
+  confirmPassword: '',
+  error: {
+    name: '',
     email: '',
     username: '',
     password: '',
     confirmPassword: '',
-    error: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      username: '',
-      password: '',
-      confirmPassword: '',
-    },
-  });
+  },
+};
+
+function Signup() {
+  const dispatch = useAppDispatch();
+  const [state, setState] = useState<SignUpForm>(initialState);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -70,14 +70,13 @@ function Signup() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
-    const { firstName, lastName, email, username, password, confirmPassword } =
-      state;
+    const { name, email, username, password, confirmPassword } = state;
     const error = {
-      firstName: firstName ? '' : 'First name is required',
-      lastName: lastName ? '' : 'Last name is required',
+      name: name ? '' : 'First name is required',
       email: email ? '' : 'Email is required',
       username: username ? '' : 'Username is required',
       password: password ? '' : 'Password is required',
@@ -89,14 +88,15 @@ function Signup() {
       error,
     });
     if (
-      error.firstName ||
-      error.lastName ||
+      error.name ||
       error.email ||
       error.username ||
       error.password ||
       error.confirmPassword
-    )
+    ) {
+      setIsLoading(false);
       return;
+    }
 
     if (password !== confirmPassword) {
       setState({
@@ -107,19 +107,61 @@ function Signup() {
           confirmPassword: 'Password does not match',
         },
       });
+      setIsLoading(false);
       return;
     }
 
     try {
-      console.log('signup');
+      const res = await FetchData('/api/v1/auth/register', 'POST', {
+        name: name.trim(),
+        email: email.trim(),
+        username: username.trim(),
+        password: password.trim(),
+      });
+
+      if (!res.ok) {
+        if (res.status === 409) {
+          const { message } = await res.json();
+          dispatch(
+            setAlert({
+              message,
+              type: 'ERROR',
+              show: true,
+            })
+          );
+          setIsLoading(false);
+          return;
+        }
+        dispatch(
+          setAlert({
+            message: 'Something went wrong, please try again later',
+            type: 'ERROR',
+            show: true,
+          })
+        );
+        setIsLoading(false);
+        return;
+      }
+
+      dispatch(
+        setAlert({
+          message:
+            'Account created successfully, check your email to verify your account',
+          type: 'SUCCESS',
+          show: true,
+        })
+      );
+      setIsLoading(false);
+      setState(initialState);
     } catch (err) {
       console.log(err);
     }
   };
 
   return (
-    <div className='flex flex-1 justify-center'>
-      <div className='w-full flex justify-center bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+    <div className='flex flex-1 justify-center overflow-hidden'>
+      <div className='relative w-full flex justify-center bg-slate-200 px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20'>
+        <Alert />
         <div className='flex items-center justify-center w-full'>
           <div className='bg-white p-8 rounded-lg shadow-md max-w-md w-full'>
             <h2 className='text-2xl font-bold mb-4 text-center'>SignUp</h2>
@@ -149,8 +191,33 @@ function Signup() {
 
               <button
                 type='submit'
-                className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded'
+                disabled={isLoading}
+                className={`flex ${
+                  isLoading ? 'bg-gray-500' : 'bg-blue-500 hover:bg-blue-700'
+                } text-white font-bold py-2 px-4 rounded`}
               >
+                {isLoading && (
+                  <svg
+                    className='animate-spin -ml-1 mr-3 h-5 w-5 text-white'
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                  >
+                    <circle
+                      className='opacity-25'
+                      cx='12'
+                      cy='12'
+                      r='10'
+                      stroke='currentColor'
+                      strokeWidth='4'
+                    ></circle>
+                    <path
+                      className='opacity-75'
+                      fill='currentColor'
+                      d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                    ></path>
+                  </svg>
+                )}
                 Sign Up
               </button>
 

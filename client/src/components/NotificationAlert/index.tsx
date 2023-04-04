@@ -26,10 +26,10 @@ const Alert = () => {
     <div
       className={`${
         !show ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100'
-      } transform ease-in-out duration-700 absolute top-0 right-0 w-full max-w-md mx-4 mt-4`}
+      } z-50 transform ease-in-out duration-700 absolute top-0 right-0 w-full max-w-md mx-4 mt-4`}
     >
       <div
-        className={`bg-red-100 border ${alertColors[type]} px-4 py-3 rounded relative`}
+        className={`border ${alertColors[type]} px-4 py-3 rounded relative`}
         role='alert'
       >
         <strong className='font-bold'>{message}</strong>

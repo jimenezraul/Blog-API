@@ -10,7 +10,7 @@ const AllPosts = lazy(() => import('../pages/AllPosts'));
 
 const Public = () => {
   return (
-    <div className='flex flex-1 bg-gray-100'>
+    <div className='relative flex flex-1 bg-gray-100'>
       <Suspense
         fallback={
           <div className='h-full w-full flex items-center justify-center'></div>

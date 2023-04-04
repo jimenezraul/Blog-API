@@ -3,6 +3,7 @@ package com.raul.blogapi.service;
 import com.raul.blogapi.dto.RoleDTO;
 import com.raul.blogapi.dto.UserDTO;
 import com.raul.blogapi.model.User;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
@@ -15,9 +16,11 @@ public interface UserService {
     UserDTO removeRoleFromUser(Long id, Long roleId);
     void deleteUser(Long id);
 
-    boolean userExists(String username);
+    void createUser(UserDetails user);
 
-   void createUser(UserDetails user);
+    String saveUser(UserDetails user);
+
+    boolean userExists(String username);
 
     UserDTO getUserByEmail(String email);
 

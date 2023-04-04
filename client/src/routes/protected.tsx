@@ -11,7 +11,7 @@ const EditPost = lazy(() => import('../pages/EditPost'));
 
 const Protected = () => {
   return (
-    <div className='relative flex flex-1 bg-gray-100 overflow-hidden'>
+    <div className='flex flex-1 bg-gray-100 overflow-hidden'>
       <Suspense
         fallback={
           <div className='h-full w-full flex items-center justify-center'></div>

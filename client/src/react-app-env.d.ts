@@ -43,15 +43,13 @@ interface ProfileCardProps {
 }
 
 interface SignUpForm {
-  firstName: string;
-  lastName: string;
+  name: string;
   username: string;
   email: string;
   password: string;
   confirmPassword: string;
   error: {
-    firstName: string;
-    lastName: string;
+    name: string;
     username: string;
     email: string;
     password: string;

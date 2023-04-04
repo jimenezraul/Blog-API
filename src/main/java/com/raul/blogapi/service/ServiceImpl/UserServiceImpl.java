@@ -13,6 +13,8 @@ import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.service.UserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class UserServiceImpl implements UserService, UserDetailsManager {
+public class UserServiceImpl implements UserDetailsManager, UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -55,7 +57,6 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
     public UserDTO updateUser(Long id, UserDTO userDto) {
         User userToUpdate = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User not found"));
         userToUpdate.setName(userDto.getName());
-        userToUpdate.setBirthDate(userDto.getBirthDate());
         userToUpdate.setIsEmailVerified(userDto.getIsEmailVerified());
         userToUpdate.setUpdatedAt();
         return new UserDTO(userRepository.save(userToUpdate));
@@ -97,11 +98,13 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
 
     @Override
     public void createUser(UserDetails user) {
-        if(user == null || user.getUsername() == null || user.getPassword() == null){
-            throw new IllegalArgumentException("Username and password cannot be null");
-        }
-
         User userToCreate = (User) user;
+
+        Boolean userExists = userRepository.existsByUsernameOrEmail(userToCreate.getUsername(), userToCreate.getEmail());
+
+        if(userExists){
+            throw new IllegalStateException("Username or email already exists");
+        }
 
         userToCreate.setPassword(passwordEncoder.encode(user.getPassword()));
         Role role = roleRepository.findByName("ROLE_USER");
@@ -111,6 +114,27 @@ public class UserServiceImpl implements UserService, UserDetailsManager {
         userToCreate.setUpdatedAt();
 
         userRepository.save(userToCreate);
+    }
+
+    @Override
+    public String saveUser(UserDetails user) {
+        User userToCreate = (User) user;
+
+        Boolean userExists = userRepository.existsByUsernameOrEmail(userToCreate.getUsername(), userToCreate.getEmail());
+
+        if(userExists){
+            return "Username or email already exists";
+        }
+
+        userToCreate.setPassword(passwordEncoder.encode(user.getPassword()));
+        Role role = roleRepository.findByName("ROLE_USER");
+        userToCreate.getRoles().add(role);
+
+        userToCreate.setCreatedAt();
+        userToCreate.setUpdatedAt();
+
+        userRepository.save(userToCreate);
+        return "Account created successfully";
     }
 
     @Override

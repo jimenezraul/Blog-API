@@ -39,7 +39,7 @@ public class DummyDataLoader implements CommandLineRunner {
 
 
         // Create users
-        User adminUser = new User("Raul","jimenezraul","jimenezraul1981@gmail.com", passwordEncoder().encode("password"), LocalDate.of(1990, 1, 1));
+        User adminUser = new User("Raul","jimenezraul","jimenezraul1981@gmail.com", passwordEncoder().encode("password"));
 
         adminUser.setIsEmailVerified(true);
         adminUser.setUpdatedAt();
@@ -50,7 +50,7 @@ public class DummyDataLoader implements CommandLineRunner {
         user1.getRoles().add(new Role(userRole));
         userRepository.save(user1);
 
-        User regularUser = new User("Jose","jose","jose@example.com", passwordEncoder().encode("password"), LocalDate.of(1990, 1, 1));
+        User regularUser = new User("Jose","jose","jose@example.com", passwordEncoder().encode("password"));
         regularUser.setIsEmailVerified(true);
         regularUser.setUpdatedAt();
         regularUser.setCreatedAt();
