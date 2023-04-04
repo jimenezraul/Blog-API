@@ -85,6 +85,7 @@ const Dashboard = () => {
               setTotalPages={setTotalPages}
               page={page}
               postsLength={posts.length}
+              userId={post.userId}
             />
           );
         })}

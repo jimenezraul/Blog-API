@@ -1,11 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import { FetchData } from '../../utils/FetchData';
+import { useAppSelector } from '../../app/hooks';
+import { user } from '../../app/features/userSlice';
 
 interface Props extends PostProps {
   setPosts: React.Dispatch<React.SetStateAction<PostProps[]>>;
   setTotalPages: React.Dispatch<React.SetStateAction<number>>;
   page: number;
   postsLength: number;
+  userId: number;
 }
 
 const Post = ({
@@ -18,8 +21,10 @@ const Post = ({
   setPosts,
   setTotalPages,
   page,
+  userId,
   postsLength,
 }: Props) => {
+  const userStateId = useAppSelector(user);
   const navigate = useNavigate();
   const handleReadMore = () => {
     navigate(`/blog-details/${id}`);
@@ -49,13 +54,18 @@ const Post = ({
           key={id}
           className='relative overflow-hidden transition-shadow duration-300 bg-white rounded-lg shadow-lg border border-slate-300'
         >
-          <div className='absolute -top-3 right-0 p-3'>
-            <i onClick={()=> navigate(`/edit-post?post=${id}`)} className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-blue-500 hover:text-blue-600 cursor-pointer text-xl fa-solid fa-pen-to-square'></i>
-            <i
-              onClick={handlePostDelete}
-              className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-red-500 hover:text-red-600 cursor-pointer text-xl fa-solid fa-trash'
-            ></i>
-          </div>
+          {userStateId === userId && (
+            <div className='absolute -top-3 right-0 p-3'>
+              <i
+                onClick={() => navigate(`/edit-post?post=${id}`)}
+                className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-blue-500 hover:text-blue-600 cursor-pointer text-xl fa-solid fa-pen-to-square'
+              ></i>
+              <i
+                onClick={handlePostDelete}
+                className='transition ease-in-out duration-300 hover:bg-slate-100 rounded-lg p-3 text-red-500 hover:text-red-600 cursor-pointer text-xl fa-solid fa-trash'
+              ></i>
+            </div>
+          )}
           {/* <img
             src='https://images.pexels.com/photos/2408666/pexels-photo-2408666.jpeg?auto=compress&amp;cs=tinysrgb&amp;dpr=2&amp;w=500'
             className='object-cover w-full h-64'

@@ -21,7 +21,6 @@ const AllPosts = () => {
         FetchData(`/api/v1/posts/count`, 'GET'),
         FetchData(`/api/v1/posts?page=${currentPage - 1}&size=${size}`, 'GET'),
       ]).then(([postCount, postsData]) => {
-        console.log(postCount)
         setTotalPages(Math.ceil(postCount / size));
         setPosts(postsData);
         setPage(currentPage);
@@ -30,7 +29,7 @@ const AllPosts = () => {
     };
     fetchPosts();
   }, []);
-  console.log(totalPages)
+
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
     window.scrollTo(0, 0);
@@ -64,6 +63,7 @@ const AllPosts = () => {
             setTotalPages={setTotalPages}
             page={page}
             postsLength={posts.length}
+            userId={post.userId}
           />
         ))}
         {totalPages > 1 && (

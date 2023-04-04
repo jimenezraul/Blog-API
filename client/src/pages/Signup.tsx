@@ -4,6 +4,7 @@ import { useAppDispatch } from '../app/hooks';
 import { setAlert } from '../app/features/alertSlice';
 import { FetchData } from '../utils/FetchData';
 import Alert from '../components/NotificationAlert';
+import AlertType from '../enum/alert';
 
 const signupInpit = [
   {
@@ -125,7 +126,7 @@ function Signup() {
           dispatch(
             setAlert({
               message,
-              type: 'ERROR',
+              type: AlertType.ERROR,
               show: true,
             })
           );
@@ -135,7 +136,7 @@ function Signup() {
         dispatch(
           setAlert({
             message: 'Something went wrong, please try again later',
-            type: 'ERROR',
+            type: AlertType.ERROR,
             show: true,
           })
         );
@@ -147,7 +148,7 @@ function Signup() {
         setAlert({
           message:
             'Account created successfully, check your email to verify your account',
-          type: 'SUCCESS',
+          type: AlertType.SUCCESS,
           show: true,
         })
       );

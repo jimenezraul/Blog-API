@@ -5,6 +5,7 @@ import { useAppDispatch } from '../app/hooks';
 import { setAccessToken } from '../app/features/accessTokenSlice';
 import { menuInput, initialState } from '../utils/loginInputs';
 import Alert from '../components/NotificationAlert';
+import { setUser } from '../app/features/userSlice';
 
 function LoginForm() {
   const location = useLocation();
@@ -66,6 +67,11 @@ function LoginForm() {
         localStorage.setItem('user', JSON.stringify(userData));
         dispatch(setAccessToken(res.accessToken));
         setIsLoading(false);
+        dispatch(
+          setUser({
+            id: Number(res.userId),
+          })
+        );
       }
       navigate(link);
     } catch (err) {

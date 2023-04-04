@@ -29,6 +29,9 @@ public class PostDTO {
 
     @JsonView(Views.Public.class)
     private String content;
+
+    @JsonView(Views.Public.class)
+    private Long userId;
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonView(Views.Public.class)
     private String author;
@@ -48,6 +51,7 @@ public class PostDTO {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
+        this.userId = post.getUser().getId();
         this.author = post.getUser().getName();
         this.numberOfComments = post.getComments().stream().count();
         this.created_at = post.getCreatedAt();
