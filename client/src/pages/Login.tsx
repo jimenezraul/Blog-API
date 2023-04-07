@@ -2,7 +2,6 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { FetchData } from '../utils/FetchData';
 import { useAppDispatch } from '../app/hooks';
-import { setAccessToken } from '../app/features/accessTokenSlice';
 import { menuInput, initialState } from '../utils/loginInputs';
 import Alert from '../components/NotificationAlert';
 import { setUser } from '../app/features/userSlice';
@@ -65,7 +64,6 @@ function LoginForm() {
         }
 
         localStorage.setItem('user', JSON.stringify(userData));
-        dispatch(setAccessToken(res.accessToken));
         setIsLoading(false);
         dispatch(
           setUser({
