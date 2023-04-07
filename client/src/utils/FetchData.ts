@@ -1,14 +1,8 @@
 import { store } from '../app/store';
-import { setAccessToken } from '../app/features/accessTokenSlice';
 import Auth from '../auth';
 import { setAlert } from '../app/features/alertSlice';
 
 const BASE_URL = 'http://localhost:8080';
-
-const getAccessToken = () => {
-  const token = store.getState().token.access_token;
-  return token ? token : null;
-};
 
 export const FetchData: any = async (
   endpoint: string,
@@ -17,12 +11,6 @@ export const FetchData: any = async (
   options: any = {}
 ) => {
   try {
-    const token = getAccessToken();
-    if (store.getState().token.access_token) {
-      options.headers = {
-        Authorization: `Bearer ${token}`,
-      };
-    }
     const requestOptions = {
       method,
       credentials: 'include' as const,
@@ -73,11 +61,6 @@ export const FetchData: any = async (
         const data = await response.json();
 
         if (data.accessToken) {
-          store.dispatch(setAccessToken(data.accessToken));
-          options.headers = {
-            ...options.headers,
-            Authorization: `Bearer ${data.accessToken}`,
-          };
           return await FetchData(endpoint, method, body, options);
         }
       } catch (error: any) {

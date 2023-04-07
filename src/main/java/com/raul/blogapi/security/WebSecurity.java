@@ -6,6 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
+import com.raul.blogapi.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,6 +27,7 @@ import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthen
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
@@ -40,6 +42,8 @@ public class WebSecurity {
     PasswordEncoder passwordEncoder;
     @Autowired
     UserDetailsManager userDetailsManager;
+    @Autowired
+    UserRepository userRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -56,6 +60,7 @@ public class WebSecurity {
                 .cors()
                 .and()
                 .httpBasic().disable()
+                .addFilterBefore(new AccessTokenFilter(this.jwtAccessTokenAuthProvider(),userRepository), UsernamePasswordAuthenticationFilter.class)
                 .oauth2ResourceServer((oauth2) ->
                         oauth2.jwt((jwt) -> jwt.jwtAuthenticationConverter(jwtToUserConverter))
                 )
@@ -115,6 +120,10 @@ public class WebSecurity {
         JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtAccessTokenDecoder());
         provider.setJwtAuthenticationConverter(jwtToUserConverter);
         return provider;
+    }
+    @Bean
+    public AccessTokenFilter accessTokenFilter(@Qualifier("jwtAccessTokenAuthProvider") JwtAuthenticationProvider jwtAuthProvider, UserRepository userRepository) {
+        return new AccessTokenFilter(jwtAuthProvider, userRepository);
     }
 
     @Bean
