@@ -20,6 +20,10 @@ public class JwtToUserConverter implements Converter<Jwt, UsernamePasswordAuthen
     @Autowired
     private UserRepository userRepository;
 
+    public JwtToUserConverter(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public UsernamePasswordAuthenticationToken convert(Jwt jwt) {
         User userFromDb = userRepository.findById(Long.valueOf(jwt.getSubject())).orElseThrow(() -> new RuntimeException("User not found"));
@@ -33,7 +37,6 @@ public class JwtToUserConverter implements Converter<Jwt, UsernamePasswordAuthen
         User user = new User();
         user.setId(userFromDb.getId());
         user.setRoles(roles);
-
         return new UsernamePasswordAuthenticationToken(user, jwt, authorities);
     }
 

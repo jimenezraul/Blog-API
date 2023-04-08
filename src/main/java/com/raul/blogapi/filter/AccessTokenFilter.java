@@ -1,8 +1,9 @@
-package com.raul.blogapi.security;
+package com.raul.blogapi.filter;
 
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.UserRepository;
+import com.raul.blogapi.security.JwtToUserConverter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -18,7 +19,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.security.core.Authentication;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Optional;
 
 @Log4j2
@@ -40,14 +40,9 @@ public class AccessTokenFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
+            Authentication authentication = this.getUserByAccessToken(accessToken.get());
 
-                User user = this.getUserByAccessToken(accessToken.get());
-                if(user != null) {
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-
-
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
             log.error("cannot set authentication", e);
         }
@@ -67,9 +62,9 @@ public class AccessTokenFilter extends OncePerRequestFilter {
         return Optional.empty();
     }
 
-    private User getUserByAccessToken(String accessToken) {
+    private UsernamePasswordAuthenticationToken getUserByAccessToken(String accessToken) {
         Authentication authentication = accessTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(accessToken));
         Jwt jwt = (Jwt) authentication.getCredentials();
-        return userRepository.findById(Long.valueOf(jwt.getSubject())).orElseThrow(() -> new UserNotFoundException("User not found"));
+        return new JwtToUserConverter(userRepository).convert(jwt);
     }
 }
