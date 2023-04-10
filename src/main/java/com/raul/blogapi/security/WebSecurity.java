@@ -55,6 +55,8 @@ public class WebSecurity {
                         .requestMatchers("/api/v1/posts").permitAll()
                         .requestMatchers("/api/v1/posts/{id}").permitAll()
                         .requestMatchers("/api/v1/posts/{id}/comments").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/v3/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .csrf().disable()

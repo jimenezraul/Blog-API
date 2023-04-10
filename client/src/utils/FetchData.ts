@@ -48,7 +48,7 @@ export const FetchData: any = async (
     if (error.status === 401) {
       try {
         const response = await fetch(BASE_URL + '/api/v1/auth/refresh', {
-          method: 'GET',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
