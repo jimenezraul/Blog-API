@@ -1,15 +1,16 @@
 package com.raul.blogapi.service.ServiceImpl;
 
+import com.raul.blogapi.dto.CreatePostDTO;
 import com.raul.blogapi.dto.PostDTO;
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Post;
 import com.raul.blogapi.model.Tag;
 import com.raul.blogapi.model.User;
 import com.raul.blogapi.repository.PostRepository;
-import com.raul.blogapi.repository.RoleRepository;
 import com.raul.blogapi.repository.TagRepository;
 import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.service.PostService;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,8 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,7 +41,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostDTO createPost(PostDTO post) {
+    public PostDTO createPost(@Valid CreatePostDTO post) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
         User loggedUser = userRepository.getById(user.getId());

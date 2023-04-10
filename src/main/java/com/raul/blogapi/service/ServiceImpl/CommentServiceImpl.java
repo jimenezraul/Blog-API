@@ -1,7 +1,7 @@
 package com.raul.blogapi.service.ServiceImpl;
 
 import com.raul.blogapi.dto.CommentDTO;
-import com.raul.blogapi.dto.UserDTO;
+import com.raul.blogapi.dto.CreateCommentDTO;
 import com.raul.blogapi.error.UserNotFoundException;
 import com.raul.blogapi.model.Comment;
 import com.raul.blogapi.model.Post;
@@ -10,7 +10,7 @@ import com.raul.blogapi.repository.CommentRepository;
 import com.raul.blogapi.repository.PostRepository;
 import com.raul.blogapi.repository.UserRepository;
 import com.raul.blogapi.service.CommentService;
-import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,7 +37,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentDTO createComment(CommentDTO commentDto) {
+    public CommentDTO createComment(@Valid CreateCommentDTO commentDto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 
@@ -79,7 +78,7 @@ public class CommentServiceImpl implements CommentService {
 
 
 
-    private Comment convertToEntity(CommentDTO comment) {
+    private Comment convertToEntity(CreateCommentDTO comment) {
         Comment commentModel = new Comment();
         BeanUtils.copyProperties(comment, commentModel);
         return commentModel;

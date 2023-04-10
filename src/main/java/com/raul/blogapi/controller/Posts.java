@@ -1,12 +1,14 @@
 package com.raul.blogapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.raul.blogapi.dto.CreatePostDTO;
 import com.raul.blogapi.dto.PostDTO;
 import com.raul.blogapi.service.PostService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -43,12 +45,12 @@ public class Posts {
     }
 
     @PostMapping("/posts")
-    public ResponseEntity<Long> createPost(@Valid @RequestBody PostDTO post) {
-        service.createPost(post);
-        URI location = URI.create(String.format("/posts/%s", post.getId()));
+    public ResponseEntity<Long> createPost(@Valid @RequestBody CreatePostDTO post) {
+        PostDTO newPost = service.createPost(post);
+        URI location = URI.create(String.format("/posts/%s", newPost.getId()));
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
-        return ResponseEntity.created(location).headers(headers).body(post.getId());
+        return ResponseEntity.created(location).headers(headers).body(newPost.getId());
     }
 
     @PutMapping("/posts/{id}")

@@ -2,6 +2,7 @@ package com.raul.blogapi.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
 import com.raul.blogapi.dto.CommentDTO;
+import com.raul.blogapi.dto.CreateCommentDTO;
 import com.raul.blogapi.model.Comment;
 import com.raul.blogapi.service.CommentService;
 import com.raul.blogapi.service.PostService;
@@ -28,9 +29,10 @@ public class Comments {
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<CommentDTO> createComment(@Valid @RequestBody CommentDTO comment) {
-        URI location = URI.create(String.format("/comments/%s", comment.getId()));
-        return ResponseEntity.created(location).body(comments.createComment(comment));
+    public ResponseEntity<CommentDTO> createComment(@Valid @RequestBody CreateCommentDTO comment) {
+        CommentDTO newComment = comments.createComment(comment);
+        URI location = URI.create(String.format("/comments/%s", newComment.getId()));
+        return ResponseEntity.created(location).body(newComment);
     }
 
     @GetMapping("/comments/{id}")

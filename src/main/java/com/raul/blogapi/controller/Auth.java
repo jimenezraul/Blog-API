@@ -118,7 +118,7 @@ public class Auth {
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
-    @GetMapping("/refresh")
+    @PostMapping("/refresh")
     public ResponseEntity token(HttpServletResponse response, @CookieValue(name = "refreshToken") String refreshToken) {
         Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshToken));
         Jwt jwt = (Jwt) authentication.getCredentials();
