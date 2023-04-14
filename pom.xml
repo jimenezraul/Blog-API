@@ -99,6 +99,8 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<source>17</source>
+				<target>17</target>
 				<configuration>
 					<excludes>
 						<exclude>
