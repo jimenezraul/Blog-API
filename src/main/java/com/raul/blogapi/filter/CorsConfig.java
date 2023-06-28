@@ -8,6 +8,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import javax.servlet.ServletRequest;
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class CorsConfig {
@@ -20,6 +21,8 @@ public class CorsConfig {
         config.setAllowCredentials(true);
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
+        // allow cross origin requests for all endpoints
+        config.setAllowedOrigins(List.of("*"));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
