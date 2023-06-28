@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserDetailsManager, UserService {
     public List<UserDTO> getAllUsers() {
         return  userRepository.findAll()
                 .stream()
-                .map(user -> toDto(user))
+                .map(this::toDto)
                 .collect(Collectors.toList());
     }
 
