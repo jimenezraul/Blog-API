@@ -102,7 +102,7 @@ public class Auth {
         });
 
         Cookies.setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
-
+        System.out.println(response);
         return ResponseEntity.ok(tokens);
     }
 
@@ -126,7 +126,7 @@ public class Auth {
         // check if present in db and not revoked, etc
         RefreshTokensDTO token = refreshTokenService.getRefreshToken(refreshToken, Long.valueOf(jwt.getSubject()));
 
-        if(token == null || token.getIsRevoked()) {
+        if (token == null || token.getIsRevoked()) {
             Cookies.deleteCookie(response);
             return ResponseEntity.badRequest().body("Refresh token not found");
         }
