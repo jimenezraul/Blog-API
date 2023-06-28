@@ -29,7 +29,6 @@ import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-@CrossOrigin(origins = "*")
 public class Auth {
     @Autowired
     UserService userService;

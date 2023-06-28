@@ -14,7 +14,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1")
 @PreAuthorize("hasRole('ROLE_ADMIN')")
-@CrossOrigin(origins = "*")
 public class Admin {
     @Autowired
     PostService postService;
