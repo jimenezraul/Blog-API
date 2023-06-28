@@ -14,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1")
 @PreAuthorize("hasRole('ROLE_USER')")
+@CrossOrigin(origins = "https://649c83fe6fe6f80d997f1350--illustrious-sprite-a61321.netlify.app")
 public class Users {
     @Autowired
     private UserService service;
