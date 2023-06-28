@@ -2,7 +2,7 @@ import { store } from '../app/store';
 import Auth from '../auth';
 import { setAlert } from '../app/features/alertSlice';
 
-const BASE_URL = 'https://mysterious-headland-44233-fdefe22bd12e.herokuapp.com/';
+const BASE_URL = 'https://mysterious-headland-44233-fdefe22bd12e.herokuapp.com';
 
 export const FetchData: any = async (
   endpoint: string,
