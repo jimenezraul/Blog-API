@@ -23,7 +23,7 @@ public class Cookies {
         cookie.setPath("/");
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
-        cookie.setAttribute("SameSite", "Lax");
+        cookie.setAttribute("SameSite", "none");
         response.addCookie(cookie);
     }
 }
