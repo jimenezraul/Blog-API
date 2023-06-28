@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
-@CrossOrigin(origins = "https://649c83fe6fe6f80d997f1350--illustrious-sprite-a61321.netlify.app")
+@CrossOrigin(origins = "*")
 public class Comments {
     @Autowired
     private CommentService comments;
