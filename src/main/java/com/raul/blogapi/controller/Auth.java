@@ -102,7 +102,6 @@ public class Auth {
         });
 
         Cookies.setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
-        System.out.println(response);
         return ResponseEntity.ok(tokens);
     }
 
