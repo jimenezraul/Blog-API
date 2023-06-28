@@ -13,7 +13,6 @@ export const FetchData: any = async (
   try {
     const requestOptions = {
       method,
-      credentials: 'include' as const,
       headers: {
         'Content-Type': 'application/json',
         ...options.headers,
@@ -21,7 +20,10 @@ export const FetchData: any = async (
       body: body && JSON.stringify(body),
     };
 
-    const response = await fetch(BASE_URL + endpoint, requestOptions);
+    const response = await fetch(BASE_URL + endpoint,{
+      ...requestOptions,
+      credentials: 'include',
+    });
 
     if (response.ok) {
       if (endpoint === '/api/v1/auth/logout') {
