@@ -6,7 +6,7 @@ refresh-token:
   public: ${REFRESH_TOKEN_PUBLIC_KEY_PATH}
 spring:
   profiles:
-    active: prod
+    active: dev
   datasource:
     url: ${DATABASE_URL}
     username: ${DB_USERNAME}
