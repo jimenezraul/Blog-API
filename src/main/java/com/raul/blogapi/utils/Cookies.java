@@ -24,7 +24,7 @@ public class Cookies {
         cookie.setMaxAge(maxAge);
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
-        cookie.setAttribute("SameSite", "None");
+        cookie.setAttribute("SameSite", "Strict");
         response.addCookie(cookie);
     }
 }
