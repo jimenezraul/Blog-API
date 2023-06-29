@@ -67,8 +67,8 @@ export const FetchData: any = async (
         }
       } catch (error: any) {
         console.log(error);
-        Auth.logout();
-        window.location.href = '/login';
+        // Auth.logout();
+        // window.location.href = '/login';
       }
     }
     store.dispatch(
