@@ -24,7 +24,7 @@ public class Cookies {
         cookie.setMaxAge(maxAge);
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
-        cookie.setAttribute("SameSite", "Strict");
+        cookie.setAttribute("SameSite", "Lax");
         cookie.setDomain("illustrious-sprite-a61321.netlify.app");
         response.addCookie(cookie);
     }
