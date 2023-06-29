@@ -25,7 +25,6 @@ public class Cookies {
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
         cookie.setAttribute("SameSite", "None");
-        cookie.setDomain("illustrious-sprite-a61321.netlify.app");
 
         response.addCookie(cookie);
     }
