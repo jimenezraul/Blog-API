@@ -9,6 +9,7 @@ import com.raul.blogapi.service.RefreshTokenService;
 import com.raul.blogapi.service.RoleService;
 import com.raul.blogapi.service.UserService;
 import com.raul.blogapi.utils.Cookies;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -80,7 +81,7 @@ public class Auth {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(HttpServletResponse response, @RequestBody LoginDTO loginDTO) {
+    public ResponseEntity<?> login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginDTO loginDTO) {
         Authentication authentication = daoAuthenticationProvider.authenticate(
                 new UsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
 
@@ -101,25 +102,25 @@ public class Auth {
             }
         });
 
-        Cookies.setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
+        Cookies.setTokenCookies(request, response, tokens.getAccessToken(), tokens.getRefreshToken());
 
         return ResponseEntity.ok(tokens);
     }
 
     @PostMapping("/logout")
-    public void logout(HttpServletResponse response, @CookieValue(name = "refreshToken") String refreshToken) {
+    public void logout(HttpServletRequest request, HttpServletResponse response, @CookieValue(name = "refreshToken") String refreshToken) {
         Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshToken));
         Jwt jwt = (Jwt) authentication.getCredentials();
 
         RefreshTokensDTO token = refreshTokenService.getRefreshToken(refreshToken, Long.valueOf(jwt.getSubject()));
 
         refreshTokenService.deleteRefreshToken(token.getId());
-        Cookies.deleteCookie(response);
+        Cookies.deleteCookie(request, response);
         response.setStatus(HttpServletResponse.SC_OK);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity token(HttpServletResponse response, @CookieValue(name = "refreshToken") String refreshToken) {
+    public ResponseEntity token(HttpServletRequest request, HttpServletResponse response, @CookieValue(name = "refreshToken") String refreshToken) {
         Authentication authentication = refreshTokenAuthProvider.authenticate(new BearerTokenAuthenticationToken(refreshToken));
         Jwt jwt = (Jwt) authentication.getCredentials();
 
@@ -127,7 +128,7 @@ public class Auth {
         RefreshTokensDTO token = refreshTokenService.getRefreshToken(refreshToken, Long.valueOf(jwt.getSubject()));
 
         if (token == null || token.getIsRevoked()) {
-            Cookies.deleteCookie(response);
+            Cookies.deleteCookie(request, response);
             return ResponseEntity.badRequest().body("Refresh token not found");
         }
 
@@ -142,7 +143,7 @@ public class Auth {
             refreshTokenService.createRefreshToken(tokens.getRefreshToken(), Long.valueOf(jwt.getSubject()));
         }
 
-        Cookies.setTokenCookies(response, tokens.getAccessToken(), tokens.getRefreshToken());
+        Cookies.setTokenCookies(request, response, tokens.getAccessToken(), tokens.getRefreshToken());
 
         return ResponseEntity.ok(tokens);
     }
