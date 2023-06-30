@@ -2,6 +2,8 @@
 
 TechTalk Blog is a blog dedicated to exploring the world of coding, programming, and software development. It is a place where you can find articles on a variety of topics.
 
+## Click [here](https://illustrious-sprite-a61321.netlify.app/) to view the live application.
+
 ## Tech used
 - [React](https://reactjs.org/)
 - [Redux](https://redux.js.org/)
